@@ -1,0 +1,24 @@
+# Firebase App Hosting Cost-Optimized Configuration
+# Target: Minimum resource consumption and $0 idle billing
+
+runConfig:
+  # Scale to 0 instances when idle (Zero cost when no users are active)
+  minInstances: 0
+  
+  # Cap maximum instances to 1 (Prevents unexpected multi-instance scaling costs)
+  maxInstances: 1
+  
+  # Serve up to 80 concurrent requests per instance for maximum density
+  concurrency: 80
+  
+  # Allocate minimum standard 1 vCPU and 512 MiB RAM
+  cpu: 1
+  memoryMiB: 512
+
+# Production environment variables
+env:
+  - variable: NODE_ENV
+    value: production
+    availability:
+      - BUILD
+      - RUNTIME
