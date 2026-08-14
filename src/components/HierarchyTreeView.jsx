@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { ChevronRight, ChevronDown, Folder, FileText, ArrowUpRight, Copy } from 'lucide-react';
+import { ChevronRight, ChevronDown, Folder, ArrowUpRight, Copy } from 'lucide-react';
 
 export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
   const [expandedNodes, setExpandedNodes] = useState({

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, Bookmark, BookmarkCheck, ArrowUpRight, AlertTriangle, Sparkles, Check } from 'lucide-react';
+import { Copy, Bookmark, BookmarkCheck, ArrowUpRight, AlertTriangle, Check } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
 // Helper to highlight search matches
@@ -70,7 +70,9 @@ export function StandardCard({
             y: (rect.top + rect.height / 2) / window.innerHeight
           }
         });
-      } catch (err) {}
+      } catch {
+        // Confetti optional
+      }
     }
   };
 

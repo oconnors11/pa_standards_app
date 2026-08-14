@@ -1,10 +1,9 @@
 import React from 'react';
-import { BookOpen, GitFork, Network, Layers, Bookmark, Sparkles, SlidersHorizontal } from 'lucide-react';
+import { BookOpen, GitFork, Network, Layers, Bookmark, SlidersHorizontal } from 'lucide-react';
 
 export function Header({ 
   currentView, 
   setCurrentView, 
-  totalCount, 
   savedCount, 
   onOpenBinder,
   onToggleMobileFilters 

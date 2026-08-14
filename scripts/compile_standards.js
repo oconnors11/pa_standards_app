@@ -10,7 +10,7 @@ const standards = [];
 function addStandard(item) {
   const textBlob = `${item.code} ${item.alt_code || ''} ${item.subject} ${item.domain} ${item.anchor || ''} ${item.descriptor || ''} ${item.description || ''} ${item.assessment_limits || ''} ${(item.crosswalks || []).join(' ')} ${(item.keywords || []).join(' ')}`.toLowerCase();
   
-  const rawWords = textBlob.match(/[a-z0-9\-\.]{3,}/g) || [];
+  const rawWords = textBlob.match(/[a-z0-9\-.]{3,}/g) || [];
   const uniqueKeywords = Array.from(new Set([...(item.keywords || []), ...rawWords.filter(w => !['the', 'and', 'for', 'with', 'that', 'from', 'this', 'into', 'each', 'such', 'than', 'have', 'more', 'less', 'will', 'been', 'their', 'when'].includes(w))]));
 
   standards.push({

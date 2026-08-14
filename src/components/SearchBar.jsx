@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Search, X, Sparkles, Command } from 'lucide-react';
+import { Search, X, Sparkles } from 'lucide-react';
 
 export function SearchBar({ 
   query, 

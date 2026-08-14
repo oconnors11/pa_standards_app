@@ -13,7 +13,7 @@ import { Toast } from './components/Toast';
 import { useStandardsSearch } from './hooks/useStandardsSearch';
 import { useLessonBinder } from './hooks/useLessonBinder';
 import { useToast } from './hooks/useToast';
-import { Sparkles, BookOpen, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 export function App() {
   const [currentView, setCurrentView] = useState('feed'); // 'feed', 'crosswalk', 'tree', 'pssa'
@@ -23,7 +23,6 @@ export function App() {
 
   const {
     standards,
-    stats,
     filteredStandards,
     totalCount,
     filteredCount,

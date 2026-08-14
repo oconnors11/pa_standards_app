@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   X, Copy, Bookmark, BookmarkCheck, ArrowRight, ArrowLeft, 
-  Sparkles, Check, BookOpen, Layers, ShieldCheck, Target, FileText 
+  Sparkles, Check 
 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
@@ -10,7 +10,6 @@ export function StandardDetailModal({
   onClose,
   isBookmarked,
   onToggleBookmark,
-  onCopyShort,
   onCopyCitation,
   onSelectPrerequisite
 }) {
@@ -30,7 +29,9 @@ export function StandardDetailModal({
     if (added) {
       try {
         confetti({ particleCount: 25, spread: 50, origin: { y: 0.7 } });
-      } catch (err) {}
+      } catch {
+        // Confetti optional
+      }
     }
   };
 

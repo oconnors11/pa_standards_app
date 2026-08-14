@@ -12,7 +12,9 @@ export function useToast() {
     if (typeof navigator !== 'undefined' && navigator.vibrate) {
       try {
         navigator.vibrate(type === 'error' ? [30, 40, 30] : 15);
-      } catch (e) {}
+      } catch {
+        // Haptics not supported or permitted
+      }
     }
 
     setToast({ message, type, id: Date.now() });

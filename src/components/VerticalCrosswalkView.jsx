@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { GitFork, ArrowRight, BookOpen, Layers, Check, Copy } from 'lucide-react';
+import { GitFork, ArrowRight, Copy } from 'lucide-react';
 
 export function VerticalCrosswalkView({ standards, onInspect, onCopyShort }) {
   const [selectedStrand, setSelectedStrand] = useState('fractions');

@@ -3,7 +3,6 @@ import {
   X, Trash2, Plus, Download, Printer, Copy, Check, 
   BookmarkCheck, BookOpen, Calendar, Edit3, Save 
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 export function LessonBinderModal({
   isOpen,
@@ -16,7 +15,6 @@ export function LessonBinderModal({
   updateActiveUnit,
   deleteUnit,
   allStandards,
-  onInspect,
   showToast
 }) {
   const [isEditingMeta, setIsEditingMeta] = useState(false);

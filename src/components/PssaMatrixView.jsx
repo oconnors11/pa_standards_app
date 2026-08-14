@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layers, ShieldCheck, AlertCircle, ArrowRight, BarChart3 } from 'lucide-react';
+import { Layers, ArrowRight } from 'lucide-react';
 
 export function PssaMatrixView({ standards, onSelectCategory, onInspect }) {
   const categories = [
