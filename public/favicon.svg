@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+  <defs>
+    <linearGradient id="keystoneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1E3A8A" />
+      <stop offset="100%" stop-color="#0F172A" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Keystone Shape -->
+  <polygon points="12,18 88,18 78,86 50,96 22,86" fill="url(#keystoneGrad)" stroke="#3B82F6" stroke-width="3" stroke-linejoin="round" />
+  
+  <!-- Inner Keystone Accent Line -->
+  <polygon points="18,24 82,24 73,81 50,89 27,81" fill="none" stroke="#60A5FA" stroke-width="1.5" stroke-opacity="0.4" />
+  
+  <!-- Open Book / Standards Emblem -->
+  <path d="M 32 45 Q 50 40 50 62 Q 50 40 68 45 L 68 68 Q 50 63 50 78 Q 50 63 32 68 Z" fill="#F8FAFC" />
+  <path d="M 50 42 L 50 78" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round" />
+  
+  <!-- Golden Keystone Star -->
+  <path d="M 50 26 L 52.5 32 L 59 32.5 L 54 36.5 L 56 42.5 L 50 38.5 L 44 42.5 L 46 36.5 L 41 32.5 L 47.5 32 Z" fill="url(#goldGrad)" />
+</svg>

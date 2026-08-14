@@ -1,0 +1,100 @@
+# PA Core Standards & Assessment Anchors Explorer 🏛️
+
+A lightning-fast, offline-first **Progressive Web App (PWA)** for exploring, searching, and aligning Pennsylvania Core Standards, PSSA Assessment Anchors, and Keystone Frameworks across **Kindergarten through Grade 12**.
+
+Designed for seamless responsive use on **Android, iPhone, iPad / Tablets, and Desktop PCs / Smartboards**.
+
+![PA Standards Explorer](public/favicon.svg)
+
+---
+
+## 🚀 Key Features
+
+* **⚡ Instant Omnibar Search (<5ms):** Fast client-side fuzzy search and exact code matcher (`M08.A-N.1.1.1`, `CC.2.1.8.E.1`, `E03.A-K.1.1.1`, `BIO.A.1.1.1`).
+* **📱 Multi-Device Adaptive Interface:**
+  * **Mobile (iOS & Android):** Bottom sheet drawers, sticky top search, swipeable grade pills, native haptic feedback (`navigator.vibrate`), 1-tap clipboard copying.
+  * **Tablet (iPad / Android):** 2-column master-detail split layout.
+  * **Desktop:** 3-column power command center with keyboard hotkeys (`/` or `⌘K` to search, `Esc` to close).
+* **🔀 Vertical Progression / Crosswalk Matrix:** Side-by-side comparative views tracing how concepts evolve across grades (e.g. Fractions in Grade 1–5 $\rightarrow$ Rational Numbers in 6–8 $\rightarrow$ Real Numbers in Keystone Algebra).
+* **🌲 Hierarchy Tree Explorer:** Expandable/collapsible nested tree of all PA standards by Subject $\rightarrow$ Grade $\rightarrow$ Domain $\rightarrow$ Anchor $\rightarrow$ Eligible Content.
+* **📁 Lesson Unit Binder & Pacing Guide:**
+  * Create custom units (e.g., *"Unit 3: Linear Functions & Slope"*).
+  * Add standards with 1-click bookmarking.
+  * Add custom teacher notes and estimated pacing days.
+  * **1-Click Exporters:** Copy Planbook/Google Docs Markdown Table, Download CSV / Excel matrix, or Print Clean Alignment Sheets.
+* **✨ AI Lesson Objective Generator:** Generates customizable Bloom's taxonomy "Students Will Be Able To" (SWBAT) objective stems for any standard.
+* **📶 100% Offline PWA:** Service Worker caching allows teachers to use the app in basement classrooms or areas with spotty school Wi-Fi.
+
+---
+
+## 📐 Data Architecture
+
+The application is powered by a normalized static JSON dataset (`src/data/standards.json`) compiled directly from Pennsylvania Department of Education (PDE SAS) standards:
+
+```json
+{
+  "id": "M08.A-N.1.1.1",
+  "code": "M08.A-N.1.1.1",
+  "alt_code": "CC.2.1.8.E.1",
+  "subject": "Mathematics",
+  "grade": "8",
+  "grade_band": "Middle School (6-8)",
+  "domain": "The Number System",
+  "reporting_category": "Reporting Category A - Numbers and Operations",
+  "anchor": "M08.A-N.1 - Demonstrate an understanding of numbers...",
+  "descriptor": "M08.A-N.1.1 - Apply concepts of rational and irrational numbers.",
+  "description": "Determine whether a number is rational or irrational...",
+  "assessment_limits": "Radicals limited to square roots and cube roots.",
+  "dok": "DOK 1-2",
+  "is_pssa_assessed": true,
+  "crosswalks": ["CC.2.1.8.E.1", "8.NS.A.1"],
+  "prerequisites": ["M07.A-N.1.1.1"],
+  "next_steps": ["A1.1.1.1.1"],
+  "keywords": ["rational", "irrational", "repeating decimals", "fractions", "real numbers"]
+}
+```
+
+---
+
+## 🛠️ Data Compilation & Extension
+
+To compile or add new standards to the master JSON dataset:
+
+```bash
+# Compile and validate standards dataset
+node scripts/compile_standards.js
+```
+
+---
+
+## 💻 Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start local Vite dev server
+npm run dev
+
+# Build production bundle
+npm run build
+```
+
+---
+
+## 🔥 Firebase Hosting Deployment
+
+The app is pre-configured with `firebase.json` and `.firebaserc` for 1-command deployment:
+
+```bash
+# Build production bundle
+npm run build
+
+# Deploy to Firebase Hosting
+npx -y firebase-tools@latest deploy --only hosting
+```
+
+---
+
+## 📄 License
+MIT License. Built for Pennsylvania educators, curriculum directors, and students.

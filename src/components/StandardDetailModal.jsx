@@ -1,0 +1,437 @@
+import React, { useState } from 'react';
+import { 
+  X, Copy, Bookmark, BookmarkCheck, ArrowRight, ArrowLeft, 
+  Sparkles, Check, BookOpen, Layers, ShieldCheck, Target, FileText 
+} from 'lucide-react';
+import confetti from 'canvas-confetti';
+
+export function StandardDetailModal({
+  standard,
+  onClose,
+  isBookmarked,
+  onToggleBookmark,
+  onCopyShort,
+  onCopyCitation,
+  onSelectPrerequisite
+}) {
+  const [copied, setCopied] = useState(false);
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'ai_objectives', 'crosswalks'
+
+  if (!standard) return null;
+
+  const handleCopy = () => {
+    onCopyCitation(standard);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleBookmark = () => {
+    const added = onToggleBookmark(standard.id);
+    if (added) {
+      try {
+        confetti({ particleCount: 25, spread: 50, origin: { y: 0.7 } });
+      } catch (err) {}
+    }
+  };
+
+  // Generate dynamic teacher objective stems (SWBAT)
+  const generateObjectives = () => {
+    const desc = standard.description;
+    return [
+      {
+        level: "Conceptual Understanding (DOK 2)",
+        stem: `Students will be able to explain and model the core principles of ${standard.domain.toLowerCase()} (${standard.code}) using visual representations and mathematical/textual evidence.`
+      },
+      {
+        level: "Procedural & Application (DOK 2-3)",
+        stem: `Students will be able to solve multi-step problems and analyze scenarios requiring ${desc.slice(0, 100).toLowerCase()}...`
+      },
+      {
+        level: "Analysis & Strategic Thinking (DOK 3-4)",
+        stem: `Students will be able to evaluate claims, justify reasoning, and construct arguments demonstrating mastery of ${standard.code}.`
+      }
+    ];
+  };
+
+  return (
+    <div 
+      style={{
+        position: 'fixed',
+        inset: 0,
+        backgroundColor: 'rgba(5, 15, 30, 0.75)',
+        backdropFilter: 'blur(6px)',
+        WebkitBackdropFilter: 'blur(6px)',
+        zIndex: 900,
+        display: 'flex',
+        justifyContent: 'flex-end',
+        alignItems: 'stretch'
+      }}
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: 'var(--bg-secondary)',
+          width: '100%',
+          maxWidth: '560px',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          boxShadow: 'var(--shadow-lg)',
+          borderLeft: '1px solid var(--border-medium)',
+          animation: 'slideInRight 0.25s cubic-bezier(0.16, 1, 0.3, 1)',
+          overflowY: 'auto'
+        }}
+      >
+        {/* Drawer Header */}
+        <div style={{
+          padding: '20px 24px',
+          borderBottom: '1px solid var(--border-subtle)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          background: 'var(--bg-card)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 10
+        }}>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span className="badge badge-code" style={{ fontSize: '0.85rem' }}>
+                {standard.code}
+              </span>
+              <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-muted)' }}>
+                Grade {standard.grade}
+              </span>
+              {standard.is_keystone && (
+                <span className="badge badge-keystone">Keystone</span>
+              )}
+            </div>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+              {standard.subject} · {standard.grade_band}
+            </p>
+          </div>
+
+          <button
+            onClick={onClose}
+            style={{
+              padding: '8px',
+              borderRadius: 'var(--radius-sm)',
+              color: 'var(--text-muted)'
+            }}
+            aria-label="Close drawer"
+          >
+            <X size={20} />
+          </button>
+        </div>
+
+        {/* Tab Navigation */}
+        <div style={{
+          display: 'flex',
+          borderBottom: '1px solid var(--border-subtle)',
+          padding: '0 24px',
+          background: 'var(--bg-card)',
+          gap: '16px'
+        }}>
+          <button
+            onClick={() => setActiveTab('overview')}
+            style={{
+              padding: '12px 0',
+              borderBottom: `2px solid ${activeTab === 'overview' ? 'var(--accent-blue)' : 'transparent'}`,
+              color: activeTab === 'overview' ? '#FFFFFF' : 'var(--text-muted)',
+              fontSize: '0.85rem',
+              fontWeight: '600'
+            }}
+          >
+            Standard Overview
+          </button>
+          <button
+            onClick={() => setActiveTab('ai_objectives')}
+            style={{
+              padding: '12px 0',
+              borderBottom: `2px solid ${activeTab === 'ai_objectives' ? 'var(--accent-gold)' : 'transparent'}`,
+              color: activeTab === 'ai_objectives' ? 'var(--accent-gold)' : 'var(--text-muted)',
+              fontSize: '0.85rem',
+              fontWeight: '600',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px'
+            }}
+          >
+            <Sparkles size={14} />
+            <span>Lesson Objectives</span>
+          </button>
+        </div>
+
+        {/* Modal Body */}
+        <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '20px', flex: 1 }}>
+
+          {activeTab === 'overview' ? (
+            <>
+              {/* Domain & Anchor Breadcrumbs */}
+              <div style={{
+                background: 'var(--bg-primary)',
+                padding: '16px',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--border-subtle)'
+              }}>
+                <div style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '4px' }}>
+                  Domain & Strand
+                </div>
+                <div style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--accent-blue)', marginBottom: '8px' }}>
+                  {standard.domain}
+                </div>
+                {standard.anchor && (
+                  <div>
+                    <div style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '2px' }}>
+                      Assessment Anchor
+                    </div>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                      {standard.anchor}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Standard Statement / Eligible Content */}
+              <div>
+                <div style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                  Standard Statement / Eligible Content
+                </div>
+                <div style={{
+                  fontSize: '1rem',
+                  lineHeight: '1.6',
+                  color: 'var(--text-main)',
+                  background: 'var(--bg-card)',
+                  padding: '16px',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-medium)'
+                }}>
+                  {standard.description}
+                </div>
+              </div>
+
+              {/* Assessment Limits */}
+              {standard.assessment_limits && (
+                <div style={{
+                  background: 'rgba(245, 158, 11, 0.08)',
+                  padding: '14px 16px',
+                  borderRadius: 'var(--radius-md)',
+                  borderLeft: '4px solid var(--accent-gold)'
+                }}>
+                  <div style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--accent-gold)', marginBottom: '4px' }}>
+                    Assessment Limits & Boundaries
+                  </div>
+                  <p style={{ fontSize: '0.85rem', color: 'var(--text-main)', lineHeight: '1.4' }}>
+                    {standard.assessment_limits}
+                  </p>
+                </div>
+              )}
+
+              {/* Rigor / DOK & Framework Specs */}
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr',
+                gap: '12px'
+              }}>
+                <div style={{
+                  background: 'var(--bg-card)',
+                  padding: '12px',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-subtle)'
+                }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontWeight: '600' }}>Rigor Level</div>
+                  <div style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--accent-gold)', marginTop: '2px' }}>
+                    {standard.dok}
+                  </div>
+                </div>
+
+                <div style={{
+                  background: 'var(--bg-card)',
+                  padding: '12px',
+                  borderRadius: 'var(--radius-md)',
+                  border: '1px solid var(--border-subtle)'
+                }}>
+                  <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontWeight: '600' }}>Reporting Category</div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: '600', color: 'var(--text-main)', marginTop: '2px' }}>
+                    {standard.reporting_category || 'General Core'}
+                  </div>
+                </div>
+              </div>
+
+              {/* PA Core Crosswalks */}
+              {standard.crosswalks && standard.crosswalks.length > 0 && (
+                <div>
+                  <div style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                    PA Core & National Crosswalks
+                  </div>
+                  <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                    {standard.crosswalks.map((cw, i) => (
+                      <span key={i} className="badge badge-code">
+                        {cw}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Vertical Prerequisites & Next Steps */}
+              <div style={{
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '10px',
+                padding: '14px',
+                background: 'var(--bg-primary)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--border-subtle)'
+              }}>
+                <div style={{ fontSize: '0.8rem', fontWeight: '700', color: 'var(--text-main)' }}>
+                  Vertical Learning Trajectory
+                </div>
+
+                {standard.prerequisites && standard.prerequisites.length > 0 && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem' }}>
+                    <ArrowLeft size={14} color="var(--accent-blue)" />
+                    <span style={{ color: 'var(--text-muted)' }}>Prerequisite:</span>
+                    {standard.prerequisites.map((p, i) => (
+                      <button
+                        key={i}
+                        onClick={() => onSelectPrerequisite && onSelectPrerequisite(p)}
+                        style={{
+                          color: 'var(--accent-blue)',
+                          fontWeight: '600',
+                          textDecoration: 'underline'
+                        }}
+                      >
+                        {p}
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {standard.next_steps && standard.next_steps.length > 0 && (
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem' }}>
+                    <ArrowRight size={14} color="var(--accent-emerald)" />
+                    <span style={{ color: 'var(--text-muted)' }}>Next Step:</span>
+                    {standard.next_steps.map((n, i) => (
+                      <span key={i} style={{ color: 'var(--accent-emerald)', fontWeight: '600' }}>
+                        {n}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          ) : (
+            /* AI Lesson Objectives Tab */
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <div style={{
+                padding: '12px 16px',
+                background: 'var(--accent-gold-bg)',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid var(--accent-gold)',
+                color: 'var(--accent-gold)',
+                fontSize: '0.85rem'
+              }}>
+                <strong>Curriculum Alignment Assistant:</strong> These customizable "Students Will Be Able To" (SWBAT) objective stems are grounded in the standard's cognitive rigor level.
+              </div>
+
+              {generateObjectives().map((obj, i) => (
+                <div 
+                  key={i}
+                  style={{
+                    background: 'var(--bg-card)',
+                    padding: '16px',
+                    borderRadius: 'var(--radius-md)',
+                    border: '1px solid var(--border-subtle)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '8px'
+                  }}
+                >
+                  <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--accent-gold)' }}>
+                    {obj.level}
+                  </div>
+                  <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: '1.5' }}>
+                    {obj.stem}
+                  </p>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(obj.stem);
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    style={{
+                      alignSelf: 'flex-start',
+                      marginTop: '4px',
+                      padding: '4px 10px',
+                      borderRadius: 'var(--radius-sm)',
+                      background: 'var(--bg-primary)',
+                      border: '1px solid var(--border-subtle)',
+                      fontSize: '0.75rem',
+                      color: 'var(--accent-blue)',
+                      fontWeight: '600',
+                      gap: '4px'
+                    }}
+                  >
+                    <Copy size={12} />
+                    <span>Copy Objective</span>
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
+
+        </div>
+
+        {/* Drawer Sticky Footer Actions */}
+        <div style={{
+          padding: '16px 24px',
+          borderTop: '1px solid var(--border-subtle)',
+          background: 'var(--bg-card)',
+          position: 'sticky',
+          bottom: 0,
+          zIndex: 10,
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '12px'
+        }}>
+          <button
+            onClick={handleCopy}
+            style={{
+              padding: '12px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--bg-primary)',
+              color: copied ? 'var(--accent-emerald)' : 'var(--text-main)',
+              border: '1px solid var(--border-medium)',
+              fontWeight: '600',
+              fontSize: '0.88rem',
+              gap: '6px'
+            }}
+          >
+            {copied ? <Check size={16} /> : <Copy size={16} />}
+            <span>{copied ? 'Copied Citation' : 'Copy Citation'}</span>
+          </button>
+
+          <button
+            onClick={handleBookmark}
+            style={{
+              padding: '12px',
+              borderRadius: 'var(--radius-md)',
+              background: isBookmarked ? 'var(--accent-gold-bg)' : 'var(--accent-blue)',
+              color: isBookmarked ? 'var(--accent-gold)' : '#FFFFFF',
+              border: isBookmarked ? '1px solid var(--accent-gold)' : 'none',
+              fontWeight: '700',
+              fontSize: '0.88rem',
+              gap: '6px'
+            }}
+          >
+            {isBookmarked ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
+            <span>{isBookmarked ? 'Saved to Unit' : 'Add to Unit'}</span>
+          </button>
+        </div>
+
+      </div>
+    </div>
+  );
+}

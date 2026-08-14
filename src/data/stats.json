@@ -1,0 +1,22 @@
+{
+  "total": 85,
+  "by_subject": {
+    "Mathematics": 54,
+    "English Language Arts": 16,
+    "STEELS Science": 9,
+    "Social Studies": 6
+  },
+  "by_grade": {
+    "1": 6,
+    "2": 4,
+    "3": 12,
+    "4": 7,
+    "5": 7,
+    "6": 5,
+    "7": 4,
+    "8": 20,
+    "K": 9,
+    "HS": 11
+  },
+  "updated_at": "2026-08-14T19:40:26.753Z"
+}
