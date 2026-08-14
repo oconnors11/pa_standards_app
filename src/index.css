@@ -155,21 +155,33 @@ mark.highlight {
 
 /* Responsive Grid / Columns */
 .main-layout {
-  display: grid;
-  grid-template-columns: 280px 1fr;
-  gap: 24px;
-  max-width: 1440px;
   width: 100%;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 20px 24px;
   flex: 1;
 }
 
+.main-layout.feed-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 24px;
+}
+
+.main-layout.fullwidth-layout {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
 @media (max-width: 1024px) {
   .main-layout {
-    grid-template-columns: 1fr;
-    padding: 16px;
+    padding: 16px 14px;
     gap: 16px;
+  }
+  .main-layout.feed-layout {
+    display: flex;
+    flex-direction: column;
   }
   .desktop-sidebar {
     display: none !important;

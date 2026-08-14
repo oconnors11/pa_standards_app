@@ -132,7 +132,7 @@ export function App() {
       />
 
       {/* Main Content Area */}
-      <main className="main-layout" style={{ maxWidth: currentView === 'home' ? '1380px' : '1440px' }}>
+      <main className={`main-layout ${currentView === 'feed' ? 'feed-layout' : 'fullwidth-layout'}`}>
         
         {/* Left Sidebar Filters (Only active on feed view) */}
         {currentView === 'feed' && (
