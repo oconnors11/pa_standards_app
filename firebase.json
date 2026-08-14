@@ -1,5 +1,6 @@
 {
   "hosting": {
+    "target": "pa-standards-browser",
     "public": "dist",
     "ignore": [
       "firebase.json",

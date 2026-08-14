@@ -1,5 +1,15 @@
 {
   "projects": {
     "default": "mro-analysis-hub"
-  }
+  },
+  "targets": {
+    "mro-analysis-hub": {
+      "hosting": {
+        "pa-standards-browser": [
+          "pa-standards-browser"
+        ]
+      }
+    }
+  },
+  "etags": {}
 }
