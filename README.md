@@ -1,10 +1,18 @@
 # PA Core Standards & Assessment Anchors Explorer 🏛️
 
-A lightning-fast, offline-first **Progressive Web App (PWA)** for exploring, searching, and aligning Pennsylvania Core Standards, PSSA Assessment Anchors, and Keystone Frameworks across **Kindergarten through Grade 12**.
+A lightning-fast, offline-first **Progressive Web App (PWA)** and full-stack educational tool for exploring, searching, and aligning Pennsylvania Core Standards, PSSA Assessment Anchors, and Keystone Frameworks across **Kindergarten through Grade 12**.
 
 Designed for seamless responsive use on **Android, iPhone, iPad / Tablets, and Desktop PCs / Smartboards**.
 
 ![PA Standards Explorer](public/favicon.svg)
+
+---
+
+## 🌐 Live Deployments
+
+* **Firebase App Hosting (`us-east4` Cloud Run):** [https://pa-standards-browser--mro-analysis-hub.us-east4.hosted.app](https://pa-standards-browser--mro-analysis-hub.us-east4.hosted.app)
+* **Firebase Hosting (Global Edge CDN):** [https://pa-standards-browser.web.app](https://pa-standards-browser.web.app)
+* **GitHub Repository:** [https://github.com/oconnors11/pa_standards_app](https://github.com/oconnors11/pa_standards_app)
 
 ---
 
@@ -21,7 +29,7 @@ Designed for seamless responsive use on **Android, iPhone, iPad / Tablets, and D
   * Create custom units (e.g., *"Unit 3: Linear Functions & Slope"*).
   * Add standards with 1-click bookmarking.
   * Add custom teacher notes and estimated pacing days.
-  * **1-Click Exporters:** Copy Planbook/Google Docs Markdown Table, Download CSV / Excel matrix, or Print Clean Alignment Sheets.
+  * **1-Click Exporters:** Copy Planbook/Google Docs Formatted Markdown Table, Download CSV / Excel matrix, or Print Clean Alignment Sheets.
 * **✨ AI Lesson Objective Generator:** Generates customizable Bloom's taxonomy "Students Will Be Able To" (SWBAT) objective stems for any standard.
 * **📶 100% Offline PWA:** Service Worker caching allows teachers to use the app in basement classrooms or areas with spotty school Wi-Fi.
 
@@ -56,42 +64,20 @@ The application is powered by a normalized static JSON dataset (`src/data/standa
 
 ---
 
-## 🛠️ Data Compilation & Extension
-
-To compile or add new standards to the master JSON dataset:
-
-```bash
-# Compile and validate standards dataset
-node scripts/compile_standards.js
-```
-
----
-
-## 💻 Local Development
+## 🛠️ Local Development & Compilation
 
 ```bash
 # Install dependencies
 npm install
 
-# Start local Vite dev server
+# Start local dev server
 npm run dev
 
+# Re-compile standards database
+node scripts/compile_standards.js
+
 # Build production bundle
 npm run build
-```
-
----
-
-## 🔥 Firebase Hosting Deployment
-
-The app is pre-configured with `firebase.json` and `.firebaserc` for 1-command deployment:
-
-```bash
-# Build production bundle
-npm run build
-
-# Deploy to Firebase Hosting
-npx -y firebase-tools@latest deploy --only hosting
 ```
 
 ---
