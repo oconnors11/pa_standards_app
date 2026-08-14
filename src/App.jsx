@@ -98,6 +98,21 @@ export function App() {
     setCurrentView('feed');
   }, [clearAllFilters, setQuery]);
 
+  // Handle grade band selection from Home page
+  const handleSelectGradeBand = useCallback((bandKey) => {
+    clearAllFilters();
+    if (bandKey === 'K-2') {
+      setSelectedGrade('K');
+    } else if (bandKey === '3-5') {
+      setSelectedGrade('3');
+    } else if (bandKey === '6-8') {
+      setSelectedGrade('8');
+    } else if (bandKey === 'Keystone') {
+      setExamFilter('Keystone');
+    }
+    setCurrentView('feed');
+  }, [clearAllFilters, setSelectedGrade, setExamFilter]);
+
   // Handle category selection from PSSA matrix view
   const handleSelectPssaCategory = useCallback((categoryId) => {
     setSelectedCategory(categoryId);
@@ -117,7 +132,7 @@ export function App() {
       />
 
       {/* Main Content Area */}
-      <main className="main-layout" style={{ maxWidth: currentView === 'home' ? '1280px' : '1440px' }}>
+      <main className="main-layout" style={{ maxWidth: currentView === 'home' ? '1380px' : '1440px' }}>
         
         {/* Left Sidebar Filters (Only active on feed view) */}
         {currentView === 'feed' && (
@@ -148,6 +163,7 @@ export function App() {
             <HomePage
               onNavigate={setCurrentView}
               onSearchTopic={handleSearchTopic}
+              onSelectGradeBand={handleSelectGradeBand}
               totalCount={totalCount}
               onOpenBinder={() => setIsBinderOpen(true)}
             />

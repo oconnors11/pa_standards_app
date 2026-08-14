@@ -27,13 +27,16 @@ export function SearchBar({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  // K-8 oriented search suggestions
   const sampleTags = [
-    { label: 'Pythagorean Theorem', query: 'Pythagorean' },
-    { label: 'Fractions', query: 'fractions' },
-    { label: 'Linear Equations', query: 'linear' },
-    { label: 'TDA Evidence', query: 'TDA' },
-    { label: 'Slope / Unit Rate', query: 'slope' },
-    { label: 'Keystone Biology', query: 'organelles' }
+    { label: 'Fractions (3–5)', query: 'fractions' },
+    { label: 'Place Value (K–2)', query: 'place value' },
+    { label: 'Ratios & Rates (6–7)', query: 'ratios' },
+    { label: 'Linear Slope (8)', query: 'slope' },
+    { label: 'Main Idea & Details (3–5)', query: 'main idea' },
+    { label: 'TDA Evidence (3–8)', query: 'TDA' },
+    { label: 'Forces & Motion (3–8)', query: 'motion' },
+    { label: 'PA Civics & Govt (3–8)', query: 'constitution' }
   ];
 
   return (
@@ -63,7 +66,7 @@ export function SearchBar({
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search by code (e.g. M08.A-N.1, CC.2.1), topic (e.g. slope, fractions), or keyword..."
+          placeholder="Search by code (e.g. CC.2.1.8, M08.A-N, E03.A-K), K-8 topic (e.g. fractions, slope), or keyword..."
           style={{
             flex: 1,
             background: 'transparent',
@@ -119,7 +122,7 @@ export function SearchBar({
         flexWrap: 'wrap',
         gap: '8px'
       }}>
-        {/* Sample query chips */}
+        {/* Sample K-8 query chips */}
         <div style={{
           display: 'flex',
           alignItems: 'center',
@@ -129,7 +132,7 @@ export function SearchBar({
           scrollbarWidth: 'none'
         }}>
           <span style={{ fontSize: '0.75rem', color: 'var(--text-dim)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-            <Sparkles size={12} color="var(--accent-gold)" /> Suggestions:
+            <Sparkles size={12} color="var(--accent-gold)" /> K–8 Topics:
           </span>
           {sampleTags.map(tag => (
             <button
