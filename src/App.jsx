@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Header } from './components/Header';
+import { HomePage } from './components/HomePage';
 import { SearchBar } from './components/SearchBar';
 import { FilterBar } from './components/FilterBar';
 import { StandardCard } from './components/StandardCard';
@@ -16,7 +17,7 @@ import { useToast } from './hooks/useToast';
 import { AlertCircle } from 'lucide-react';
 
 export function App() {
-  const [currentView, setCurrentView] = useState('feed'); // 'feed', 'crosswalk', 'tree', 'pssa'
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'crosswalk', 'tree', 'pssa'
   const [inspectedStandard, setInspectedStandard] = useState(null);
   const [isBinderOpen, setIsBinderOpen] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
@@ -90,6 +91,13 @@ export function App() {
     }
   }, [standards, setQuery]);
 
+  // Handle quick topic search from Home page
+  const handleSearchTopic = useCallback((topicQuery) => {
+    clearAllFilters();
+    setQuery(topicQuery);
+    setCurrentView('feed');
+  }, [clearAllFilters, setQuery]);
+
   // Handle category selection from PSSA matrix view
   const handleSelectPssaCategory = useCallback((categoryId) => {
     setSelectedCategory(categoryId);
@@ -109,9 +117,9 @@ export function App() {
       />
 
       {/* Main Content Area */}
-      <main className="main-layout">
+      <main className="main-layout" style={{ maxWidth: currentView === 'home' ? '1280px' : '1440px' }}>
         
-        {/* Left Sidebar Filters (Desktop Only) */}
+        {/* Left Sidebar Filters (Only active on feed view) */}
         {currentView === 'feed' && (
           <div className="desktop-sidebar">
             <FilterBar
@@ -135,6 +143,16 @@ export function App() {
         {/* Center / Full-Width Feed & Tools */}
         <section style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
           
+          {/* Landing / Home Page */}
+          {currentView === 'home' && (
+            <HomePage
+              onNavigate={setCurrentView}
+              onSearchTopic={handleSearchTopic}
+              totalCount={totalCount}
+              onOpenBinder={() => setIsBinderOpen(true)}
+            />
+          )}
+
           {/* Main Feed View */}
           {currentView === 'feed' && (
             <>
@@ -239,7 +257,6 @@ export function App() {
         onClose={() => setInspectedStandard(null)}
         isBookmarked={inspectedStandard ? isStandardInActiveUnit(inspectedStandard.id) : false}
         onToggleBookmark={handleToggleBookmark}
-        onCopyShort={handleCopyShort}
         onCopyCitation={handleCopyCitation}
         onSelectPrerequisite={handleSelectPrerequisite}
       />
@@ -256,7 +273,6 @@ export function App() {
         updateActiveUnit={updateActiveUnit}
         deleteUnit={deleteUnit}
         allStandards={standards}
-        onInspect={setInspectedStandard}
         showToast={showToast}
       />
 

@@ -1,7 +1,7 @@
 {
-  "name": "PA Core Standards Explorer",
-  "short_name": "PA Standards",
-  "description": "Fast, accessible browser for Pennsylvania Common Core Standards, PSSA Assessment Anchors, and Keystone Frameworks.",
+  "name": "RBCS Standards Browser",
+  "short_name": "RBCS Standards",
+  "description": "Fast, accessible browser for Pennsylvania Core Standards, PSSA Assessment Anchors, and Keystone Frameworks.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0B1D33",

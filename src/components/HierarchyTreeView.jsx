@@ -4,6 +4,7 @@ import { ChevronRight, ChevronDown, Folder, ArrowUpRight, Copy } from 'lucide-re
 export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
   const [expandedNodes, setExpandedNodes] = useState({
     'Mathematics': true,
+    'Mathematics-1': true,
     'Mathematics-8': true
   });
 
@@ -45,7 +46,7 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
       
       {/* Top Controls */}
       <div style={{
@@ -55,10 +56,12 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
         background: 'var(--bg-secondary)',
         padding: '12px 20px',
         borderRadius: 'var(--radius-lg)',
-        border: '1px solid var(--border-subtle)'
+        border: '1px solid var(--border-subtle)',
+        flexWrap: 'wrap',
+        gap: '12px'
       }}>
         <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
-          Explore the Pennsylvania Standards Aligned System (SAS) hierarchy tree
+          Explore the Pennsylvania Standards Aligned System hierarchy tree
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
@@ -134,14 +137,14 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
 
               {/* Grade Level Children */}
               {isSubjectOpen && (
-                <div style={{ padding: '12px 20px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                <div style={{ padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
                   {gradeKeys.map(grade => {
                     const gradeNodeId = `${subject}-${grade}`;
                     const isGradeOpen = !!expandedNodes[gradeNodeId];
                     const domainKeys = Object.keys(tree[subject][grade]);
 
                     return (
-                      <div key={grade} style={{ borderLeft: '2px solid var(--border-medium)', marginLeft: '12px', paddingLeft: '16px' }}>
+                      <div key={grade} style={{ borderLeft: '2px solid var(--border-medium)', marginLeft: '8px', paddingLeft: '14px' }}>
                         
                         {/* Grade Header */}
                         <button
@@ -165,7 +168,7 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
 
                         {/* Domain Level Children */}
                         {isGradeOpen && (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '8px', marginLeft: '16px' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginTop: '10px', marginLeft: '6px' }}>
                             {domainKeys.map(domain => {
                               const stds = tree[subject][grade][domain];
                               return (
@@ -178,52 +181,88 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
                                     padding: '14px'
                                   }}
                                 >
-                                  <div style={{ fontSize: '0.82rem', fontWeight: '700', color: 'var(--accent-blue)', marginBottom: '8px' }}>
+                                  <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--accent-blue)', marginBottom: '10px' }}>
                                     {domain}
                                   </div>
 
-                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                                  {/* Standard Cards in Domain */}
+                                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                                     {stds.map(s => (
                                       <div
                                         key={s.id}
                                         onClick={() => onInspect(s)}
                                         style={{
-                                          padding: '10px 12px',
-                                          borderRadius: 'var(--radius-sm)',
+                                          padding: '12px 14px',
+                                          borderRadius: 'var(--radius-md)',
                                           background: 'var(--bg-card)',
                                           border: '1px solid var(--border-subtle)',
                                           display: 'flex',
-                                          alignItems: 'center',
-                                          justifyContent: 'space-between',
+                                          flexDirection: 'column',
                                           cursor: 'pointer',
-                                          gap: '12px'
+                                          gap: '8px',
+                                          transition: 'all var(--transition-fast)'
+                                        }}
+                                        onMouseEnter={(e) => {
+                                          e.currentTarget.style.borderColor = 'var(--border-medium)';
+                                          e.currentTarget.style.background = 'var(--bg-card-hover)';
+                                        }}
+                                        onMouseLeave={(e) => {
+                                          e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                                          e.currentTarget.style.background = 'var(--bg-card)';
                                         }}
                                       >
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                          <span className="badge badge-code" style={{ fontSize: '0.75rem' }}>
-                                            {s.code}
-                                          </span>
-                                          <span style={{ fontSize: '0.84rem', color: 'var(--text-main)', fontWeight: '500' }}>
-                                            {s.description.slice(0, 90)}...
-                                          </span>
+                                        {/* Top Header Row with Standard Code and Action buttons */}
+                                        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', gap: '8px', flexWrap: 'wrap' }}>
+                                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', flexWrap: 'wrap' }}>
+                                            <span className="badge badge-code" style={{ fontSize: '0.78rem' }}>
+                                              {s.code}
+                                            </span>
+                                            {s.alt_code && (
+                                              <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-dim)', fontSize: '0.7rem' }}>
+                                                Core: {s.alt_code}
+                                              </span>
+                                            )}
+                                            <span className="badge badge-dok" style={{ fontSize: '0.7rem' }}>
+                                              {s.dok}
+                                            </span>
+                                          </div>
+
+                                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                                            <button
+                                              onClick={(e) => {
+                                                e.stopPropagation();
+                                                onCopyShort(s);
+                                              }}
+                                              style={{
+                                                padding: '4px 8px',
+                                                borderRadius: 'var(--radius-sm)',
+                                                background: 'var(--bg-primary)',
+                                                color: 'var(--text-muted)',
+                                                fontSize: '0.72rem',
+                                                fontWeight: '600',
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                gap: '4px'
+                                              }}
+                                              title="Copy standard code"
+                                            >
+                                              <Copy size={12} />
+                                              <span>Copy</span>
+                                            </button>
+                                            <ArrowUpRight size={16} color="var(--accent-blue)" />
+                                          </div>
                                         </div>
 
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                                          <button
-                                            onClick={(e) => {
-                                              e.stopPropagation();
-                                              onCopyShort(s);
-                                            }}
-                                            style={{
-                                              padding: '4px',
-                                              color: 'var(--text-muted)'
-                                            }}
-                                            title="Copy code"
-                                          >
-                                            <Copy size={13} />
-                                          </button>
-                                          <ArrowUpRight size={15} color="var(--accent-blue)" />
-                                        </div>
+                                        {/* Description text neatly displayed below the code badge spanning full width */}
+                                        <p style={{
+                                          fontSize: '0.86rem',
+                                          color: 'var(--text-main)',
+                                          lineHeight: '1.5',
+                                          margin: 0,
+                                          width: '100%'
+                                        }}>
+                                          {s.description}
+                                        </p>
                                       </div>
                                     ))}
                                   </div>

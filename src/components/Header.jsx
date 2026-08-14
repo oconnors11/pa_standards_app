@@ -1,5 +1,5 @@
 import React from 'react';
-import { BookOpen, GitFork, Network, Layers, Bookmark, SlidersHorizontal } from 'lucide-react';
+import { Home, BookOpen, GitFork, Network, Layers, Bookmark, SlidersHorizontal } from 'lucide-react';
 
 export function Header({ 
   currentView, 
@@ -9,10 +9,11 @@ export function Header({
   onToggleMobileFilters 
 }) {
   const navItems = [
-    { id: 'feed', label: 'Standards Feed', icon: <BookOpen size={16} /> },
-    { id: 'crosswalk', label: 'Vertical Progression', icon: <GitFork size={16} /> },
-    { id: 'tree', label: 'Hierarchy Tree', icon: <Network size={16} /> },
-    { id: 'pssa', label: 'PSSA Blueprint', icon: <Layers size={16} /> }
+    { id: 'home', label: 'Home', icon: <Home size={15} /> },
+    { id: 'feed', label: 'Standards Feed', icon: <BookOpen size={15} /> },
+    { id: 'crosswalk', label: 'Vertical Progression', icon: <GitFork size={15} /> },
+    { id: 'tree', label: 'Hierarchy Tree', icon: <Network size={15} /> },
+    { id: 'pssa', label: 'PSSA Blueprint', icon: <Layers size={15} /> }
   ];
 
   return (
@@ -35,8 +36,21 @@ export function Header({
         gap: '16px'
       }}>
         
-        {/* Brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+        {/* Clickable Brand Logo & Title (Returns Home) */}
+        <button
+          onClick={() => setCurrentView('home')}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            background: 'transparent',
+            border: 'none',
+            padding: 0,
+            cursor: 'pointer',
+            textAlign: 'left'
+          }}
+          title="Return to Home Landing Page"
+        >
           <div style={{
             width: '36px',
             height: '36px',
@@ -46,7 +60,8 @@ export function Header({
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: 'var(--shadow-sm)'
+            boxShadow: 'var(--shadow-sm)',
+            flexShrink: 0
           }}>
             <svg width="22" height="22" viewBox="0 0 100 100">
               <polygon points="12,18 88,18 78,86 50,96 22,86" fill="#3B82F6" />
@@ -55,18 +70,15 @@ export function Header({
           </div>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <h1 style={{ fontSize: '1.15rem', fontWeight: '800', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
-                PA Core Standards
-              </h1>
-              <span className="badge badge-keystone" style={{ fontSize: '0.65rem', padding: '1px 6px' }}>
-                PDE SAS
+              <span style={{ fontSize: '1.15rem', fontWeight: '800', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
+                RBCS Standards Browser
               </span>
             </div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>
-              K–12 Assessment Anchors & Eligible Content
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
+              K–12 Assessment Anchors & Curriculum Explorer
             </p>
           </div>
-        </div>
+        </button>
 
         {/* View Mode Switcher (Desktop / Tablet) */}
         <nav style={{
@@ -106,24 +118,26 @@ export function Header({
 
         {/* Action Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* Mobile Filter Toggle */}
-          <button
-            onClick={onToggleMobileFilters}
-            className="mobile-filter-btn"
-            style={{
-              padding: '8px 12px',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--bg-primary)',
-              border: '1px solid var(--border-medium)',
-              color: 'var(--text-main)',
-              fontSize: '0.85rem',
-              display: 'none',
-              gap: '6px'
-            }}
-          >
-            <SlidersHorizontal size={16} />
-            <span>Filters</span>
-          </button>
+          {/* Mobile Filter Toggle (only on feed view) */}
+          {currentView === 'feed' && (
+            <button
+              onClick={onToggleMobileFilters}
+              className="mobile-filter-btn"
+              style={{
+                padding: '8px 12px',
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--bg-primary)',
+                border: '1px solid var(--border-medium)',
+                color: 'var(--text-main)',
+                fontSize: '0.85rem',
+                display: 'none',
+                gap: '6px'
+              }}
+            >
+              <SlidersHorizontal size={16} />
+              <span>Filters</span>
+            </button>
+          )}
 
           {/* Lesson Binder Drawer Button */}
           <button
@@ -142,7 +156,7 @@ export function Header({
             }}
           >
             <Bookmark size={16} />
-            <span>Lesson Binder</span>
+            <span className="binder-btn-text">Lesson Binder</span>
             <span style={{
               background: savedCount > 0 ? 'var(--accent-gold)' : 'var(--border-medium)',
               color: savedCount > 0 ? '#000000' : 'var(--text-main)',
@@ -179,10 +193,14 @@ export function Header({
               fontWeight: currentView === item.id ? '700' : '500',
               background: currentView === item.id ? 'var(--accent-blue)' : 'var(--bg-primary)',
               color: currentView === item.id ? '#FFFFFF' : 'var(--text-muted)',
-              border: '1px solid var(--border-subtle)'
+              border: '1px solid var(--border-subtle)',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '4px'
             }}
           >
-            {item.label}
+            {item.icon}
+            <span>{item.label}</span>
           </button>
         ))}
       </div>
@@ -192,6 +210,7 @@ export function Header({
           .desktop-nav { display: none !important; }
           .mobile-nav-strip { display: flex !important; }
           .mobile-filter-btn { display: flex !important; }
+          .binder-btn-text { display: none; }
         }
       `}</style>
     </header>
