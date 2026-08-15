@@ -1,6 +1,53 @@
 import React, { useState, useMemo } from 'react';
 import { ChevronRight, ChevronDown, Folder, ArrowUpRight, Copy } from 'lucide-react';
 
+const GRADE_ORDER = [
+  'Pre-K',
+  'K',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9',
+  '10',
+  '11',
+  '12',
+  'HS'
+];
+
+function getGradeSortIndex(grade) {
+  const norm = String(grade).trim();
+  const idx = GRADE_ORDER.indexOf(norm);
+  if (idx !== -1) return idx;
+  const num = parseInt(norm.replace(/\D/g, ''), 10);
+  if (!isNaN(num)) return 100 + num;
+  return 999;
+}
+
+const SUBJECT_ORDER = [
+  'Mathematics',
+  'English Language Arts',
+  'STEELS Science',
+  'Social Studies'
+];
+
+function getSubjectSortIndex(subject) {
+  const idx = SUBJECT_ORDER.indexOf(subject);
+  return idx !== -1 ? idx : 99;
+}
+
+function formatGradeLabel(grade) {
+  if (grade === 'Pre-K') return 'Pre-K';
+  if (grade === 'K') return 'Kindergarten (Grade K)';
+  if (grade === 'HS') return 'High School (Keystone Frameworks)';
+  if (String(grade).toLowerCase().startsWith('grade')) return grade;
+  return `Grade ${grade}`;
+}
+
 export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
   const [expandedNodes, setExpandedNodes] = useState({
     'Mathematics': true,
@@ -45,6 +92,10 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
     setExpandedNodes({});
   };
 
+  const sortedSubjects = useMemo(() => {
+    return Object.keys(tree).sort((a, b) => getSubjectSortIndex(a) - getSubjectSortIndex(b));
+  }, [tree]);
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', width: '100%' }}>
       
@@ -60,33 +111,43 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
         flexWrap: 'wrap',
         gap: '12px'
       }}>
-        <div style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>
+        <div style={{ fontSize: '0.9rem', color: 'var(--text-silver)' }}>
           Explore the Pennsylvania Standards Aligned System hierarchy tree
         </div>
         <div style={{ display: 'flex', gap: '8px' }}>
           <button
             onClick={expandAll}
             style={{
-              padding: '6px 12px',
+              padding: '6px 14px',
               borderRadius: 'var(--radius-sm)',
-              background: 'var(--bg-primary)',
-              color: 'var(--accent-blue)',
+              background: 'var(--accent-crimson)',
+              color: '#FFFFFF',
               fontSize: '0.8rem',
-              fontWeight: '600'
+              fontWeight: '700',
+              border: 'none',
+              cursor: 'pointer',
+              transition: 'all var(--transition-fast)'
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--accent-crimson-hover)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--accent-crimson)'; }}
           >
             Expand All
           </button>
           <button
             onClick={collapseAll}
             style={{
-              padding: '6px 12px',
+              padding: '6px 14px',
               borderRadius: 'var(--radius-sm)',
               background: 'var(--bg-primary)',
-              color: 'var(--text-muted)',
+              color: 'var(--text-silver)',
+              border: '1px solid var(--border-subtle)',
               fontSize: '0.8rem',
-              fontWeight: '600'
+              fontWeight: '600',
+              cursor: 'pointer',
+              transition: 'all var(--transition-fast)'
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = 'var(--border-medium)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = 'var(--border-subtle)'; }}
           >
             Collapse All
           </button>
@@ -95,9 +156,9 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
 
       {/* Tree Nodes */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-        {Object.keys(tree).map(subject => {
+        {sortedSubjects.map(subject => {
           const isSubjectOpen = !!expandedNodes[subject];
-          const gradeKeys = Object.keys(tree[subject]);
+          const gradeKeys = Object.keys(tree[subject]).sort((a, b) => getGradeSortIndex(a) - getGradeSortIndex(b));
 
           return (
             <div 
@@ -120,17 +181,21 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
                   justifyContent: 'space-between',
                   background: 'var(--bg-secondary)',
                   borderBottom: isSubjectOpen ? '1px solid var(--border-subtle)' : 'none',
+                  borderTop: 'none',
+                  borderLeft: 'none',
+                  borderRight: 'none',
                   color: 'var(--text-main)',
                   fontWeight: '800',
-                  fontSize: '1rem'
+                  fontSize: '1rem',
+                  cursor: 'pointer'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                  {isSubjectOpen ? <ChevronDown size={18} /> : <ChevronRight size={18} />}
-                  <Folder size={18} color="var(--accent-blue)" />
+                  {isSubjectOpen ? <ChevronDown size={18} color="var(--text-silver)" /> : <ChevronRight size={18} color="var(--text-silver)" />}
+                  <Folder size={18} color="var(--text-silver)" />
                   <span>{subject}</span>
                 </div>
-                <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-muted)' }}>
+                <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-silver)' }}>
                   {gradeKeys.length} Grade Bands
                 </span>
               </button>
@@ -156,11 +221,14 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
                             padding: '6px 0',
                             color: 'var(--text-main)',
                             fontWeight: '700',
-                            fontSize: '0.92rem'
+                            fontSize: '0.92rem',
+                            background: 'transparent',
+                            border: 'none',
+                            cursor: 'pointer'
                           }}
                         >
-                          {isGradeOpen ? <ChevronDown size={15} /> : <ChevronRight size={15} />}
-                          <span>Grade {grade}</span>
+                          {isGradeOpen ? <ChevronDown size={15} color="var(--text-silver)" /> : <ChevronRight size={15} color="var(--text-silver)" />}
+                          <span>{formatGradeLabel(grade)}</span>
                           <span className="badge badge-code" style={{ fontSize: '0.7rem' }}>
                             {domainKeys.length} Domains
                           </span>
@@ -181,7 +249,7 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
                                     padding: '14px'
                                   }}
                                 >
-                                  <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--accent-blue)', marginBottom: '10px' }}>
+                                  <div style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-silver)', marginBottom: '10px' }}>
                                     {domain}
                                   </div>
 
@@ -237,19 +305,21 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
                                                 padding: '4px 8px',
                                                 borderRadius: 'var(--radius-sm)',
                                                 background: 'var(--bg-primary)',
-                                                color: 'var(--text-muted)',
+                                                color: 'var(--text-silver)',
                                                 fontSize: '0.72rem',
                                                 fontWeight: '600',
                                                 display: 'flex',
                                                 alignItems: 'center',
-                                                gap: '4px'
+                                                gap: '4px',
+                                                border: '1px solid var(--border-subtle)',
+                                                cursor: 'pointer'
                                               }}
                                               title="Copy standard code"
                                             >
                                               <Copy size={12} />
                                               <span>Copy</span>
                                             </button>
-                                            <ArrowUpRight size={16} color="var(--accent-blue)" />
+                                            <ArrowUpRight size={16} color="var(--text-silver)" />
                                           </div>
                                         </div>
 
@@ -264,7 +334,7 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
                                           {s.bullets && s.bullets.length > 0 ? (
                                             <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                                               <p style={{ margin: 0 }}>{s.clean_intro || s.description}</p>
-                                              <ul style={{ margin: '4px 0 0 0', paddingLeft: '18px', color: 'var(--text-muted)', fontSize: '0.82rem', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                                              <ul style={{ margin: '4px 0 0 0', paddingLeft: '18px', color: 'var(--text-silver)', fontSize: '0.82rem', display: 'flex', flexDirection: 'column', gap: '3px' }}>
                                                 {s.bullets.map((b, bIdx) => (
                                                   <li key={bIdx}>{b}</li>
                                                 ))}
