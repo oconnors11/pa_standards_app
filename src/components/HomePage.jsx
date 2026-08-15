@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
-  BookOpen, GitFork, Network, Layers, Bookmark, Search, 
-  ArrowRight, Sparkles, CheckCircle2, Compass, GraduationCap, 
+  BookOpen, GitFork, Network, Layers, Search, 
+  ArrowRight, Sparkles, Compass, GraduationCap, 
   Calculator, BookText, Microscope, Landmark, ChevronRight
 } from 'lucide-react';
 
@@ -9,8 +9,7 @@ export function HomePage({
   onNavigate, 
   onSearchTopic, 
   onSelectGradeBand,
-  totalCount, 
-  onOpenBinder 
+  totalCount
 }) {
   const [localQuery, setLocalQuery] = useState('');
 
@@ -196,14 +195,6 @@ export function HomePage({
             >
               <BookOpen size={16} />
               <span>Browse All Standards ({totalCount})</span>
-            </button>
-
-            <button
-              onClick={onOpenBinder}
-              className="btn-secondary-launch"
-            >
-              <Bookmark size={16} />
-              <span>Lesson Unit Planner</span>
             </button>
           </div>
         </div>
@@ -420,59 +411,6 @@ export function HomePage({
         </div>
       </div>
 
-      {/* SECTION 5: Teacher Toolkit & Pacing Planner Banner */}
-      <div className="tile-card teacher-toolkit-card">
-        <div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-            <Bookmark size={20} color="var(--accent-gold)" />
-            <h3 style={{ fontSize: '1.15rem', fontWeight: '800', color: 'var(--text-main)' }}>
-              Teacher Lesson Planner & 1-Click Exports
-            </h3>
-          </div>
-          <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', lineHeight: '1.5', maxWidth: '560px', margin: 0 }}>
-            Assemble custom curriculum units, calculate estimated instructional pacing days, and generate Bloom's taxonomy SWBAT objective stems for your daily lesson plans.
-          </p>
-          <button
-            onClick={onOpenBinder}
-            style={{
-              marginTop: '16px',
-              padding: '10px 20px',
-              borderRadius: 'var(--radius-md)',
-              background: 'var(--accent-gold-bg)',
-              color: 'var(--accent-gold)',
-              border: '1px solid var(--accent-gold)',
-              fontWeight: '700',
-              fontSize: '0.88rem',
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '8px'
-            }}
-          >
-            <Bookmark size={16} />
-            <span>Open My Lesson Units</span>
-          </button>
-        </div>
-
-        <div className="toolkit-check-list">
-          <div className="toolkit-check-item">
-            <CheckCircle2 size={16} color="var(--accent-emerald)" />
-            <span>1-Click Copy Code or Full Citation for district planbooks</span>
-          </div>
-          <div className="toolkit-check-item">
-            <CheckCircle2 size={16} color="var(--accent-emerald)" />
-            <span>AI-assisted "SWBAT" Lesson Objective stems across DOK 1–4</span>
-          </div>
-          <div className="toolkit-check-item">
-            <CheckCircle2 size={16} color="var(--accent-emerald)" />
-            <span>Export to Markdown Tables, CSV spreadsheets, and Print sheets</span>
-          </div>
-          <div className="toolkit-check-item">
-            <CheckCircle2 size={16} color="var(--accent-emerald)" />
-            <span>100% Offline PWA functionality for spotty classroom Wi-Fi</span>
-          </div>
-        </div>
-      </div>
-
       {/* Embedded Responsive Styles for Tiled Dashboard */}
       <style>{`
         .home-dashboard-container {
@@ -599,19 +537,6 @@ export function HomePage({
           font-weight: 700;
           font-size: 0.88rem;
           box-shadow: var(--shadow-sm);
-        }
-
-        .btn-secondary-launch {
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          padding: 10px 18px;
-          border-radius: var(--radius-md);
-          background: var(--bg-primary);
-          color: var(--accent-gold);
-          border: 1px solid var(--accent-gold);
-          font-weight: 700;
-          font-size: 0.88rem;
         }
 
         .launchpad-tile {
@@ -809,30 +734,6 @@ export function HomePage({
           flex-shrink: 0;
         }
 
-        .teacher-toolkit-card {
-          background: var(--bg-secondary);
-          border-color: var(--border-medium);
-          display: grid;
-          grid-template-columns: 1.2fr 1fr;
-          gap: 24px;
-          align-items: center;
-          padding: 28px;
-        }
-
-        .toolkit-check-list {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        .toolkit-check-item {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          font-size: 0.85rem;
-          color: var(--text-main);
-        }
-
         @media (max-width: 1080px) {
           .hero-grid-row {
             grid-template-columns: 1fr;
@@ -844,9 +745,6 @@ export function HomePage({
             grid-template-columns: 1fr;
           }
           .feature-deepdive-grid {
-            grid-template-columns: 1fr;
-          }
-          .teacher-toolkit-card {
             grid-template-columns: 1fr;
           }
         }

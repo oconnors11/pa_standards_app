@@ -1,20 +1,17 @@
 import React, { useState } from 'react';
 import { 
-  X, Copy, Bookmark, BookmarkCheck, ArrowRight, ArrowLeft, 
+  X, Copy, ArrowRight, ArrowLeft, 
   Sparkles, Check 
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 export function StandardDetailModal({
   standard,
   onClose,
-  isBookmarked,
-  onToggleBookmark,
   onCopyCitation,
   onSelectPrerequisite
 }) {
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'ai_objectives', 'crosswalks'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'ai_objectives'
 
   if (!standard) return null;
 
@@ -22,17 +19,6 @@ export function StandardDetailModal({
     onCopyCitation(standard);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
-  };
-
-  const handleBookmark = () => {
-    const added = onToggleBookmark(standard.id);
-    if (added) {
-      try {
-        confetti({ particleCount: 25, spread: 50, origin: { y: 0.7 } });
-      } catch {
-        // Confetti optional
-      }
-    }
   };
 
   // Generate dynamic teacher objective stems (SWBAT)
@@ -393,42 +379,27 @@ export function StandardDetailModal({
           position: 'sticky',
           bottom: 0,
           zIndex: 10,
-          display: 'grid',
-          gridTemplateColumns: '1fr 1fr',
-          gap: '12px'
+          display: 'flex'
         }}>
           <button
             onClick={handleCopy}
             style={{
+              width: '100%',
               padding: '12px',
               borderRadius: 'var(--radius-md)',
-              background: 'var(--bg-primary)',
-              color: copied ? 'var(--accent-emerald)' : 'var(--text-main)',
-              border: '1px solid var(--border-medium)',
-              fontWeight: '600',
+              background: 'var(--accent-blue)',
+              color: '#FFFFFF',
+              border: 'none',
+              fontWeight: '700',
               fontSize: '0.88rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
               gap: '6px'
             }}
           >
             {copied ? <Check size={16} /> : <Copy size={16} />}
             <span>{copied ? 'Copied Citation' : 'Copy Citation'}</span>
-          </button>
-
-          <button
-            onClick={handleBookmark}
-            style={{
-              padding: '12px',
-              borderRadius: 'var(--radius-md)',
-              background: isBookmarked ? 'var(--accent-gold-bg)' : 'var(--accent-blue)',
-              color: isBookmarked ? 'var(--accent-gold)' : '#FFFFFF',
-              border: isBookmarked ? '1px solid var(--accent-gold)' : 'none',
-              fontWeight: '700',
-              fontSize: '0.88rem',
-              gap: '6px'
-            }}
-          >
-            {isBookmarked ? <BookmarkCheck size={16} /> : <Bookmark size={16} />}
-            <span>{isBookmarked ? 'Saved to Unit' : 'Add to Unit'}</span>
           </button>
         </div>
 

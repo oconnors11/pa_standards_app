@@ -25,11 +25,6 @@ Designed for seamless responsive use on **Android, iPhone, iPad / Tablets, and D
   * **Desktop:** 3-column power command center with keyboard hotkeys (`/` or `⌘K` to search, `Esc` to close).
 * **🔀 Vertical Progression / Crosswalk Matrix:** Side-by-side comparative views tracing how concepts evolve across grades (e.g. Fractions in Grade 1–5 $\rightarrow$ Rational Numbers in 6–8 $\rightarrow$ Real Numbers in Keystone Algebra).
 * **🌲 Hierarchy Tree Explorer:** Expandable/collapsible nested tree of all PA standards by Subject $\rightarrow$ Grade $\rightarrow$ Domain $\rightarrow$ Anchor $\rightarrow$ Eligible Content.
-* **📁 Lesson Unit Binder & Pacing Guide:**
-  * Create custom units (e.g., *"Unit 3: Linear Functions & Slope"*).
-  * Add standards with 1-click bookmarking.
-  * Add custom teacher notes and estimated pacing days.
-  * **1-Click Exporters:** Copy Planbook/Google Docs Formatted Markdown Table, Download CSV / Excel matrix, or Print Clean Alignment Sheets.
 * **✨ AI Lesson Objective Generator:** Generates customizable Bloom's taxonomy "Students Will Be Able To" (SWBAT) objective stems for any standard.
 * **📶 100% Offline PWA:** Service Worker caching allows teachers to use the app in basement classrooms or areas with spotty school Wi-Fi.
 

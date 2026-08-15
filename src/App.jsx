@@ -8,18 +8,15 @@ import { StandardDetailModal } from './components/StandardDetailModal';
 import { VerticalCrosswalkView } from './components/VerticalCrosswalkView';
 import { HierarchyTreeView } from './components/HierarchyTreeView';
 import { PssaMatrixView } from './components/PssaMatrixView';
-import { LessonBinderModal } from './components/LessonBinderModal';
 import { Toast } from './components/Toast';
 
 import { useStandardsSearch } from './hooks/useStandardsSearch';
-import { useLessonBinder } from './hooks/useLessonBinder';
 import { useToast } from './hooks/useToast';
 import { AlertCircle } from 'lucide-react';
 
 export function App() {
   const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'crosswalk', 'tree', 'pssa'
   const [inspectedStandard, setInspectedStandard] = useState(null);
-  const [isBinderOpen, setIsBinderOpen] = useState(false);
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const {
@@ -44,19 +41,6 @@ export function App() {
     hasActiveFilters
   } = useStandardsSearch();
 
-  const {
-    units,
-    activeUnit,
-    activeUnitId,
-    setActiveUnitId,
-    isStandardInActiveUnit,
-    toggleStandardInActiveUnit,
-    createUnit,
-    updateActiveUnit,
-    deleteUnit,
-    totalSavedCount
-  } = useLessonBinder();
-
   const { toast, showToast, hideToast } = useToast();
 
   // Copy Short Code
@@ -69,15 +53,8 @@ export function App() {
   const handleCopyCitation = useCallback((standard) => {
     const citation = `PA Standard ${standard.code}${standard.alt_code ? ` (${standard.alt_code})` : ''} - Grade ${standard.grade} ${standard.subject} [${standard.domain}]: ${standard.description}`;
     navigator.clipboard.writeText(citation);
-    showToast(`Copied lesson plan citation for ${standard.code}`);
+    showToast(`Copied citation for ${standard.code}`);
   }, [showToast]);
-
-  // Toggle bookmark in unit
-  const handleToggleBookmark = useCallback((standardId) => {
-    const added = toggleStandardInActiveUnit(standardId);
-    showToast(added ? `Added to "${activeUnit?.title || 'Lesson Unit'}"` : 'Removed from lesson unit');
-    return added;
-  }, [toggleStandardInActiveUnit, activeUnit, showToast]);
 
   // Select prerequisite from detail modal
   const handleSelectPrerequisite = useCallback((code) => {
@@ -126,8 +103,6 @@ export function App() {
         currentView={currentView}
         setCurrentView={setCurrentView}
         totalCount={totalCount}
-        savedCount={totalSavedCount}
-        onOpenBinder={() => setIsBinderOpen(true)}
         onToggleMobileFilters={() => setIsMobileFiltersOpen(true)}
       />
 
@@ -165,7 +140,6 @@ export function App() {
               onSearchTopic={handleSearchTopic}
               onSelectGradeBand={handleSelectGradeBand}
               totalCount={totalCount}
-              onOpenBinder={() => setIsBinderOpen(true)}
             />
           )}
 
@@ -225,8 +199,6 @@ export function App() {
                       standard={standard}
                       query={query}
                       onInspect={setInspectedStandard}
-                      isBookmarked={isStandardInActiveUnit(standard.id)}
-                      onToggleBookmark={handleToggleBookmark}
                       onCopyShort={handleCopyShort}
                       onCopyCitation={handleCopyCitation}
                     />
@@ -271,25 +243,8 @@ export function App() {
       <StandardDetailModal
         standard={inspectedStandard}
         onClose={() => setInspectedStandard(null)}
-        isBookmarked={inspectedStandard ? isStandardInActiveUnit(inspectedStandard.id) : false}
-        onToggleBookmark={handleToggleBookmark}
         onCopyCitation={handleCopyCitation}
         onSelectPrerequisite={handleSelectPrerequisite}
-      />
-
-      {/* Lesson Binder & Pacing Planner Modal */}
-      <LessonBinderModal
-        isOpen={isBinderOpen}
-        onClose={() => setIsBinderOpen(false)}
-        units={units}
-        activeUnit={activeUnit}
-        activeUnitId={activeUnitId}
-        setActiveUnitId={setActiveUnitId}
-        createUnit={createUnit}
-        updateActiveUnit={updateActiveUnit}
-        deleteUnit={deleteUnit}
-        allStandards={standards}
-        showToast={showToast}
       />
 
       {/* Mobile Filters Modal Drawer */}

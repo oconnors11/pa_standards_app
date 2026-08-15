@@ -1,6 +1,5 @@
 import React from 'react';
-import { Copy, Bookmark, BookmarkCheck, ArrowUpRight, AlertTriangle, Check } from 'lucide-react';
-import confetti from 'canvas-confetti';
+import { Copy, ArrowUpRight, AlertTriangle, Check } from 'lucide-react';
 
 // Helper to highlight search matches
 function HighlightedText({ text, query }) {
@@ -29,8 +28,6 @@ export function StandardCard({
   standard,
   query,
   onInspect,
-  isBookmarked,
-  onToggleBookmark,
   onCopyShort,
   onCopyCitation
 }) {
@@ -53,27 +50,6 @@ export function StandardCard({
     onCopyCitation(standard);
     setCopiedType('citation');
     setTimeout(() => setCopiedType(null), 1800);
-  };
-
-  const handleBookmark = (e) => {
-    e.stopPropagation();
-    const added = onToggleBookmark(standard.id);
-    if (added) {
-      // Trigger tiny celebratory confetti burst near button
-      try {
-        const rect = e.currentTarget.getBoundingClientRect();
-        confetti({
-          particleCount: 20,
-          spread: 45,
-          origin: {
-            x: (rect.left + rect.width / 2) / window.innerWidth,
-            y: (rect.top + rect.height / 2) / window.innerHeight
-          }
-        });
-      } catch {
-        // Confetti optional
-      }
-    }
   };
 
   return (
@@ -227,7 +203,7 @@ export function StandardCard({
           {/* Quick Copy Full Citation */}
           <button
             onClick={handleCopyCitation}
-            title="Copy citation for lesson plan"
+            title="Copy citation"
             style={{
               padding: '6px 10px',
               borderRadius: 'var(--radius-sm)',
@@ -241,25 +217,6 @@ export function StandardCard({
           >
             {copiedType === 'citation' ? <Check size={13} /> : <Copy size={13} />}
             <span>{copiedType === 'citation' ? 'Copied' : 'Citation'}</span>
-          </button>
-
-          {/* Bookmark Button */}
-          <button
-            onClick={handleBookmark}
-            title={isBookmarked ? 'Remove from Lesson Binder' : 'Add to Lesson Binder'}
-            style={{
-              padding: '6px 10px',
-              borderRadius: 'var(--radius-sm)',
-              background: isBookmarked ? 'var(--accent-gold-bg)' : 'var(--bg-primary)',
-              color: isBookmarked ? 'var(--accent-gold)' : 'var(--text-muted)',
-              border: `1px solid ${isBookmarked ? 'var(--accent-gold)' : 'var(--border-subtle)'}`,
-              fontSize: '0.75rem',
-              fontWeight: '600',
-              gap: '4px'
-            }}
-          >
-            {isBookmarked ? <BookmarkCheck size={13} /> : <Bookmark size={13} />}
-            <span>{isBookmarked ? 'Saved' : 'Save'}</span>
           </button>
 
           {/* Inspect Arrow */}

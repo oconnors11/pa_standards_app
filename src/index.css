@@ -242,7 +242,7 @@ button:active {
   .no-print, header, .filter-section, .action-buttons {
     display: none !important;
   }
-  .standard-card, .binder-print-view {
+  .standard-card {
     border: 1px solid #ddd !important;
     box-shadow: none !important;
     page-break-inside: avoid;

@@ -1,11 +1,9 @@
 import React from 'react';
-import { Home, BookOpen, GitFork, Network, Layers, Bookmark, SlidersHorizontal } from 'lucide-react';
+import { Home, BookOpen, GitFork, Network, Layers, SlidersHorizontal } from 'lucide-react';
 
 export function Header({ 
   currentView, 
   setCurrentView, 
-  savedCount, 
-  onOpenBinder,
   onToggleMobileFilters 
 }) {
   const navItems = [
@@ -116,10 +114,9 @@ export function Header({
           })}
         </nav>
 
-        {/* Action Controls */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-          {/* Mobile Filter Toggle (only on feed view) */}
-          {currentView === 'feed' && (
+        {/* Action Controls (Mobile Filter Toggle) */}
+        {currentView === 'feed' && (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
             <button
               onClick={onToggleMobileFilters}
               className="mobile-filter-btn"
@@ -137,38 +134,8 @@ export function Header({
               <SlidersHorizontal size={16} />
               <span>Filters</span>
             </button>
-          )}
-
-          {/* Lesson Binder Drawer Button */}
-          <button
-            onClick={onOpenBinder}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '8px',
-              padding: '8px 16px',
-              borderRadius: 'var(--radius-md)',
-              background: savedCount > 0 ? 'var(--accent-gold-bg)' : 'var(--bg-primary)',
-              border: `1px solid ${savedCount > 0 ? 'var(--accent-gold)' : 'var(--border-medium)'}`,
-              color: savedCount > 0 ? 'var(--accent-gold)' : 'var(--text-main)',
-              fontWeight: '600',
-              fontSize: '0.85rem'
-            }}
-          >
-            <Bookmark size={16} />
-            <span className="binder-btn-text">Lesson Binder</span>
-            <span style={{
-              background: savedCount > 0 ? 'var(--accent-gold)' : 'var(--border-medium)',
-              color: savedCount > 0 ? '#000000' : 'var(--text-main)',
-              padding: '1px 7px',
-              borderRadius: 'var(--radius-full)',
-              fontSize: '0.75rem',
-              fontWeight: '800'
-            }}>
-              {savedCount}
-            </span>
-          </button>
-        </div>
+          </div>
+        )}
 
       </div>
 
@@ -210,7 +177,6 @@ export function Header({
           .desktop-nav { display: none !important; }
           .mobile-nav-strip { display: flex !important; }
           .mobile-filter-btn { display: flex !important; }
-          .binder-btn-text { display: none; }
         }
       `}</style>
     </header>
