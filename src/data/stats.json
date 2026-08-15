@@ -1,22 +1,23 @@
 {
-  "total": 140,
+  "total": 1064,
   "by_subject": {
-    "English Language Arts": 71,
+    "English Language Arts": 995,
     "Mathematics": 54,
     "Social Studies": 6,
     "STEELS Science": 9
   },
   "by_grade": {
     "1": 61,
-    "2": 4,
-    "3": 12,
-    "4": 7,
-    "5": 7,
-    "6": 5,
-    "7": 4,
-    "8": 20,
+    "2": 34,
+    "3": 128,
+    "4": 137,
+    "5": 140,
+    "6": 138,
+    "7": 140,
+    "8": 159,
+    "10": 53,
     "K": 9,
-    "HS": 11
+    "HS": 65
   },
-  "updated_at": "2026-08-15T03:22:11.019Z"
+  "updated_at": "2026-08-15T03:34:38.709Z"
 }

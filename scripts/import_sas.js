@@ -146,18 +146,11 @@ export function runImport() {
     const filePath = path.join(rawDataDir, fileName);
     console.log(`\n📄 Processing file: ${fileName}...`);
 
-    let rows = [];
-    if (/\.(xlsx|xls)$/i.test(fileName)) {
-      const workbook = XLSX.readFile(filePath);
-      const sheetName = workbook.SheetNames[0];
-      rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
-    } else {
-      // Parse CSV / TSV with XLSX utility for robust quote and newline handling
-      const fileContent = fs.readFileSync(filePath, 'utf-8');
-      const workbook = XLSX.read(fileContent, { type: 'string', raw: false });
-      const sheetName = workbook.SheetNames[0];
-      rows = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
-    }
+    const xlsxLib = XLSX.default || XLSX;
+    const fileBuffer = fs.readFileSync(filePath);
+    const workbook = xlsxLib.read(fileBuffer, { type: 'buffer' });
+    const sheetName = workbook.SheetNames[0];
+    const rows = xlsxLib.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
 
     console.log(`  Read ${rows.length} rows from ${fileName}.`);
 
