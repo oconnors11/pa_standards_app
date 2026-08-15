@@ -299,7 +299,7 @@ export function StandardDetailModal({
                 </div>
 
                 {standard.prerequisites && standard.prerequisites.length > 0 && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', flexWrap: 'wrap' }}>
                     <ArrowLeft size={14} color="var(--accent-blue)" />
                     <span style={{ color: 'var(--text-silver)' }}>Prerequisite:</span>
                     {standard.prerequisites.map((p, i) => (
@@ -307,10 +307,17 @@ export function StandardDetailModal({
                         key={i}
                         onClick={() => onSelectPrerequisite && onSelectPrerequisite(p)}
                         style={{
-                          color: 'var(--text-silver)',
+                          color: 'var(--accent-blue)',
                           fontWeight: '600',
-                          textDecoration: 'underline'
+                          textDecoration: 'underline',
+                          cursor: 'pointer',
+                          padding: '2px 6px',
+                          borderRadius: 'var(--radius-sm)',
+                          background: 'var(--bg-card)',
+                          border: '1px solid var(--border-subtle)',
+                          fontSize: '0.8rem'
                         }}
+                        title={`Jump to prerequisite ${p}`}
                       >
                         {p}
                       </button>
@@ -319,13 +326,28 @@ export function StandardDetailModal({
                 )}
 
                 {standard.next_steps && standard.next_steps.length > 0 && (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem', flexWrap: 'wrap' }}>
                     <ArrowRight size={14} color="var(--accent-emerald)" />
                     <span style={{ color: 'var(--text-silver)' }}>Next Step:</span>
                     {standard.next_steps.map((n, i) => (
-                      <span key={i} style={{ color: 'var(--accent-emerald)', fontWeight: '600' }}>
+                      <button
+                        key={i}
+                        onClick={() => onSelectPrerequisite && onSelectPrerequisite(n)}
+                        style={{
+                          color: 'var(--accent-emerald)',
+                          fontWeight: '600',
+                          textDecoration: 'underline',
+                          cursor: 'pointer',
+                          padding: '2px 6px',
+                          borderRadius: 'var(--radius-sm)',
+                          background: 'var(--bg-card)',
+                          border: '1px solid var(--border-subtle)',
+                          fontSize: '0.8rem'
+                        }}
+                        title={`Jump to next standard ${n}`}
+                      >
                         {n}
-                      </span>
+                      </button>
                     ))}
                   </div>
                 )}

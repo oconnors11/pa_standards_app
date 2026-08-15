@@ -56,17 +56,25 @@ export function App() {
     showToast(`Copied citation for ${standard.code}`);
   }, [showToast]);
 
-  // Select prerequisite from detail modal
+  // Select trajectory standard (prerequisite or next step) from detail modal
   const handleSelectPrerequisite = useCallback((code) => {
-    const target = standards.find(s => s.code === code || s.alt_code === code || s.crosswalks?.includes(code));
+    if (!code) return;
+    const cleanCode = code.trim();
+    const target = standards.find(s => 
+      s.code === cleanCode || 
+      s.alt_code === cleanCode || 
+      s.id === cleanCode ||
+      s.crosswalks?.includes(cleanCode)
+    );
     if (target) {
       setInspectedStandard(target);
     } else {
-      setQuery(code);
+      clearAllFilters();
+      setQuery(cleanCode);
       setInspectedStandard(null);
       setCurrentView('feed');
     }
-  }, [standards, setQuery]);
+  }, [standards, setQuery, clearAllFilters]);
 
   // Handle quick topic search from Home page
   const handleSearchTopic = useCallback((topicQuery) => {
