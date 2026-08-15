@@ -2,10 +2,19 @@ import { useState, useMemo, useCallback } from 'react';
 import rawStandards from '../data/standards.json';
 import stats from '../data/stats.json';
 
+const GRADE_ORDER = { 
+  'Pre-K': 0, 'PK': 0,
+  'K': 1, 'KG': 1,
+  '1': 2, '2': 3, '3': 4, '4': 5, 
+  '5': 6, '6': 7, '7': 8, '8': 9, 
+  '9': 10, '10': 11, '11': 12, '12': 13, 
+  'HS': 14 
+};
+
 export function useStandardsSearch() {
   const [query, setQuery] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('All');
-  const [selectedGrade, setSelectedGrade] = useState('All');
+  const [selectedGrades, setSelectedGrades] = useState(['All']);
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDok, setSelectedDok] = useState('All');
   const [examFilter, setExamFilter] = useState('All'); // 'All', 'PSSA', 'Keystone'
@@ -27,6 +36,7 @@ export function useStandardsSearch() {
   const filteredStandards = useMemo(() => {
     const cleanQuery = query.trim().toLowerCase();
     const queryTerms = cleanQuery.split(/\s+/).filter(Boolean);
+    const hasGradeFilter = !selectedGrades.includes('All') && selectedGrades.length > 0;
 
     return rawStandards.filter(item => {
       // Subject filter
@@ -34,8 +44,8 @@ export function useStandardsSearch() {
         return false;
       }
 
-      // Grade filter
-      if (selectedGrade !== 'All' && item.grade !== selectedGrade) {
+      // Grade multi-select filter
+      if (hasGradeFilter && !selectedGrades.includes(item.grade)) {
         return false;
       }
 
@@ -94,24 +104,56 @@ export function useStandardsSearch() {
       }
 
       // Default sort by subject, grade, then code
-      const gradeOrder = { 'K': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, 'HS': 9 };
-      const gradeDiff = (gradeOrder[a.grade] ?? 99) - (gradeOrder[b.grade] ?? 99);
+      const gradeDiff = (GRADE_ORDER[a.grade] ?? 99) - (GRADE_ORDER[b.grade] ?? 99);
       if (gradeDiff !== 0) return gradeDiff;
 
       return a.code.localeCompare(b.code);
     });
-  }, [query, selectedSubject, selectedGrade, selectedCategory, selectedDok, examFilter]);
+  }, [query, selectedSubject, selectedGrades, selectedCategory, selectedDok, examFilter]);
+
+  // Toggle individual grade in multi-select mode
+  const toggleGrade = useCallback((grade) => {
+    if (grade === 'All') {
+      setSelectedGrades(['All']);
+      return;
+    }
+
+    setSelectedGrades(prev => {
+      if (prev.includes('All')) {
+        return [grade];
+      }
+
+      if (prev.includes(grade)) {
+        const next = prev.filter(g => g !== grade);
+        return next.length === 0 ? ['All'] : next;
+      } else {
+        return [...prev, grade];
+      }
+    });
+  }, []);
+
+  // Set grade(s) directly - accepts single grade string or array of grades
+  const setSelectedGrade = useCallback((gradeOrGrades) => {
+    if (Array.isArray(gradeOrGrades)) {
+      setSelectedGrades(gradeOrGrades.length === 0 ? ['All'] : gradeOrGrades);
+    } else if (!gradeOrGrades || gradeOrGrades === 'All') {
+      setSelectedGrades(['All']);
+    } else {
+      setSelectedGrades([gradeOrGrades]);
+    }
+  }, []);
 
   const clearAllFilters = useCallback(() => {
     setQuery('');
     setSelectedSubject('All');
-    setSelectedGrade('All');
+    setSelectedGrades(['All']);
     setSelectedCategory('All');
     setSelectedDok('All');
     setExamFilter('All');
   }, []);
 
-  const hasActiveFilters = query.length > 0 || selectedSubject !== 'All' || selectedGrade !== 'All' || selectedCategory !== 'All' || selectedDok !== 'All' || examFilter !== 'All';
+  const isGradeFiltered = !selectedGrades.includes('All') && selectedGrades.length > 0;
+  const hasActiveFilters = query.length > 0 || selectedSubject !== 'All' || isGradeFiltered || selectedCategory !== 'All' || selectedDok !== 'All' || examFilter !== 'All';
 
   return {
     standards: rawStandards,
@@ -123,8 +165,11 @@ export function useStandardsSearch() {
     setQuery,
     selectedSubject,
     setSelectedSubject,
-    selectedGrade,
+    selectedGrade: selectedGrades.length === 1 ? selectedGrades[0] : (selectedGrades.includes('All') ? 'All' : selectedGrades.join(',')),
+    selectedGrades,
     setSelectedGrade,
+    setSelectedGrades,
+    toggleGrade,
     selectedCategory,
     setSelectedCategory,
     selectedDok,

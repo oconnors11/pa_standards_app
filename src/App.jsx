@@ -29,7 +29,10 @@ export function App() {
     selectedSubject,
     setSelectedSubject,
     selectedGrade,
+    selectedGrades,
     setSelectedGrade,
+    setSelectedGrades,
+    toggleGrade,
     selectedCategory,
     setSelectedCategory,
     selectedDok,
@@ -86,17 +89,17 @@ export function App() {
   // Handle grade band selection from Home page
   const handleSelectGradeBand = useCallback((bandKey) => {
     clearAllFilters();
-    if (bandKey === 'K-2') {
-      setSelectedGrade('K');
+    if (bandKey === 'PreK-2' || bandKey === 'K-2') {
+      setSelectedGrades(['Pre-K', 'K', '1', '2']);
     } else if (bandKey === '3-5') {
-      setSelectedGrade('3');
+      setSelectedGrades(['3', '4', '5']);
     } else if (bandKey === '6-8') {
-      setSelectedGrade('8');
-    } else if (bandKey === 'Keystone') {
-      setExamFilter('Keystone');
+      setSelectedGrades(['6', '7', '8']);
+    } else if (bandKey === '9-12' || bandKey === 'Keystone') {
+      setSelectedGrades(['9', '10', '11', '12', 'HS']);
     }
     setCurrentView('feed');
-  }, [clearAllFilters, setSelectedGrade, setExamFilter]);
+  }, [clearAllFilters, setSelectedGrades]);
 
   // Handle category selection from PSSA matrix view
   const handleSelectPssaCategory = useCallback((categoryId) => {
@@ -123,7 +126,9 @@ export function App() {
             <FilterBar
               selectedSubject={selectedSubject}
               setSelectedSubject={setSelectedSubject}
+              selectedGrades={selectedGrades}
               selectedGrade={selectedGrade}
+              toggleGrade={toggleGrade}
               setSelectedGrade={setSelectedGrade}
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}
@@ -276,7 +281,9 @@ export function App() {
             <FilterBar
               selectedSubject={selectedSubject}
               setSelectedSubject={setSelectedSubject}
+              selectedGrades={selectedGrades}
               selectedGrade={selectedGrade}
+              toggleGrade={toggleGrade}
               setSelectedGrade={setSelectedGrade}
               selectedCategory={selectedCategory}
               setSelectedCategory={setSelectedCategory}

@@ -4,7 +4,9 @@ import { Calculator, BookText, Microscope, Globe, Filter, Check, X, Sparkles } f
 export function FilterBar({
   selectedSubject,
   setSelectedSubject,
-  selectedGrade,
+  selectedGrades = ['All'],
+  selectedGrade = 'All',
+  toggleGrade,
   setSelectedGrade,
   selectedCategory,
   setSelectedCategory,
@@ -34,6 +36,21 @@ export function FilterBar({
     { id: 'PSSA', label: 'PSSA Tested (3–8)' },
     { id: 'Keystone', label: 'Keystone Exam (HS)' }
   ];
+
+  const handleGradeClick = (g) => {
+    if (toggleGrade) {
+      toggleGrade(g);
+    } else if (setSelectedGrade) {
+      setSelectedGrade(g);
+    }
+  };
+
+  const isGradeActive = (g) => {
+    if (g === 'All') {
+      return selectedGrades.includes('All') || selectedGrades.length === 0;
+    }
+    return !selectedGrades.includes('All') && selectedGrades.includes(g);
+  };
 
   return (
     <aside style={{
@@ -109,22 +126,26 @@ export function FilterBar({
         </div>
       </div>
 
-      {/* 2. Grade Level Carousel */}
+      {/* 2. Grade Level Multi-Select Grid */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <label style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
-          Grade Level
-        </label>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <label style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
+            Grade Level
+          </label>
+          <span style={{ fontSize: '0.7rem', color: 'var(--text-dim)' }}>Multi-select</span>
+        </div>
         <div style={{
           display: 'grid',
           gridTemplateColumns: 'repeat(4, 1fr)',
           gap: '6px'
         }}>
           {grades.map(g => {
-            const active = selectedGrade === g;
+            const active = isGradeActive(g);
             return (
               <button
                 key={g}
-                onClick={() => setSelectedGrade(g)}
+                onClick={() => handleGradeClick(g)}
+                title={g === 'All' ? 'Show all grades' : `Toggle Grade ${g}`}
                 style={{
                   padding: '7px 4px',
                   borderRadius: 'var(--radius-sm)',
@@ -132,7 +153,9 @@ export function FilterBar({
                   color: active ? '#FFFFFF' : 'var(--text-silver)',
                   border: `1px solid ${active ? 'var(--accent-crimson)' : 'var(--border-subtle)'}`,
                   fontSize: '0.82rem',
-                  fontWeight: active ? '700' : '500'
+                  fontWeight: active ? '700' : '500',
+                  cursor: 'pointer',
+                  transition: 'all var(--transition-fast)'
                 }}
               >
                 {g}

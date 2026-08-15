@@ -63,17 +63,17 @@ export function HomePage({
 
   const gradeBands = [
     {
-      label: 'Early Elementary',
-      grades: 'Grades K–2',
-      query: 'K',
-      bandKey: 'K-2',
+      label: 'Early Learning & Primary',
+      grades: 'Pre-K – Grade 2',
+      query: 'PreK-2',
+      bandKey: 'PreK-2',
       icon: <Calculator size={18} color="#38BDF8" />,
-      topics: 'Phonics, Counting, Place Value, Basic Shapes'
+      topics: 'Early Literacy, Counting, Place Value, Basic Shapes'
     },
     {
       label: 'Intermediate',
       grades: 'Grades 3–5',
-      query: '3',
+      query: '3-5',
       bandKey: '3-5',
       icon: <BookText size={18} color="#34D399" />,
       topics: 'Multiplication, Fractions, Main Idea, Earth Systems'
@@ -81,16 +81,16 @@ export function HomePage({
     {
       label: 'Middle School',
       grades: 'Grades 6–8',
-      query: '8',
+      query: '6-8',
       bandKey: '6-8',
       icon: <GraduationCap size={18} color="#818CF8" />,
       topics: 'Ratios, Linear Slope, TDA Evidence, Cells & Genetics'
     },
     {
       label: 'High School',
-      grades: 'Keystone Exams',
-      query: 'Keystone',
-      bandKey: 'Keystone',
+      grades: 'Grades 9–12 / Keystone',
+      query: '9-12',
+      bandKey: '9-12',
       icon: <Microscope size={18} color="#F59E0B" />,
       topics: 'Keystone Algebra 1, Literature, Biology'
     }
