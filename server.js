@@ -20,8 +20,9 @@ app.use(express.static(distPath, {
   }
 }));
 
-// SPA Fallback: send index.html for all non-file routes
+// SPA Fallback: send index.html for all non-file routes with no-cache headers
 app.get('*', (req, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.sendFile(path.join(distPath, 'index.html'));
 });
 

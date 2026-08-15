@@ -26,7 +26,7 @@ export function FilterBar({
     { id: 'Social Studies', label: 'Social Studies', icon: <Globe size={15} color="#FB923C" /> }
   ];
 
-  const grades = ['All', 'K', '1', '2', '3', '4', '5', '6', '7', '8', 'HS'];
+  const grades = ['All', 'Pre-K', 'K', '1', '2', '3', '4', '5', '6', '7', '8', 'HS'];
   const dokLevels = ['All', 'DOK 1', 'DOK 2', 'DOK 3', 'DOK 4'];
   const examOptions = [
     { id: 'All', label: 'All Frameworks' },

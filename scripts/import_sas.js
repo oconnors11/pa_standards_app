@@ -14,7 +14,8 @@ function normalizeGrade(gradeText, completeNumber = '') {
   if (!gradeText && !completeNumber) return 'HS';
   const str = String(gradeText || '').trim().toLowerCase();
   
-  if (str.includes('kindergarten') || str === 'k' || str === 'grade k') return 'K';
+  if (str.includes('pre-k') || str.includes('prek') || str.includes('pre-kindergarten') || str.includes('pre kindergarten') || completeNumber.toLowerCase().includes('prek')) return 'Pre-K';
+  if (str.includes('kindergarten') || str === 'k' || str === 'grade k' || completeNumber.includes('.K.')) return 'K';
   if (str.includes('1st') || str.includes('grade 1') || str === '1') return '1';
   if (str.includes('2nd') || str.includes('grade 2') || str === '2') return '2';
   if (str.includes('3rd') || str.includes('grade 3') || str === '3') return '3';
@@ -32,6 +33,7 @@ function normalizeGrade(gradeText, completeNumber = '') {
   const parts = completeNumber.split('.');
   if (parts.length >= 4) {
     const candidate = parts[2] || parts[3];
+    if (candidate === 'PREK' || candidate === 'prek') return 'Pre-K';
     if (candidate === 'K' || candidate === 'k') return 'K';
     if (/^[1-8]$/.test(candidate)) return candidate;
   }
@@ -40,7 +42,7 @@ function normalizeGrade(gradeText, completeNumber = '') {
 }
 
 function getGradeBand(grade) {
-  if (['K', '1', '2'].includes(grade)) return 'Early Elementary (K-2)';
+  if (['Pre-K', 'PK', 'K', '1', '2'].includes(grade)) return 'Early Elementary (PreK-2)';
   if (['3', '4', '5'].includes(grade)) return 'Upper Elementary (3-5)';
   if (['6', '7', '8'].includes(grade)) return 'Middle School (6-8)';
   return 'High School (9-12)';
@@ -244,28 +246,34 @@ export function runImport() {
   const allStandards = Array.from(standardsMap.values());
   const codeIndex = new Set(allStandards.map(s => s.code));
 
-  const gradeSequence = ['K', '1', '2', '3', '4', '5', '6', '7', '8', 'HS'];
+  const gradeSequence = ['Pre-K', 'K', '1', '2', '3', '4', '5', '6', '7', '8', 'HS'];
+  const gradeToCode = { 'Pre-K': 'PREK', 'K': 'K', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', 'HS': 'HS' };
+  const codeToGrade = { 'PREK': 'Pre-K', 'K': 'K', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', 'HS': 'HS' };
 
   allStandards.forEach(std => {
-    // Check if code matches CC.1.x.G.X pattern (e.g. CC.1.1.1.B)
-    const match = std.code.match(/^(CC\.[12]\.[1-5]\.)([K1-8]|HS)(\.[A-Z0-9]+)$/i);
+    // Check if code matches CC.1.x.G.X pattern (e.g. CC.1.1.1.B or CC.1.1.PREK.B)
+    const match = std.code.match(/^(CC\.[12]\.[1-5]\.)(PREK|[K1-8]|HS)(\.[A-Z0-9]+)$/i);
     if (match) {
       const prefix = match[1];
-      const curGrade = match[2];
+      const codeGradeKey = match[2].toUpperCase();
       const suffix = match[3];
 
+      const curGrade = codeToGrade[codeGradeKey] || codeGradeKey;
       const curIdx = gradeSequence.indexOf(curGrade);
+
       if (curIdx > 0) {
         const prevGrade = gradeSequence[curIdx - 1];
-        const prevCode = `${prefix}${prevGrade}${suffix}`;
+        const prevCodeKey = gradeToCode[prevGrade] || prevGrade;
+        const prevCode = `${prefix}${prevCodeKey}${suffix}`;
         if (codeIndex.has(prevCode) && !std.prerequisites.includes(prevCode)) {
           std.prerequisites.push(prevCode);
         }
       }
 
-      if (curIdx < gradeSequence.length - 1) {
+      if (curIdx >= 0 && curIdx < gradeSequence.length - 1) {
         const nextGrade = gradeSequence[curIdx + 1];
-        const nextCode = `${prefix}${nextGrade}${suffix}`;
+        const nextCodeKey = gradeToCode[nextGrade] || nextGrade;
+        const nextCode = `${prefix}${nextCodeKey}${suffix}`;
         if (codeIndex.has(nextCode) && !std.next_steps.includes(nextCode)) {
           std.next_steps.push(nextCode);
         }
@@ -274,7 +282,7 @@ export function runImport() {
   });
 
   // Sort standards by subject, grade, then code
-  const gradeOrder = { 'K': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, 'HS': 9 };
+  const gradeOrder = { 'Pre-K': -1, 'K': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, '11': 11, '12': 12, 'HS': 13 };
   allStandards.sort((a, b) => {
     if (a.subject !== b.subject) return a.subject.localeCompare(b.subject);
     const gd = (gradeOrder[a.grade] ?? 99) - (gradeOrder[b.grade] ?? 99);
