@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calculator, BookText, Microscope, Globe, Filter, Check, X } from 'lucide-react';
+import { Calculator, BookText, Microscope, Globe, Filter, Check, X, Sparkles } from 'lucide-react';
 
 export function FilterBar({
   selectedSubject,
@@ -20,13 +20,14 @@ export function FilterBar({
 }) {
   const subjects = [
     { id: 'All', label: 'All Subjects', icon: null },
+    { id: 'Early Learning', label: 'Early Learning (PreK-2)', icon: <Sparkles size={15} color="#F472B6" /> },
     { id: 'Mathematics', label: 'Mathematics', icon: <Calculator size={15} color="#38BDF8" /> },
     { id: 'English Language Arts', label: 'ELA / Reading', icon: <BookText size={15} color="#34D399" /> },
     { id: 'STEELS Science', label: 'STEELS Science', icon: <Microscope size={15} color="#A78BFA" /> },
     { id: 'Social Studies', label: 'Social Studies', icon: <Globe size={15} color="#FB923C" /> }
   ];
 
-  const grades = ['All', 'Pre-K', 'K', '1', '2', '3', '4', '5', '6', '7', '8', 'HS'];
+  const grades = ['All', 'Pre-K', 'K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'HS'];
   const dokLevels = ['All', 'DOK 1', 'DOK 2', 'DOK 3', 'DOK 4'];
   const examOptions = [
     { id: 'All', label: 'All Frameworks' },

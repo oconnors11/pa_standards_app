@@ -39,6 +39,8 @@
   --accent-ruby: #800022;
 
   /* Subject Colors */
+  --color-early: #f472b6;
+  --color-early-bg: rgba(244, 114, 182, 0.15);
   --color-math: #38bdf8;
   --color-math-bg: rgba(56, 189, 248, 0.14);
   --color-ela: #34d399;
@@ -216,6 +218,7 @@ button:active {
   border: 1px solid var(--border-medium);
 }
 
+.badge-early { background: var(--color-early-bg); color: var(--color-early); border: 1px solid rgba(244, 114, 182, 0.3); }
 .badge-math { background: var(--color-math-bg); color: var(--color-math); border: 1px solid rgba(56, 189, 248, 0.3); }
 .badge-ela { background: var(--color-ela-bg); color: var(--color-ela); border: 1px solid rgba(52, 211, 153, 0.3); }
 .badge-steels { background: var(--color-steels-bg); color: var(--color-steels); border: 1px solid rgba(167, 139, 250, 0.3); }

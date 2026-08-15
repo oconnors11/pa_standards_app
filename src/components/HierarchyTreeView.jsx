@@ -29,6 +29,7 @@ function getGradeSortIndex(grade) {
 }
 
 const SUBJECT_ORDER = [
+  'Early Learning',
   'Mathematics',
   'English Language Arts',
   'STEELS Science',

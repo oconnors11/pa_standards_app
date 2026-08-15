@@ -10,33 +10,52 @@ const rawDataDir = path.resolve(__dirname, '../raw_data');
 const outputDir = path.resolve(__dirname, '../src/data');
 
 // Grade standardizer
-function normalizeGrade(gradeText, completeNumber = '') {
-  if (!gradeText && !completeNumber) return 'HS';
+function normalizeGrade(gradeText, completeNumber = '', fileName = '') {
   const str = String(gradeText || '').trim().toLowerCase();
-  
-  if (str.includes('pre-k') || str.includes('prek') || str.includes('pre-kindergarten') || str.includes('pre kindergarten') || completeNumber.toLowerCase().includes('prek')) return 'Pre-K';
-  if (str.includes('kindergarten') || str === 'k' || str === 'grade k' || completeNumber.includes('.K.')) return 'K';
-  if (str.includes('1st') || str.includes('grade 1') || str === '1') return '1';
-  if (str.includes('2nd') || str.includes('grade 2') || str === '2') return '2';
-  if (str.includes('3rd') || str.includes('grade 3') || str === '3') return '3';
-  if (str.includes('4th') || str.includes('grade 4') || str === '4') return '4';
-  if (str.includes('5th') || str.includes('grade 5') || str === '5') return '5';
-  if (str.includes('6th') || str.includes('grade 6') || str === '6') return '6';
-  if (str.includes('7th') || str.includes('grade 7') || str === '7') return '7';
-  if (str.includes('8th') || str.includes('grade 8') || str === '8') return '8';
-  if (str.includes('9th') || str.includes('grade 9') || str === '9') return '9';
-  if (str.includes('10th') || str.includes('grade 10') || str === '10') return '10';
-  if (str.includes('11th') || str.includes('grade 11') || str === '11') return '11';
-  if (str.includes('12th') || str.includes('grade 12') || str === '12' || str.includes('high school') || str.includes('hs')) return 'HS';
+  const fileLower = String(fileName || '').toLowerCase();
+  const code = String(completeNumber || '').trim();
+  const parts = code.split('.');
 
-  // Fallback from completeNumber e.g. CC.1.1.1.B -> 1, CC.2.1.K.A.1 -> K
-  const parts = completeNumber.split('.');
-  if (parts.length >= 4) {
-    const candidate = parts[2] || parts[3];
-    if (candidate === 'PREK' || candidate === 'prek') return 'Pre-K';
-    if (candidate === 'K' || candidate === 'k') return 'K';
-    if (/^[1-8]$/.test(candidate)) return candidate;
+  // 1. From GradeLevelText if it is a specific grade (ignore generic '12th Grade' headers in SAS exports)
+  if (str === 'pre-kindergarten' || str === 'prek' || str.includes('pre-k')) return 'Pre-K';
+  if (str === 'kindergarten' || str === 'grade k') return 'K';
+  if (str === '1st grade' || str === 'grade 1') return '1';
+  if (str === '2nd grade' || str === 'grade 2') return '2';
+  if (str === '3rd grade' || str === 'grade 3') return '3';
+  if (str === '4th grade' || str === 'grade 4') return '4';
+  if (str === '5th grade' || str === 'grade 5') return '5';
+  if (str === '6th grade' || str === 'grade 6') return '6';
+  if (str === '7th grade' || str === 'grade 7') return '7';
+  if (str === '8th grade' || str === 'grade 8') return '8';
+  if (str === '9th grade' || str === 'grade 9') return '9';
+  if (str === '10th grade' || str === 'grade 10') return '10';
+  if (str === '11th grade' || str === 'grade 11') return '11';
+  if (str === '12th grade' || str === 'grade 12') {
+    if (fileLower.includes('grade12') || fileLower.includes('12th')) return '12';
   }
+
+  // 2. From filename
+  if (fileLower.includes('prek')) return 'Pre-K';
+  if (fileLower.startsWith('k') || fileLower.includes('kearly') || fileLower.includes('ksteel') || fileLower.includes('kmath') || fileLower.includes('kela')) return 'K';
+  
+  const gMatch = fileLower.match(/grade(\d+)/);
+  if (gMatch) return gMatch[1];
+
+  // 3. From completeNumber format
+  if (parts.length >= 3) {
+    for (let i = 1; i < parts.length - 1; i++) {
+      const p = parts[i].toUpperCase();
+      if (p === 'PK' || p === 'PREK') return 'Pre-K';
+      if (p === 'K') return 'K';
+      if (p === 'HS') return 'HS';
+      if (/^[1-9]$|^1[0-2]$/.test(p)) return p;
+    }
+  }
+
+  const anchorMatch = code.match(/^[ME](0[3-8]|[3-8])\./i);
+  if (anchorMatch) return String(parseInt(anchorMatch[1], 10));
+
+  if (code.startsWith('BIO.') || code.startsWith('LIT.') || code.startsWith('ALG.')) return 'HS';
 
   return 'HS';
 }
@@ -48,28 +67,38 @@ function getGradeBand(grade) {
   return 'High School (9-12)';
 }
 
-// Clean Domain name from SAS Standard Area description
+// Clean Domain name from Standard Area description
 function cleanDomain(standardAreaDesc) {
   if (!standardAreaDesc) return 'General';
-  // If format is "Foundational Skills: Students gain a working knowledge of..."
-  // Extract "Foundational Skills"
-  const colonIdx = standardAreaDesc.indexOf(':');
+  const clean = String(standardAreaDesc).trim();
+  const colonIdx = clean.indexOf(':');
   if (colonIdx > 0 && colonIdx < 60) {
-    return standardAreaDesc.substring(0, colonIdx).trim();
+    return clean.substring(0, colonIdx).trim();
   }
-  return standardAreaDesc.trim();
+  return clean;
 }
 
 // Parse text into intro statement and bullet points
 function parseBullets(text) {
-  if (!text) return { description: '', bullets: [] };
+  if (!text) return { description: '', bullets: [], fullText: '' };
   
-  // Normalize whitespace
-  let cleanText = text.replace(/\r\n/g, '\n').trim();
+  let cleanText = String(text).replace(/\r\n/g, '\n').trim();
 
   // Check if contains bullet symbol '•'
   if (cleanText.includes('•')) {
     const parts = cleanText.split('•').map(p => p.trim()).filter(Boolean);
+    const intro = parts[0] || '';
+    const bullets = parts.slice(1).map(b => b.replace(/\s+/g, ' ').trim());
+    return {
+      description: intro,
+      bullets: bullets,
+      fullText: cleanText
+    };
+  }
+
+  // Check if contains newline hyphens or numbered lists
+  if (cleanText.includes('\n- ') || cleanText.includes('\n* ')) {
+    const parts = cleanText.split(/\n[-*]\s+/).map(p => p.trim()).filter(Boolean);
     const intro = parts[0] || '';
     const bullets = parts.slice(1).map(b => b.replace(/\s+/g, ' ').trim());
     return {
@@ -88,14 +117,14 @@ function parseBullets(text) {
 
 // Heuristic DOK generator
 function inferDok(text, grade) {
-  const lower = (text || '').toLowerCase();
-  if (lower.includes('evaluate') || lower.includes('synthesize') || lower.includes('critique') || lower.includes('construct an argument')) {
+  const lower = String(text || '').toLowerCase();
+  if (lower.includes('evaluate') || lower.includes('synthesize') || lower.includes('critique') || lower.includes('construct an argument') || lower.includes('design a solution')) {
     return 'DOK 3-4';
   }
-  if (lower.includes('analyze') || lower.includes('compare and contrast') || lower.includes('explain') || lower.includes('draw conclusions')) {
+  if (lower.includes('analyze') || lower.includes('compare and contrast') || lower.includes('explain') || lower.includes('draw conclusions') || lower.includes('develop a model')) {
     return 'DOK 3';
   }
-  if (lower.includes('identify') || lower.includes('recall') || lower.includes('recognize') || lower.includes('name') || lower.includes('count')) {
+  if (lower.includes('identify') || lower.includes('recall') || lower.includes('recognize') || lower.includes('name') || lower.includes('count') || lower.includes('match')) {
     return 'DOK 1';
   }
   return 'DOK 2';
@@ -105,7 +134,7 @@ function inferDok(text, grade) {
 function extractKeywords(item) {
   const textBlob = `${item.code} ${item.alt_code || ''} ${item.subject} ${item.domain} ${item.anchor || ''} ${item.description || ''} ${(item.bullets || []).join(' ')} ${(item.crosswalks || []).join(' ')}`.toLowerCase();
   const rawWords = textBlob.match(/[a-z0-9\-.]{3,}/g) || [];
-  const stopWords = new Set(['the', 'and', 'for', 'with', 'that', 'from', 'this', 'into', 'each', 'such', 'than', 'have', 'more', 'less', 'will', 'been', 'their', 'when', 'what', 'which', 'about', 'some', 'these', 'those', 'using', 'used']);
+  const stopWords = new Set(['the', 'and', 'for', 'with', 'that', 'from', 'this', 'into', 'each', 'such', 'than', 'have', 'more', 'less', 'will', 'been', 'their', 'when', 'what', 'which', 'about', 'some', 'these', 'those', 'using', 'used', 'can']);
   
   const keywords = Array.from(new Set(rawWords.filter(w => !stopWords.has(w))));
   return keywords.slice(0, 35);
@@ -140,89 +169,136 @@ export function runImport() {
 
   // 2. Scan raw_data directory
   const files = fs.readdirSync(rawDataDir).filter(f => /\.(csv|tsv|xlsx|xls)$/i.test(f));
-  console.log(`Found ${files.length} file(s) in ${rawDataDir}: ${files.join(', ')}`);
+  console.log(`Found ${files.length} file(s) in ${rawDataDir}`);
 
+  const xlsxLib = XLSX.default || XLSX;
   let parsedCount = 0;
 
   files.forEach(fileName => {
     const filePath = path.join(rawDataDir, fileName);
-    console.log(`\n📄 Processing file: ${fileName}...`);
 
-    const xlsxLib = XLSX.default || XLSX;
+    const isEarly = /early/i.test(fileName);
+    const isSteel = /steel/i.test(fileName);
+    const isMath = /math/i.test(fileName);
+    const isEla = /ela/i.test(fileName);
+
+    const defaultSubject = isEarly ? 'Early Learning' :
+                           isSteel ? 'STEELS Science' :
+                           isMath ? 'Mathematics' :
+                           isEla ? 'English Language Arts' : 'Other';
+
     const fileBuffer = fs.readFileSync(filePath);
     const workbook = xlsxLib.read(fileBuffer, { type: 'buffer' });
     const sheetName = workbook.SheetNames[0];
     const rows = xlsxLib.utils.sheet_to_json(workbook.Sheets[sheetName], { defval: '' });
 
-    console.log(`  Read ${rows.length} rows from ${fileName}.`);
+    console.log(`  Processed ${fileName}: ${rows.length} rows (${defaultSubject})`);
 
-    let currentSubject = 'English Language Arts';
+    let currentSubject = defaultSubject;
     let currentStandardArea = '';
     let currentDomain = '';
-    let currentGrade = '1';
-    let currentGradeBand = 'Early Elementary (K-2)';
+    let currentGrade = normalizeGrade('', '', fileName);
+    let currentGradeBand = getGradeBand(currentGrade);
 
-    rows.forEach((row, idx) => {
-      // Normalize column keys
-      const typeName = (row.TypeName || row.type || row.Type || '').trim();
-      const completeNumber = (row.CompleteNumber || row.complete_number || row.Code || row.code || '').trim();
-      const description = (row.Description || row.description || '').trim();
-      const topLevelDesc = (row.TopLevelDescription || row.subject || row.Subject || '').trim();
-      const gradeLevelText = (row.GradeLevelText || row.grade || row.Grade || '').trim();
+    rows.forEach(row => {
+      const typeName = String(row.TypeName || row.type || row.Type || '').trim();
+      const completeNumber = String(row.CompleteNumber || row.complete_number || row.Code || row.code || '').trim();
+      const rawDesc = String(row.Description || row.description || row.TopLevelDescription || '').trim();
+      const topLevelDesc = String(row.TopLevelDescription || row.subject || row.Subject || '').trim();
+      const gradeLevelText = String(row.GradeLevelText || row.grade || row.Grade || '').trim();
 
       // State tracker
-      if (typeName === 'Subject Area' || (!typeName && completeNumber.startsWith('CC.') && completeNumber.split('.').length === 2)) {
-        currentSubject = topLevelDesc || description || 'English Language Arts';
+      if (typeName === 'Subject Area') {
+        if (!isEarly && !isSteel) {
+          currentSubject = topLevelDesc || rawDesc || defaultSubject;
+        } else {
+          currentSubject = defaultSubject;
+        }
         return;
       }
 
-      if (typeName === 'Standard Area' || (!typeName && completeNumber.startsWith('CC.') && completeNumber.split('.').length === 3)) {
-        currentStandardArea = description || topLevelDesc || '';
+      if (typeName === 'Domain' || typeName === 'Standard Area' || typeName === 'Discipline') {
+        currentStandardArea = rawDesc || topLevelDesc || '';
         currentDomain = cleanDomain(currentStandardArea);
         return;
       }
 
-      if (typeName === 'Grade Level' || (!typeName && completeNumber.startsWith('CC.') && completeNumber.split('.').length === 4 && !/[A-Z]$/.test(completeNumber))) {
-        currentGrade = normalizeGrade(gradeLevelText || description, completeNumber);
+      if (typeName === 'Strand' || typeName === 'Organizing Category') {
+        currentStandardArea = rawDesc || topLevelDesc || currentStandardArea;
+        if (!currentDomain) currentDomain = cleanDomain(currentStandardArea);
+        return;
+      }
+
+      if (typeName === 'Grade Level') {
+        currentGrade = normalizeGrade(gradeLevelText || rawDesc, completeNumber, fileName);
         currentGradeBand = getGradeBand(currentGrade);
         return;
       }
 
-      // Check if this row is a Standard or Eligible Content
-      const isStandard = typeName === 'Standard' || typeName === 'Eligible Content' || typeName === 'Assessment Anchor' || /[A-Z0-9]$/.test(completeNumber);
+      // Handle child metadata attached to existing standard
+      if (typeName === 'Assessment Boundary' && completeNumber) {
+        const parentCode = completeNumber.replace(/\.AB$/, '');
+        if (standardsMap.has(parentCode)) {
+          standardsMap.get(parentCode).assessment_limits = rawDesc;
+        }
+        return;
+      }
 
-      if (isStandard && completeNumber && description) {
-        const itemGrade = normalizeGrade(gradeLevelText, completeNumber) || currentGrade;
+      if (typeName === 'Clarifying Statement' && completeNumber) {
+        const parentCode = completeNumber.replace(/\.CS$/, '');
+        if (standardsMap.has(parentCode)) {
+          standardsMap.get(parentCode).clarifying_statement = rawDesc;
+        }
+        return;
+      }
+
+      // Determine if row is a Standard or Eligible Content
+      const isStandard = typeName === 'Standard' || 
+                         typeName === 'Eligible Content' || 
+                         typeName === 'Alternate Eligible Content' || 
+                         typeName === 'Assessment Anchor' ||
+                         (completeNumber && /[A-Z0-9]$/.test(completeNumber) && !completeNumber.endsWith('.AB') && !completeNumber.endsWith('.CS') && !completeNumber.endsWith('.CI'));
+
+      if (isStandard && completeNumber && rawDesc && rawDesc !== completeNumber && !/^\d+$/.test(rawDesc)) {
+        const itemGrade = normalizeGrade(gradeLevelText, completeNumber, fileName);
         const itemGradeBand = getGradeBand(itemGrade);
-        const parsedDesc = parseBullets(description);
+        const parsedDesc = parseBullets(rawDesc);
 
         const existing = standardsMap.get(completeNumber) || {};
 
         const isPssa = existing.is_pssa_assessed !== undefined 
           ? existing.is_pssa_assessed 
-          : (['3', '4', '5', '6', '7', '8'].includes(itemGrade) && ['Mathematics', 'English Language Arts'].includes(currentSubject));
+          : (['3', '4', '5', '6', '7', '8'].includes(itemGrade) && ['Mathematics', 'English Language Arts', 'STEELS Science'].includes(defaultSubject));
 
         const isKeystone = existing.is_keystone !== undefined
           ? existing.is_keystone
-          : (itemGrade === 'HS' || ['9', '10', '11', '12'].includes(itemGrade));
+          : (['9', '10', '11', '12', 'HS'].includes(itemGrade));
 
-        const dok = existing.dok || inferDok(description, itemGrade);
+        const dok = existing.dok || inferDok(rawDesc, itemGrade);
+
+        let standardDomain = existing.domain || currentDomain;
+        if (!standardDomain || standardDomain === 'General') {
+          if (isEarly) standardDomain = currentStandardArea || 'Early Childhood Learning';
+          else if (isSteel) standardDomain = 'Science, Technology & Engineering';
+          else standardDomain = 'General';
+        }
 
         const standardRecord = {
           id: existing.id || completeNumber,
           code: completeNumber,
           alt_code: existing.alt_code || null,
-          subject: existing.subject || currentSubject,
+          subject: defaultSubject,
           grade: itemGrade,
           grade_band: itemGradeBand,
-          domain: existing.domain || currentDomain || 'General',
+          domain: standardDomain,
           cluster: existing.cluster || null,
-          anchor: existing.anchor || (currentStandardArea ? currentStandardArea.substring(0, 100) : null),
+          anchor: existing.anchor || (currentStandardArea ? currentStandardArea.substring(0, 120) : null),
           descriptor: existing.descriptor || null,
-          description: description, // preserve full text with bullets for search
+          description: rawDesc,
           clean_intro: parsedDesc.description,
           bullets: parsedDesc.bullets,
           assessment_limits: existing.assessment_limits || null,
+          clarifying_statement: existing.clarifying_statement || null,
           reporting_category: existing.reporting_category || null,
           dok: dok,
           is_pssa_assessed: isPssa,
@@ -241,18 +317,18 @@ export function runImport() {
     });
   });
 
-  // 3. Compute Vertical Progression Links (K -> 1 -> 2 -> ... -> 8 -> HS)
+  // 3. Compute Vertical Progression Links
   console.log('\n🔗 Computing vertical grade progressions...');
   const allStandards = Array.from(standardsMap.values());
   const codeIndex = new Set(allStandards.map(s => s.code));
 
-  const gradeSequence = ['Pre-K', 'K', '1', '2', '3', '4', '5', '6', '7', '8', 'HS'];
-  const gradeToCode = { 'Pre-K': 'PREK', 'K': 'K', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', 'HS': 'HS' };
-  const codeToGrade = { 'PREK': 'Pre-K', 'K': 'K', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', 'HS': 'HS' };
+  const gradeSequence = ['Pre-K', 'K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'HS'];
+  const gradeToCode = { 'Pre-K': 'PREK', 'K': 'K', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10', '11': '11', '12': '12', 'HS': 'HS' };
+  const codeToGrade = { 'PREK': 'Pre-K', 'PK': 'Pre-K', 'K': 'K', '1': '1', '2': '2', '3': '3', '4': '4', '5': '5', '6': '6', '7': '7', '8': '8', '9': '9', '10': '10', '11': '11', '12': '12', 'HS': 'HS' };
 
   allStandards.forEach(std => {
-    // Check if code matches CC.1.x.G.X pattern (e.g. CC.1.1.1.B or CC.1.1.PREK.B)
-    const match = std.code.match(/^(CC\.[12]\.[1-5]\.)(PREK|[K1-8]|HS)(\.[A-Z0-9]+)$/i);
+    // ELA / Math pattern matching
+    const match = std.code.match(/^(CC\.[12]\.[1-5]\.)(PREK|PK|[K1-9]|1[0-2]|HS)(\.[A-Z0-9]+)$/i);
     if (match) {
       const prefix = match[1];
       const codeGradeKey = match[2].toUpperCase();
@@ -279,14 +355,53 @@ export function runImport() {
         }
       }
     }
+
+    // Early Learning AL pattern matching e.g. AL.1.PK.A1 -> AL.1.K.A1 -> AL.1.1.A1 -> AL.1.2.A1
+    const earlyMatch = std.code.match(/^([A-Z0-9]+\.[0-9]+\.)(PK|K|[1-2])(\.[A-Z0-9]+)$/i);
+    if (earlyMatch) {
+      const prefix = earlyMatch[1];
+      const earlyGradeKey = earlyMatch[2].toUpperCase();
+      const suffix = earlyMatch[3];
+
+      const earlySeq = ['PK', 'K', '1', '2'];
+      const eIdx = earlySeq.indexOf(earlyGradeKey);
+
+      if (eIdx > 0) {
+        const prevGradeKey = earlySeq[eIdx - 1];
+        const prevCode = `${prefix}${prevGradeKey}${suffix}`;
+        if (codeIndex.has(prevCode) && !std.prerequisites.includes(prevCode)) {
+          std.prerequisites.push(prevCode);
+        }
+      }
+      if (eIdx >= 0 && eIdx < earlySeq.length - 1) {
+        const nextGradeKey = earlySeq[eIdx + 1];
+        const nextCode = `${prefix}${nextGradeKey}${suffix}`;
+        if (codeIndex.has(nextCode) && !std.next_steps.includes(nextCode)) {
+          std.next_steps.push(nextCode);
+        }
+      }
+    }
   });
 
-  // Sort standards by subject, grade, then code
+  // Sort standards by Subject, Grade, Code
+  const subjectSort = {
+    'Early Learning': 1,
+    'Mathematics': 2,
+    'English Language Arts': 3,
+    'STEELS Science': 4,
+    'Social Studies': 5
+  };
+
   const gradeOrder = { 'Pre-K': -1, 'K': 0, '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, '8': 8, '9': 9, '10': 10, '11': 11, '12': 12, 'HS': 13 };
+
   allStandards.sort((a, b) => {
-    if (a.subject !== b.subject) return a.subject.localeCompare(b.subject);
+    const sa = subjectSort[a.subject] ?? 99;
+    const sb = subjectSort[b.subject] ?? 99;
+    if (sa !== sb) return sa - sb;
+
     const gd = (gradeOrder[a.grade] ?? 99) - (gradeOrder[b.grade] ?? 99);
     if (gd !== 0) return gd;
+
     return a.code.localeCompare(b.code);
   });
 

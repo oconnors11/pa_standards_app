@@ -1,25 +1,27 @@
 {
-  "total": 1494,
+  "total": 2489,
   "by_subject": {
-    "English Language Arts": 1046,
-    "Mathematics": 433,
-    "Social Studies": 6,
-    "STEELS Science": 9
+    "Early Learning": 227,
+    "Mathematics": 539,
+    "English Language Arts": 1317,
+    "STEELS Science": 400,
+    "Social Studies": 6
   },
   "by_grade": {
-    "1": 65,
-    "2": 43,
-    "3": 197,
-    "4": 211,
-    "5": 192,
-    "6": 200,
-    "7": 190,
-    "8": 207,
-    "9": 3,
+    "1": 133,
+    "2": 143,
+    "3": 267,
+    "4": 281,
+    "5": 304,
+    "6": 258,
+    "7": 247,
+    "8": 367,
+    "9": 122,
     "10": 53,
-    "Pre-K": 31,
-    "K": 37,
-    "HS": 65
+    "12": 90,
+    "Pre-K": 108,
+    "K": 105,
+    "HS": 11
   },
-  "updated_at": "2026-08-15T03:48:03.980Z"
+  "updated_at": "2026-08-15T04:27:58.467Z"
 }

@@ -34,6 +34,7 @@ export function StandardCard({
   const [copiedType, setCopiedType] = React.useState(null);
 
   const subjectBadgeClass = 
+    standard.subject === 'Early Learning' ? 'badge-early' :
     standard.subject === 'Mathematics' ? 'badge-math' :
     standard.subject === 'English Language Arts' ? 'badge-ela' :
     standard.subject === 'STEELS Science' ? 'badge-steels' : 'badge-social';
