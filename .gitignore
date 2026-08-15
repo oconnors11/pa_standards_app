@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Agent workflow scratch files
+.agents/
+ORIGINAL_REQUEST.md
+PROJECT.md
+TEST_INFRA.md
+TEST_READY.md
+

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, ArrowUpRight, AlertTriangle, Check } from 'lucide-react';
+import { Copy, ArrowUpRight, AlertTriangle, Check, Compass } from 'lucide-react';
 
 // Helper to highlight search matches
 function HighlightedText({ text, query }) {
@@ -29,7 +29,8 @@ export function StandardCard({
   query,
   onInspect,
   onCopyShort,
-  onCopyCitation
+  onCopyCitation,
+  onOpenMap
 }) {
   const [copiedType, setCopiedType] = React.useState(null);
 
@@ -242,6 +243,27 @@ export function StandardCard({
             {copiedType === 'citation' ? <Check size={13} /> : <Copy size={13} />}
             <span>{copiedType === 'citation' ? 'Copied' : 'Citation'}</span>
           </button>
+
+          {/* Explore in Coherence Map */}
+          {onOpenMap && (
+            <button
+              onClick={(e) => { e.stopPropagation(); onOpenMap(standard); }}
+              title="Explore in Visual Coherence Map"
+              style={{
+                padding: '6px 10px',
+                borderRadius: 'var(--radius-sm)',
+                background: 'rgba(245, 158, 11, 0.1)',
+                color: 'var(--accent-gold)',
+                border: '1px solid rgba(245, 158, 11, 0.25)',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                gap: '4px'
+              }}
+            >
+              <Compass size={13} />
+              <span>Map</span>
+            </button>
+          )}
 
           {/* Inspect Arrow */}
           <button

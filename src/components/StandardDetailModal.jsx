@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { 
   X, Copy, ArrowRight, ArrowLeft, 
-  Sparkles, Check 
+  Sparkles, Check, Compass 
 } from 'lucide-react';
 
 export function StandardDetailModal({
   standard,
   onClose,
   onCopyCitation,
-  onSelectPrerequisite
+  onSelectPrerequisite,
+  onOpenMap
 }) {
   const [copied, setCopied] = useState(false);
   const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'ai_objectives'
@@ -423,12 +424,40 @@ export function StandardDetailModal({
           position: 'sticky',
           bottom: 0,
           zIndex: 10,
-          display: 'flex'
+          display: 'flex',
+          gap: '10px'
         }}>
+          {onOpenMap && (
+            <button
+              onClick={() => {
+                onOpenMap(standard);
+                onClose();
+              }}
+              style={{
+                flex: 1,
+                padding: '12px',
+                borderRadius: 'var(--radius-md)',
+                background: 'rgba(245, 158, 11, 0.15)',
+                color: 'var(--accent-gold)',
+                border: '1px solid rgba(245, 158, 11, 0.35)',
+                fontWeight: '700',
+                fontSize: '0.86rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                cursor: 'pointer'
+              }}
+            >
+              <Compass size={16} />
+              <span>Coherence Map</span>
+            </button>
+          )}
+
           <button
             onClick={handleCopy}
             style={{
-              width: '100%',
+              flex: 1,
               padding: '12px',
               borderRadius: 'var(--radius-md)',
               background: 'var(--accent-crimson)',
@@ -440,7 +469,8 @@ export function StandardDetailModal({
               alignItems: 'center',
               justifyContent: 'center',
               gap: '6px',
-              transition: 'all var(--transition-fast)'
+              transition: 'all var(--transition-fast)',
+              cursor: 'pointer'
             }}
             onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--accent-crimson-hover)'; }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--accent-crimson)'; }}

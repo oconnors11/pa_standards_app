@@ -1,5 +1,5 @@
 import React from 'react';
-import { Home, BookOpen, GitFork, Network, Layers, SlidersHorizontal } from 'lucide-react';
+import { Home, BookOpen, GitFork, Network, Layers, SlidersHorizontal, Compass } from 'lucide-react';
 
 export function Header({ 
   currentView, 
@@ -9,6 +9,7 @@ export function Header({
   const navItems = [
     { id: 'home', label: 'Home', icon: <Home size={15} /> },
     { id: 'feed', label: 'Standards Feed', icon: <BookOpen size={15} /> },
+    { id: 'map', label: 'Coherence Map', icon: <Compass size={15} /> },
     { id: 'crosswalk', label: 'Vertical Progression', icon: <GitFork size={15} /> },
     { id: 'tree', label: 'Hierarchy Tree', icon: <Network size={15} /> },
     { id: 'pssa', label: 'PSSA Blueprint', icon: <Layers size={15} /> }

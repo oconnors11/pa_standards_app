@@ -33,6 +33,15 @@ export function HomePage({
       border: 'var(--border-subtle)'
     },
     {
+      id: 'map',
+      title: 'Coherence Map',
+      subtitle: 'Visual prerequisite network',
+      icon: <Compass size={20} color="#F59E0B" />,
+      tag: 'Visual Graph',
+      bg: 'var(--bg-card)',
+      border: 'var(--border-subtle)'
+    },
+    {
       id: 'crosswalk',
       title: 'Vertical Progression',
       subtitle: 'Cross-grade skill trajectories',
@@ -130,6 +139,12 @@ export function HomePage({
       title: 'Standards Feed & Multi-Filter Search',
       icon: <BookOpen size={22} color="#38BDF8" />,
       description: 'Search instantly by exact short codes (e.g. M08.A-N.1, CC.2.1.8) or topic keywords. Narrow down by Grade K–8, Subject Area, Webb\'s DOK level (1–4), and PSSA Category with real-time term highlighting.'
+    },
+    {
+      id: 'map',
+      title: 'Visual Coherence Map (Achieve the Core Style)',
+      icon: <Compass size={22} color="#F59E0B" />,
+      description: 'Explore how standards connect across grade levels in an interactive node-and-link network. Trace prerequisite learning gaps backward, plan scaffolded instruction forward, and generate DOK-aligned SWBAT lesson objectives.'
     },
     {
       id: 'crosswalk',
@@ -372,7 +387,7 @@ export function HomePage({
             How to Use the RBCS Standards Browser
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Four purpose-built lenses for classroom instruction, curriculum alignment, and state assessment preparation
+            Five purpose-built lenses for classroom instruction, curriculum alignment, and state assessment preparation
           </p>
         </div>
 

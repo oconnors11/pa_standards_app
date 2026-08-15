@@ -8,6 +8,7 @@ import { StandardDetailModal } from './components/StandardDetailModal';
 import { VerticalCrosswalkView } from './components/VerticalCrosswalkView';
 import { HierarchyTreeView } from './components/HierarchyTreeView';
 import { PssaMatrixView } from './components/PssaMatrixView';
+import { CoherenceMapView } from './components/CoherenceMapView';
 import { Toast } from './components/Toast';
 
 import { useStandardsSearch } from './hooks/useStandardsSearch';
@@ -15,8 +16,9 @@ import { useToast } from './hooks/useToast';
 import { AlertCircle } from 'lucide-react';
 
 export function App() {
-  const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'crosswalk', 'tree', 'pssa'
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'map', 'crosswalk', 'tree', 'pssa'
   const [inspectedStandard, setInspectedStandard] = useState(null);
+  const [activeMapCode, setActiveMapCode] = useState('CC.2.1.4.B.2');
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const {
@@ -106,6 +108,15 @@ export function App() {
     setSelectedCategory(categoryId);
     setCurrentView('feed');
   }, [setSelectedCategory]);
+
+  // Handle open standard directly in Coherence Map
+  const handleOpenMap = useCallback((standardOrCode) => {
+    const code = typeof standardOrCode === 'string' ? standardOrCode : standardOrCode?.code;
+    if (code) {
+      setActiveMapCode(code);
+    }
+    setCurrentView('map');
+  }, []);
 
   return (
     <div className="app-container">
@@ -214,11 +225,22 @@ export function App() {
                       onInspect={setInspectedStandard}
                       onCopyShort={handleCopyShort}
                       onCopyCitation={handleCopyCitation}
+                      onOpenMap={handleOpenMap}
                     />
                   ))}
                 </div>
               )}
             </>
+          )}
+
+          {/* Visual Coherence Map View */}
+          {currentView === 'map' && (
+            <CoherenceMapView
+              initialStandardCode={activeMapCode}
+              onInspectStandard={setInspectedStandard}
+              onCopyCitation={handleCopyCitation}
+              onCopyShort={handleCopyShort}
+            />
           )}
 
           {/* Vertical Progression Matrix View */}
@@ -258,6 +280,7 @@ export function App() {
         onClose={() => setInspectedStandard(null)}
         onCopyCitation={handleCopyCitation}
         onSelectPrerequisite={handleSelectPrerequisite}
+        onOpenMap={handleOpenMap}
       />
 
       {/* Mobile Filters Modal Drawer */}
