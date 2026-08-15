@@ -68,12 +68,19 @@ npm install
 # Start local dev server
 npm run dev
 
-# Re-compile standards database
-node scripts/compile_standards.js
+# Ingest new PA SAS files (drop .csv / .xlsx files into raw_data/):
+npm run import-standards
 
 # Build production bundle
 npm run build
 ```
+
+### 📥 Ingesting Official PA SAS Standards Files
+To add complete official standards sets from the Pennsylvania Department of Education (PDE SAS):
+1. Export standards files as `.csv` or `.xlsx` from [pdesas.org](https://www.pdesas.org/).
+2. Place the export files into the [`raw_data/`](file:///home/oconnors11/teamwork_projects/pa_standards_app/raw_data) folder.
+3. Run `npm run import-standards`.
+4. The pipeline parses the hierarchy, formats bulleted sub-skills, computes vertical grade progressions, extracts search keywords, and compiles [`standards.json`](file:///home/oconnors11/teamwork_projects/pa_standards_app/src/data/standards.json).
 
 ---
 

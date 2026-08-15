@@ -45,9 +45,9 @@ export function StandardDetailModal({
       style={{
         position: 'fixed',
         inset: 0,
-        backgroundColor: 'rgba(5, 15, 30, 0.75)',
-        backdropFilter: 'blur(6px)',
-        WebkitBackdropFilter: 'blur(6px)',
+        backgroundColor: 'rgba(0, 15, 35, 0.82)',
+        backdropFilter: 'blur(8px)',
+        WebkitBackdropFilter: 'blur(8px)',
         zIndex: 900,
         display: 'flex',
         justifyContent: 'flex-end',
@@ -87,14 +87,14 @@ export function StandardDetailModal({
               <span className="badge badge-code" style={{ fontSize: '0.85rem' }}>
                 {standard.code}
               </span>
-              <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-muted)' }}>
+              <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-silver)' }}>
                 Grade {standard.grade}
               </span>
               {standard.is_keystone && (
                 <span className="badge badge-keystone">Keystone</span>
               )}
             </div>
-            <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginTop: '4px' }}>
+            <p style={{ fontSize: '0.8rem', color: 'var(--text-silver)', marginTop: '4px' }}>
               {standard.subject} · {standard.grade_band}
             </p>
           </div>
@@ -104,7 +104,7 @@ export function StandardDetailModal({
             style={{
               padding: '8px',
               borderRadius: 'var(--radius-sm)',
-              color: 'var(--text-muted)'
+              color: 'var(--text-silver)'
             }}
             aria-label="Close drawer"
           >
@@ -124,8 +124,8 @@ export function StandardDetailModal({
             onClick={() => setActiveTab('overview')}
             style={{
               padding: '12px 0',
-              borderBottom: `2px solid ${activeTab === 'overview' ? 'var(--accent-blue)' : 'transparent'}`,
-              color: activeTab === 'overview' ? '#FFFFFF' : 'var(--text-muted)',
+              borderBottom: `2px solid ${activeTab === 'overview' ? 'var(--accent-crimson)' : 'transparent'}`,
+              color: activeTab === 'overview' ? '#FFFFFF' : 'var(--text-silver)',
               fontSize: '0.85rem',
               fontWeight: '600'
             }}
@@ -136,8 +136,8 @@ export function StandardDetailModal({
             onClick={() => setActiveTab('ai_objectives')}
             style={{
               padding: '12px 0',
-              borderBottom: `2px solid ${activeTab === 'ai_objectives' ? 'var(--accent-gold)' : 'transparent'}`,
-              color: activeTab === 'ai_objectives' ? 'var(--accent-gold)' : 'var(--text-muted)',
+              borderBottom: `2px solid ${activeTab === 'ai_objectives' ? 'var(--accent-crimson)' : 'transparent'}`,
+              color: activeTab === 'ai_objectives' ? '#FFFFFF' : 'var(--text-silver)',
               fontSize: '0.85rem',
               fontWeight: '600',
               display: 'flex',
@@ -145,7 +145,7 @@ export function StandardDetailModal({
               gap: '6px'
             }}
           >
-            <Sparkles size={14} />
+            <Sparkles size={14} color="#ff85a1" />
             <span>Lesson Objectives</span>
           </button>
         </div>
@@ -173,7 +173,7 @@ export function StandardDetailModal({
                     <div style={{ fontSize: '0.75rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-dim)', marginBottom: '2px' }}>
                       Assessment Anchor
                     </div>
-                    <div style={{ fontSize: '0.85rem', color: 'var(--text-muted)', lineHeight: '1.4' }}>
+                    <div style={{ fontSize: '0.85rem', color: 'var(--text-silver)', lineHeight: '1.4' }}>
                       {standard.anchor}
                     </div>
                   </div>
@@ -182,11 +182,11 @@ export function StandardDetailModal({
 
               {/* Standard Statement / Eligible Content */}
               <div>
-                <div style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                <div style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-silver)', marginBottom: '6px' }}>
                   Standard Statement / Eligible Content
                 </div>
                 <div style={{
-                  fontSize: '1rem',
+                  fontSize: '0.96rem',
                   lineHeight: '1.6',
                   color: 'var(--text-main)',
                   background: 'var(--bg-card)',
@@ -194,7 +194,29 @@ export function StandardDetailModal({
                   borderRadius: 'var(--radius-md)',
                   border: '1px solid var(--border-medium)'
                 }}>
-                  {standard.description}
+                  {standard.bullets && standard.bullets.length > 0 ? (
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      <p style={{ margin: 0, fontWeight: '500' }}>
+                        {standard.clean_intro || standard.description}
+                      </p>
+                      <ul style={{
+                        margin: '6px 0 0 0',
+                        paddingLeft: '20px',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px',
+                        color: 'var(--text-silver)'
+                      }}>
+                        {standard.bullets.map((bullet, idx) => (
+                          <li key={idx} style={{ lineHeight: '1.5' }}>
+                            {bullet}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    standard.description
+                  )}
                 </div>
               </div>
 
@@ -228,7 +250,7 @@ export function StandardDetailModal({
                   border: '1px solid var(--border-subtle)'
                 }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontWeight: '600' }}>Rigor Level</div>
-                  <div style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--accent-gold)', marginTop: '2px' }}>
+                  <div style={{ fontSize: '0.95rem', fontWeight: '700', color: '#ff85a1', marginTop: '2px' }}>
                     {standard.dok}
                   </div>
                 </div>
@@ -249,7 +271,7 @@ export function StandardDetailModal({
               {/* PA Core Crosswalks */}
               {standard.crosswalks && standard.crosswalks.length > 0 && (
                 <div>
-                  <div style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px' }}>
+                  <div style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-silver)', marginBottom: '6px' }}>
                     PA Core & National Crosswalks
                   </div>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -279,13 +301,13 @@ export function StandardDetailModal({
                 {standard.prerequisites && standard.prerequisites.length > 0 && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem' }}>
                     <ArrowLeft size={14} color="var(--accent-blue)" />
-                    <span style={{ color: 'var(--text-muted)' }}>Prerequisite:</span>
+                    <span style={{ color: 'var(--text-silver)' }}>Prerequisite:</span>
                     {standard.prerequisites.map((p, i) => (
                       <button
                         key={i}
                         onClick={() => onSelectPrerequisite && onSelectPrerequisite(p)}
                         style={{
-                          color: 'var(--accent-blue)',
+                          color: 'var(--text-silver)',
                           fontWeight: '600',
                           textDecoration: 'underline'
                         }}
@@ -299,7 +321,7 @@ export function StandardDetailModal({
                 {standard.next_steps && standard.next_steps.length > 0 && (
                   <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '0.82rem' }}>
                     <ArrowRight size={14} color="var(--accent-emerald)" />
-                    <span style={{ color: 'var(--text-muted)' }}>Next Step:</span>
+                    <span style={{ color: 'var(--text-silver)' }}>Next Step:</span>
                     {standard.next_steps.map((n, i) => (
                       <span key={i} style={{ color: 'var(--accent-emerald)', fontWeight: '600' }}>
                         {n}
@@ -314,10 +336,10 @@ export function StandardDetailModal({
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
               <div style={{
                 padding: '12px 16px',
-                background: 'var(--accent-gold-bg)',
+                background: 'var(--accent-crimson-bg)',
                 borderRadius: 'var(--radius-md)',
-                border: '1px solid var(--accent-gold)',
-                color: 'var(--accent-gold)',
+                border: '1px solid var(--accent-crimson-border)',
+                color: '#ff85a1',
                 fontSize: '0.85rem'
               }}>
                 <strong>Curriculum Alignment Assistant:</strong> These customizable "Students Will Be Able To" (SWBAT) objective stems are grounded in the standard's cognitive rigor level.
@@ -336,7 +358,7 @@ export function StandardDetailModal({
                     gap: '8px'
                   }}
                 >
-                  <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--accent-gold)' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#ff85a1' }}>
                     {obj.level}
                   </div>
                   <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: '1.5' }}>
@@ -356,7 +378,7 @@ export function StandardDetailModal({
                       background: 'var(--bg-primary)',
                       border: '1px solid var(--border-subtle)',
                       fontSize: '0.75rem',
-                      color: 'var(--accent-blue)',
+                      color: 'var(--text-silver)',
                       fontWeight: '600',
                       gap: '4px'
                     }}
@@ -387,7 +409,7 @@ export function StandardDetailModal({
               width: '100%',
               padding: '12px',
               borderRadius: 'var(--radius-md)',
-              background: 'var(--accent-blue)',
+              background: 'var(--accent-crimson)',
               color: '#FFFFFF',
               border: 'none',
               fontWeight: '700',
@@ -395,8 +417,11 @@ export function StandardDetailModal({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              gap: '6px'
+              gap: '6px',
+              transition: 'all var(--transition-fast)'
             }}
+            onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--accent-crimson-hover)'; }}
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--accent-crimson)'; }}
           >
             {copied ? <Check size={16} /> : <Copy size={16} />}
             <span>{copied ? 'Copied Citation' : 'Copy Citation'}</span>

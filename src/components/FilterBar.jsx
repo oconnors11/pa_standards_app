@@ -54,7 +54,7 @@ export function FilterBar({
         borderBottom: '1px solid var(--border-subtle)'
       }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontWeight: '700', fontSize: '0.95rem' }}>
-          <Filter size={16} color="var(--accent-blue)" />
+          <Filter size={16} color="var(--text-silver)" />
           <span>Filter Standards</span>
         </div>
         {isMobileDrawer ? (
@@ -64,7 +64,7 @@ export function FilterBar({
         ) : hasActiveFilters ? (
           <button 
             onClick={clearAllFilters}
-            style={{ fontSize: '0.75rem', color: 'var(--accent-blue)', fontWeight: '600' }}
+            style={{ fontSize: '0.75rem', color: '#ff5c7a', fontWeight: '600' }}
           >
             Clear All
           </button>
@@ -89,11 +89,11 @@ export function FilterBar({
                   justifyContent: 'space-between',
                   padding: '8px 12px',
                   borderRadius: 'var(--radius-md)',
-                  background: active ? 'var(--bg-card-hover)' : 'transparent',
-                  border: `1px solid ${active ? 'var(--border-focus)' : 'transparent'}`,
+                  background: active ? 'var(--accent-crimson-bg)' : 'transparent',
+                  border: `1px solid ${active ? 'var(--accent-crimson)' : 'transparent'}`,
                   color: active ? '#FFFFFF' : 'var(--text-muted)',
                   fontSize: '0.85rem',
-                  fontWeight: active ? '600' : '400',
+                  fontWeight: active ? '700' : '400',
                   textAlign: 'left'
                 }}
               >
@@ -101,7 +101,7 @@ export function FilterBar({
                   {s.icon}
                   <span>{s.label}</span>
                 </div>
-                {active && <Check size={14} color="var(--accent-blue)" />}
+                {active && <Check size={14} color="#ff5c7a" />}
               </button>
             );
           })}
@@ -127,9 +127,9 @@ export function FilterBar({
                 style={{
                   padding: '7px 4px',
                   borderRadius: 'var(--radius-sm)',
-                  background: active ? 'var(--accent-blue)' : 'var(--bg-primary)',
-                  color: active ? '#FFFFFF' : 'var(--text-main)',
-                  border: `1px solid ${active ? 'var(--accent-blue)' : 'var(--border-subtle)'}`,
+                  background: active ? 'var(--accent-crimson)' : 'var(--bg-primary)',
+                  color: active ? '#FFFFFF' : 'var(--text-silver)',
+                  border: `1px solid ${active ? 'var(--accent-crimson)' : 'var(--border-subtle)'}`,
                   fontSize: '0.82rem',
                   fontWeight: active ? '700' : '500'
                 }}
@@ -159,15 +159,15 @@ export function FilterBar({
                   justifyContent: 'space-between',
                   padding: '7px 10px',
                   borderRadius: 'var(--radius-sm)',
-                  background: active ? 'var(--bg-primary)' : 'transparent',
-                  border: `1px solid ${active ? 'var(--accent-gold)' : 'var(--border-subtle)'}`,
-                  color: active ? 'var(--accent-gold)' : 'var(--text-muted)',
+                  background: active ? 'var(--accent-crimson-bg)' : 'transparent',
+                  border: `1px solid ${active ? 'var(--accent-crimson)' : 'var(--border-subtle)'}`,
+                  color: active ? '#FFFFFF' : 'var(--text-muted)',
                   fontSize: '0.8rem',
-                  fontWeight: active ? '600' : '400'
+                  fontWeight: active ? '700' : '400'
                 }}
               >
                 <span>{opt.label}</span>
-                {active && <Check size={14} color="var(--accent-gold)" />}
+                {active && <Check size={14} color="#ff5c7a" />}
               </button>
             );
           })}
@@ -189,9 +189,9 @@ export function FilterBar({
                 style={{
                   padding: '4px 10px',
                   borderRadius: 'var(--radius-full)',
-                  background: active ? 'var(--accent-purple)' : 'var(--bg-primary)',
+                  background: active ? 'var(--accent-crimson)' : 'var(--bg-primary)',
                   color: active ? '#FFFFFF' : 'var(--text-muted)',
-                  border: `1px solid ${active ? 'var(--accent-purple)' : 'var(--border-subtle)'}`,
+                  border: `1px solid ${active ? 'var(--accent-crimson)' : 'var(--border-subtle)'}`,
                   fontSize: '0.75rem',
                   fontWeight: active ? '700' : '400'
                 }}
@@ -237,7 +237,7 @@ export function FilterBar({
             marginTop: '10px',
             padding: '12px',
             borderRadius: 'var(--radius-md)',
-            background: 'var(--accent-blue)',
+            background: 'var(--accent-crimson)',
             color: '#FFFFFF',
             fontWeight: '700',
             fontSize: '0.95rem'

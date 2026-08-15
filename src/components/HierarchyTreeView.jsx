@@ -254,15 +254,26 @@ export function HierarchyTreeView({ standards, onInspect, onCopyShort }) {
                                         </div>
 
                                         {/* Description text neatly displayed below the code badge spanning full width */}
-                                        <p style={{
+                                        <div style={{
                                           fontSize: '0.86rem',
                                           color: 'var(--text-main)',
                                           lineHeight: '1.5',
                                           margin: 0,
                                           width: '100%'
                                         }}>
-                                          {s.description}
-                                        </p>
+                                          {s.bullets && s.bullets.length > 0 ? (
+                                            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                                              <p style={{ margin: 0 }}>{s.clean_intro || s.description}</p>
+                                              <ul style={{ margin: '4px 0 0 0', paddingLeft: '18px', color: 'var(--text-muted)', fontSize: '0.82rem', display: 'flex', flexDirection: 'column', gap: '3px' }}>
+                                                {s.bullets.map((b, bIdx) => (
+                                                  <li key={bIdx}>{b}</li>
+                                                ))}
+                                              </ul>
+                                            </div>
+                                          ) : (
+                                            <p style={{ margin: 0 }}>{s.description}</p>
+                                          )}
+                                        </div>
                                       </div>
                                     ))}
                                   </div>

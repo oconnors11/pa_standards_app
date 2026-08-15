@@ -29,8 +29,8 @@ export function HomePage({
       subtitle: 'Multi-filter & keyword search',
       icon: <BookOpen size={20} color="#38BDF8" />,
       tag: 'Filter Engine',
-      bg: 'rgba(56, 189, 248, 0.08)',
-      border: 'rgba(56, 189, 248, 0.25)'
+      bg: 'var(--bg-card)',
+      border: 'var(--border-subtle)'
     },
     {
       id: 'crosswalk',
@@ -38,8 +38,8 @@ export function HomePage({
       subtitle: 'Cross-grade skill trajectories',
       icon: <GitFork size={20} color="#818CF8" />,
       tag: 'Skill Ladders',
-      bg: 'rgba(129, 140, 248, 0.08)',
-      border: 'rgba(129, 140, 248, 0.25)'
+      bg: 'var(--bg-card)',
+      border: 'var(--border-subtle)'
     },
     {
       id: 'tree',
@@ -47,8 +47,8 @@ export function HomePage({
       subtitle: 'Nested PDE SAS taxonomy',
       icon: <Network size={20} color="#34D399" />,
       tag: 'Domain Tree',
-      bg: 'rgba(52, 211, 153, 0.08)',
-      border: 'rgba(52, 211, 153, 0.25)'
+      bg: 'var(--bg-card)',
+      border: 'var(--border-subtle)'
     },
     {
       id: 'pssa',
@@ -56,8 +56,8 @@ export function HomePage({
       subtitle: 'Categories A–E & test limits',
       icon: <Layers size={20} color="#F59E0B" />,
       tag: 'Assessment Specs',
-      bg: 'rgba(245, 158, 11, 0.08)',
-      border: 'rgba(245, 158, 11, 0.25)'
+      bg: 'var(--bg-card)',
+      border: 'var(--border-subtle)'
     }
   ];
 
@@ -282,7 +282,7 @@ export function HomePage({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '4px',
-                color: 'var(--accent-blue)',
+                color: 'var(--text-silver)',
                 fontSize: '0.8rem',
                 fontWeight: '700',
                 marginTop: 'auto'
@@ -399,7 +399,7 @@ export function HomePage({
                 display: 'flex',
                 alignItems: 'center',
                 gap: '6px',
-                color: 'var(--accent-blue)',
+                color: 'var(--text-silver)',
                 fontWeight: '700',
                 fontSize: '0.82rem'
               }}>
@@ -438,7 +438,7 @@ export function HomePage({
         }
 
         .hero-tile {
-          background: linear-gradient(135deg, var(--bg-secondary) 0%, #112845 100%);
+          background: linear-gradient(135deg, #00234b 0%, #001226 100%);
           border-color: var(--border-medium);
           display: flex;
           flex-direction: column;
@@ -454,9 +454,9 @@ export function HomePage({
           gap: 6px;
           padding: 4px 12px;
           border-radius: var(--radius-full);
-          background: var(--accent-blue-bg);
-          border: 1px solid rgba(59, 130, 246, 0.3);
-          color: var(--accent-blue);
+          background: var(--accent-crimson-bg);
+          border: 1px solid var(--accent-crimson-border);
+          color: #ff5c7a;
           font-size: 0.78rem;
           font-weight: 700;
           margin-bottom: 14px;
@@ -509,14 +509,19 @@ export function HomePage({
         }
 
         .hero-search-btn {
-          background: var(--accent-blue);
+          background: var(--accent-crimson);
           color: #FFFFFF;
           font-weight: 700;
           font-size: 0.85rem;
-          padding: 8px 16px;
+          padding: 8px 18px;
           border-radius: var(--radius-md);
           border: none;
           cursor: pointer;
+          transition: all var(--transition-fast);
+        }
+
+        .hero-search-btn:hover {
+          background: var(--accent-crimson-hover);
         }
 
         .hero-cta-row {
@@ -532,11 +537,16 @@ export function HomePage({
           gap: 8px;
           padding: 10px 18px;
           border-radius: var(--radius-md);
-          background: var(--accent-blue);
+          background: var(--accent-crimson);
           color: #FFFFFF;
           font-weight: 700;
           font-size: 0.88rem;
           box-shadow: var(--shadow-sm);
+          transition: all var(--transition-fast);
+        }
+
+        .btn-primary-launch:hover {
+          background: var(--accent-crimson-hover);
         }
 
         .launchpad-tile {
@@ -574,14 +584,15 @@ export function HomePage({
 
         .mode-card-compact:hover {
           transform: translateY(-2px);
-          filter: brightness(1.1);
+          border-color: var(--border-strong);
+          filter: brightness(1.08);
         }
 
         .mode-icon-box {
           width: 32px;
           height: 32px;
           border-radius: var(--radius-md);
-          background: var(--bg-card);
+          background: var(--bg-primary);
           display: flex;
           align-items: center;
           justifyContent: center;
@@ -606,7 +617,7 @@ export function HomePage({
           gap: 4px;
           font-size: 0.72rem;
           font-weight: 700;
-          color: var(--accent-blue);
+          color: var(--text-silver);
           margin-top: 4px;
         }
 
@@ -642,7 +653,7 @@ export function HomePage({
           width: 36px;
           height: 36px;
           border-radius: var(--radius-md);
-          background: var(--bg-secondary);
+          background: var(--bg-primary);
           display: flex;
           align-items: center;
           justifyContent: center;
@@ -697,9 +708,9 @@ export function HomePage({
         }
 
         .topic-chip:hover {
-          color: var(--accent-blue);
-          border-color: var(--accent-blue);
-          background: var(--accent-blue-bg);
+          color: #FFFFFF;
+          border-color: var(--accent-crimson);
+          background: var(--accent-crimson-bg);
         }
 
         .feature-deepdive-grid {
@@ -726,7 +737,7 @@ export function HomePage({
           width: 38px;
           height: 38px;
           border-radius: var(--radius-md);
-          background: var(--bg-secondary);
+          background: var(--bg-primary);
           border: 1px solid var(--border-medium);
           display: flex;
           align-items: center;

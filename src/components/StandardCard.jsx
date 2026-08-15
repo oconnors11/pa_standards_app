@@ -135,12 +135,35 @@ export function StandardCard({
 
       {/* Main Standard Statement / Eligible Content */}
       <div style={{
-        fontSize: '0.95rem',
+        fontSize: '0.92rem',
         color: 'var(--text-main)',
         lineHeight: '1.6',
         fontWeight: '400'
       }}>
-        <HighlightedText text={standard.description} query={query} />
+        {standard.bullets && standard.bullets.length > 0 ? (
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+            <p style={{ margin: 0 }}>
+              <HighlightedText text={standard.clean_intro || standard.description} query={query} />
+            </p>
+            <ul style={{
+              margin: '4px 0 0 0',
+              paddingLeft: '18px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '4px',
+              color: 'var(--text-muted)',
+              fontSize: '0.86rem'
+            }}>
+              {standard.bullets.map((bullet, idx) => (
+                <li key={idx} style={{ lineHeight: '1.4' }}>
+                  <HighlightedText text={bullet} query={query} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <HighlightedText text={standard.description} query={query} />
+        )}
       </div>
 
       {/* Assessment Limits / Notes Callout */}

@@ -54,7 +54,7 @@ export function SearchBar({
       }}>
         <div style={{
           padding: '0 16px',
-          color: query ? 'var(--accent-blue)' : 'var(--text-muted)',
+          color: query ? '#ff5c7a' : 'var(--text-silver)',
           display: 'flex',
           alignItems: 'center'
         }}>
@@ -84,7 +84,7 @@ export function SearchBar({
             onClick={() => setQuery('')}
             style={{
               padding: '8px 12px',
-              color: 'var(--text-muted)',
+              color: 'var(--text-silver)',
               borderRadius: 'var(--radius-sm)'
             }}
             aria-label="Clear search"
@@ -139,13 +139,24 @@ export function SearchBar({
               key={tag.label}
               onClick={() => setQuery(tag.query)}
               style={{
-                background: 'var(--bg-secondary)',
+                background: 'var(--bg-card)',
                 border: '1px solid var(--border-subtle)',
-                color: 'var(--text-muted)',
+                color: 'var(--text-silver)',
                 borderRadius: 'var(--radius-full)',
                 padding: '3px 10px',
                 fontSize: '0.75rem',
-                whiteSpace: 'nowrap'
+                whiteSpace: 'nowrap',
+                transition: 'all var(--transition-fast)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = 'var(--accent-crimson)';
+                e.currentTarget.style.background = 'var(--accent-crimson-bg)';
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = 'var(--border-subtle)';
+                e.currentTarget.style.background = 'var(--bg-card)';
+                e.currentTarget.style.color = 'var(--text-silver)';
               }}
             >
               {tag.label}
@@ -159,14 +170,14 @@ export function SearchBar({
           alignItems: 'center',
           gap: '8px',
           fontSize: '0.8rem',
-          color: 'var(--text-muted)'
+          color: 'var(--text-silver)'
         }}>
           <span>Showing <strong>{filteredCount}</strong> of {totalCount} standards</span>
           {hasActiveFilters && (
             <button
               onClick={onClearFilters}
               style={{
-                color: 'var(--accent-blue)',
+                color: '#ff5c7a',
                 fontWeight: '600',
                 textDecoration: 'underline',
                 fontSize: '0.8rem'

@@ -53,8 +53,8 @@ export function Header({
             width: '36px',
             height: '36px',
             borderRadius: 'var(--radius-md)',
-            background: 'linear-gradient(135deg, #1E3A8A 0%, #0F172A 100%)',
-            border: '1px solid #3B82F6',
+            background: 'linear-gradient(135deg, #00234b 0%, #001226 100%)',
+            border: '1px solid var(--accent-crimson)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -62,7 +62,7 @@ export function Header({
             flexShrink: 0
           }}>
             <svg width="22" height="22" viewBox="0 0 100 100">
-              <polygon points="12,18 88,18 78,86 50,96 22,86" fill="#3B82F6" />
+              <polygon points="12,18 88,18 78,86 50,96 22,86" fill="#800022" />
               <path d="M 32 45 Q 50 40 50 62 Q 50 40 68 45 L 68 68 Q 50 63 50 78 Q 50 63 32 68 Z" fill="#FFFFFF" />
             </svg>
           </div>
@@ -72,7 +72,7 @@ export function Header({
                 RBCS Standards Browser
               </span>
             </div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', margin: 0 }}>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-silver)', margin: 0 }}>
               K–12 Assessment Anchors & Curriculum Explorer
             </p>
           </div>
@@ -102,7 +102,7 @@ export function Header({
                   fontSize: '0.82rem',
                   fontWeight: active ? '700' : '500',
                   color: active ? '#FFFFFF' : 'var(--text-muted)',
-                  background: active ? 'var(--accent-blue)' : 'transparent',
+                  background: active ? 'var(--accent-crimson)' : 'transparent',
                   boxShadow: active ? 'var(--shadow-sm)' : 'none',
                   transition: 'all var(--transition-fast)'
                 }}
@@ -158,7 +158,7 @@ export function Header({
               borderRadius: 'var(--radius-full)',
               fontSize: '0.75rem',
               fontWeight: currentView === item.id ? '700' : '500',
-              background: currentView === item.id ? 'var(--accent-blue)' : 'var(--bg-primary)',
+              background: currentView === item.id ? 'var(--accent-crimson)' : 'var(--bg-primary)',
               color: currentView === item.id ? '#FFFFFF' : 'var(--text-muted)',
               border: '1px solid var(--border-subtle)',
               display: 'flex',
