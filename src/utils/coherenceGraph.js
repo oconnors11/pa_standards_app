@@ -1051,6 +1051,21 @@ export function getFilterOptions() {
     result.domainsBySubjectAndGrade[key] = Array.from(domainsBySubjectAndGrade[key]).sort();
   }
 
+  // Nested bySubject structure for easy cascading UI lookups
+  result.bySubject = {};
+  for (const subj of sortedSubjects) {
+    const subjGrades = result.gradesBySubject[subj] || [];
+    const domainsByGrade = {};
+    for (const g of subjGrades) {
+      domainsByGrade[g] = result.domainsBySubjectAndGrade[`${subj}|${g}`] || [];
+    }
+    result.bySubject[subj] = {
+      grades: subjGrades,
+      domains: result.domainsBySubject[subj] || [],
+      domainsByGrade
+    };
+  }
+
   cachedFilterOptions = result;
   return cachedFilterOptions;
 }

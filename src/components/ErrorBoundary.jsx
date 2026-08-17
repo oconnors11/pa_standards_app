@@ -81,6 +81,38 @@ export class ErrorBoundary extends React.Component {
             <RotateCcw size={16} />
             <span>Reload View</span>
           </button>
+
+          {this.state.error && (
+            <details style={{
+              width: '100%',
+              textAlign: 'left',
+              marginTop: '12px',
+              padding: '10px 14px',
+              background: 'var(--bg-primary)',
+              borderRadius: 'var(--radius-md)',
+              border: '1px solid var(--border-subtle)',
+              fontSize: '0.78rem',
+              color: 'var(--text-dim)'
+            }}>
+              <summary style={{ cursor: 'pointer', fontWeight: '600', color: 'var(--text-silver)' }}>
+                Technical Details ({this.state.error.message || 'Error'})
+              </summary>
+              <pre style={{
+                marginTop: '8px',
+                padding: '8px',
+                background: 'var(--bg-secondary)',
+                borderRadius: 'var(--radius-sm)',
+                overflowX: 'auto',
+                whiteSpace: 'pre-wrap',
+                wordBreak: 'break-word',
+                fontFamily: 'monospace',
+                fontSize: '0.74rem',
+                color: '#ff7b72'
+              }}>
+                {this.state.error.stack || this.state.error.message}
+              </pre>
+            </details>
+          )}
         </div>
       );
     }

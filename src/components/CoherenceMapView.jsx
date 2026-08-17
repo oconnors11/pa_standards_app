@@ -174,14 +174,30 @@ export function CoherenceMapView({
 
   // Cascading Filter Available Grades & Domains
   const availableGrades = useMemo(() => {
-    if (!filterOptions.bySubject[selectedSubject]) return [];
-    return filterOptions.bySubject[selectedSubject].grades || [];
+    if (!filterOptions || !selectedSubject) return [];
+    if (filterOptions.bySubject && filterOptions.bySubject[selectedSubject]) {
+      return filterOptions.bySubject[selectedSubject].grades || [];
+    }
+    if (filterOptions.gradesBySubject && filterOptions.gradesBySubject[selectedSubject]) {
+      return filterOptions.gradesBySubject[selectedSubject] || [];
+    }
+    return [];
   }, [filterOptions, selectedSubject]);
 
   const availableDomains = useMemo(() => {
-    if (!filterOptions.bySubject[selectedSubject]) return [];
-    const domainsByGrade = filterOptions.bySubject[selectedSubject].domainsByGrade || {};
-    return domainsByGrade[selectedGrade] || [];
+    if (!filterOptions || !selectedSubject || !selectedGrade) return [];
+    if (filterOptions.domainsBySubjectAndGrade) {
+      const doms = filterOptions.domainsBySubjectAndGrade[`${selectedSubject}|${selectedGrade}`];
+      if (doms && doms.length > 0) return doms;
+    }
+    if (filterOptions.bySubject && filterOptions.bySubject[selectedSubject]?.domainsByGrade) {
+      const doms = filterOptions.bySubject[selectedSubject].domainsByGrade[selectedGrade];
+      if (doms && doms.length > 0) return doms;
+    }
+    if (filterOptions.domainsBySubject && filterOptions.domainsBySubject[selectedSubject]) {
+      return filterOptions.domainsBySubject[selectedSubject] || [];
+    }
+    return [];
   }, [filterOptions, selectedSubject, selectedGrade]);
 
   const availableStandardsInDomain = useMemo(() => {
@@ -221,7 +237,17 @@ export function CoherenceMapView({
   // SWBAT Generator for inspected node
   const inspectedSWBAT = useMemo(() => {
     if (!inspectedStandard) return [];
-    return generateSWBAT(inspectedStandard);
+    const swbatObj = generateSWBAT(inspectedStandard);
+    if (Array.isArray(swbatObj)) return swbatObj;
+    if (swbatObj && swbatObj.swbatText) {
+      return [
+        {
+          level: `DOK ${swbatObj.dokLevel || 2} · Bloom's: ${swbatObj.bloomsLevel || 'Apply'}`,
+          stem: swbatObj.swbatText
+        }
+      ];
+    }
+    return [];
   }, [inspectedStandard]);
 
   const subjectColor = getSubjectColor(targetStandard?.subject);
