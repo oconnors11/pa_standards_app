@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { 
-  Home, BookOpen, GitFork, Network, Layers, 
-  SlidersHorizontal, Compass, Sun, Moon, NotebookPen, 
-  Menu, X, ChevronRight 
+import {
+  Home, BookOpen, GitFork, Network, Layers,
+  SlidersHorizontal, Compass, Sun, Moon, NotebookPen,
+  Menu, X, ChevronRight
 } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 
-export function Header({ 
-  currentView, 
-  setCurrentView, 
+export function Header({
+  currentView,
+  setCurrentView,
   totalNotesCount = 0,
   onToggleMobileFilters,
   theme: controlledTheme,
@@ -66,7 +66,7 @@ export function Header({
         justifyContent: 'space-between',
         gap: '16px'
       }}>
-        
+
         {/* Clickable Brand Logo & Title (Returns Home) */}
         <button
           onClick={() => {
@@ -105,7 +105,7 @@ export function Header({
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <span style={{ fontSize: '1.1rem', fontWeight: '800', letterSpacing: '-0.02em', color: 'var(--text-main)' }}>
-                RBCS Standards Browser
+                RBCS Standards Hub
               </span>
             </div>
           </div>
@@ -241,7 +241,7 @@ export function Header({
 
       {/* Mobile Slide-Out Drawer Navigation (Rendered via React Portal onto document.body to avoid stacking context traps) */}
       {isMobileDrawerOpen && typeof document !== 'undefined' && createPortal(
-        <div 
+        <div
           className="mobile-drawer-overlay animate-fade-in"
           onClick={() => setIsMobileDrawerOpen(false)}
           style={{
@@ -262,7 +262,7 @@ export function Header({
             pointerEvents: 'auto'
           }}
         >
-          <div 
+          <div
             className="mobile-drawer-panel"
             onClick={(e) => e.stopPropagation()}
             style={{
@@ -351,8 +351,8 @@ export function Header({
                         justifyContent: 'space-between',
                         padding: '12px 14px',
                         borderRadius: 'var(--radius-lg)',
-                        background: active 
-                          ? 'linear-gradient(135deg, var(--accent-crimson) 0%, rgba(128, 0, 34, 0.85) 100%)' 
+                        background: active
+                          ? 'linear-gradient(135deg, var(--accent-crimson) 0%, rgba(128, 0, 34, 0.85) 100%)'
                           : 'var(--bg-card)',
                         border: `1px solid ${active ? 'var(--accent-crimson-border)' : 'var(--border-subtle)'}`,
                         color: active ? '#FFFFFF' : 'var(--text-main)',
