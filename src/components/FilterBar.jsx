@@ -10,8 +10,6 @@ export function FilterBar({
   setSelectedGrade,
   selectedDok,
   setSelectedDok,
-  examFilter,
-  setExamFilter,
   clearAllFilters,
   hasActiveFilters,
   isMobileDrawer = false,
@@ -28,11 +26,6 @@ export function FilterBar({
 
   const grades = ['All', 'Pre-K', 'K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'HS'];
   const dokLevels = ['All', 'DOK 1', 'DOK 2', 'DOK 3', 'DOK 4'];
-  const examOptions = [
-    { id: 'All', label: 'All Frameworks' },
-    { id: 'PSSA', label: 'PSSA Tested (3–8)' },
-    { id: 'Keystone', label: 'Keystone Exam (HS)' }
-  ];
 
   const handleGradeClick = (g) => {
     if (toggleGrade) {
@@ -162,38 +155,7 @@ export function FilterBar({
         </div>
       </div>
 
-      {/* 3. Assessment Framework Focus */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        <label style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
-          Assessment Scope
-        </label>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-          {examOptions.map(opt => {
-            const active = examFilter === opt.id;
-            return (
-              <button
-                key={opt.id}
-                onClick={() => setExamFilter(opt.id)}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '7px 10px',
-                  borderRadius: 'var(--radius-sm)',
-                  background: active ? 'var(--accent-crimson-bg)' : 'transparent',
-                  border: `1px solid ${active ? 'var(--accent-crimson)' : 'var(--border-subtle)'}`,
-                  color: active ? 'var(--accent-crimson-text)' : 'var(--text-muted)',
-                  fontSize: '0.8rem',
-                  fontWeight: active ? '700' : '400'
-                }}
-              >
-                <span>{opt.label}</span>
-                {active && <Check size={14} color="var(--accent-crimson-text)" />}
-              </button>
-            );
-          })}
-        </div>
-      </div>
+
 
       {/* 4. Depth of Knowledge (DOK) */}
       <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>

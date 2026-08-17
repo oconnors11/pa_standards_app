@@ -39,8 +39,6 @@ export function App() {
     toggleGrade,
     selectedDok,
     setSelectedDok,
-    examFilter,
-    setExamFilter,
     clearAllFilters,
     hasActiveFilters
   } = useStandardsSearch();
@@ -140,8 +138,6 @@ export function App() {
               setSelectedGrade={setSelectedGrade}
               selectedDok={selectedDok}
               setSelectedDok={setSelectedDok}
-              examFilter={examFilter}
-              setExamFilter={setExamFilter}
               clearAllFilters={clearAllFilters}
               hasActiveFilters={hasActiveFilters}
             />
@@ -295,8 +291,6 @@ export function App() {
               setSelectedGrade={setSelectedGrade}
               selectedDok={selectedDok}
               setSelectedDok={setSelectedDok}
-              examFilter={examFilter}
-              setExamFilter={setExamFilter}
               clearAllFilters={clearAllFilters}
               hasActiveFilters={hasActiveFilters}
               isMobileDrawer={true}

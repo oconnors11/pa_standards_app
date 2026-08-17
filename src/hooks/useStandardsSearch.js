@@ -16,7 +16,6 @@ export function useStandardsSearch() {
   const [selectedSubject, setSelectedSubject] = useState('All');
   const [selectedGrades, setSelectedGrades] = useState(['All']);
   const [selectedDok, setSelectedDok] = useState('All');
-  const [examFilter, setExamFilter] = useState('All'); // 'All', 'PSSA', 'Keystone'
 
   // Filtered & Ranked Standards
   const filteredStandards = useMemo(() => {
@@ -42,9 +41,7 @@ export function useStandardsSearch() {
         }
       }
 
-      // Exam filter
-      if (examFilter === 'PSSA' && !item.is_pssa_assessed) return false;
-      if (examFilter === 'Keystone' && !item.is_keystone) return false;
+
 
       // Omnibar text query match
       if (cleanQuery.length > 0) {
@@ -88,7 +85,7 @@ export function useStandardsSearch() {
 
       return a.code.localeCompare(b.code);
     });
-  }, [query, selectedSubject, selectedGrades, selectedDok, examFilter]);
+  }, [query, selectedSubject, selectedGrades, selectedDok]);
 
   // Toggle individual grade in multi-select mode
   const toggleGrade = useCallback((grade) => {
@@ -127,11 +124,10 @@ export function useStandardsSearch() {
     setSelectedSubject('All');
     setSelectedGrades(['All']);
     setSelectedDok('All');
-    setExamFilter('All');
   }, []);
 
   const isGradeFiltered = !selectedGrades.includes('All') && selectedGrades.length > 0;
-  const hasActiveFilters = query.length > 0 || selectedSubject !== 'All' || isGradeFiltered || selectedDok !== 'All' || examFilter !== 'All';
+  const hasActiveFilters = query.length > 0 || selectedSubject !== 'All' || isGradeFiltered || selectedDok !== 'All';
 
   return {
     standards: rawStandards,
@@ -150,8 +146,6 @@ export function useStandardsSearch() {
     toggleGrade,
     selectedDok,
     setSelectedDok,
-    examFilter,
-    setExamFilter,
     clearAllFilters,
     hasActiveFilters
   };
