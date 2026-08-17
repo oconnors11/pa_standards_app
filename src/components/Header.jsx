@@ -81,9 +81,6 @@ export function Header({
                 RBCS Standards Browser
               </span>
             </div>
-            <p style={{ fontSize: '0.75rem', color: 'var(--text-silver)', margin: 0 }}>
-              K–12 Assessment Anchors & Curriculum Explorer
-            </p>
           </div>
         </button>
 
