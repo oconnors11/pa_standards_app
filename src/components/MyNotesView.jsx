@@ -34,13 +34,15 @@ export function MyNotesView({
   // Filter notes based on category and search query
   const filteredNotes = useMemo(() => {
     return notes.filter(n => {
-      const matchesCat = selectedCategory === 'All' || n.category === selectedCategory;
+      const noteCat = n.category === 'Scaffold' ? 'Small Group' : n.category;
+      const matchesCat = selectedCategory === 'All' || noteCat === selectedCategory || n.category === selectedCategory;
       const q = searchQuery.toLowerCase().trim();
       const matchesQuery = !q || 
         (n.standardCode && n.standardCode.toLowerCase().includes(q)) ||
         (n.content && n.content.toLowerCase().includes(q)) ||
         (n.standardSubject && n.standardSubject.toLowerCase().includes(q)) ||
-        (n.category && n.category.toLowerCase().includes(q));
+        (n.category && n.category.toLowerCase().includes(q)) ||
+        (noteCat && noteCat.toLowerCase().includes(q));
 
       return matchesCat && matchesQuery;
     });
@@ -53,10 +55,11 @@ export function MyNotesView({
   }, [notes]);
 
   const categoryCounts = useMemo(() => {
-    const counts = { 'Lesson Plan': 0, 'Walkthrough': 0, 'Scaffold': 0, 'General': 0 };
+    const counts = { 'Lesson Plan': 0, 'Walkthrough': 0, 'Small Group': 0, 'Differentiation': 0, 'General': 0 };
     notes.forEach(n => {
-      if (counts[n.category] !== undefined) {
-        counts[n.category]++;
+      let cat = n.category === 'Scaffold' ? 'Small Group' : n.category;
+      if (counts[cat] !== undefined) {
+        counts[cat]++;
       } else {
         counts['General']++;
       }
@@ -254,8 +257,21 @@ export function MyNotesView({
             alignItems: 'center',
             justifyContent: 'space-between'
           }}>
-            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: '600' }}>Lesson Plans</span>
-            <span style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--accent-emerald)' }}>{categoryCounts['Lesson Plan']}</span>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: '600' }}>Small Group</span>
+            <span style={{ fontSize: '1.25rem', fontWeight: '800', color: 'var(--accent-gold)' }}>{categoryCounts['Small Group']}</span>
+          </div>
+
+          <div style={{
+            background: 'var(--bg-card)',
+            padding: '12px 16px',
+            borderRadius: 'var(--radius-md)',
+            border: '1px solid var(--border-subtle)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}>
+            <span style={{ fontSize: '0.82rem', color: 'var(--text-muted)', fontWeight: '600' }}>Differentiation</span>
+            <span style={{ fontSize: '1.25rem', fontWeight: '800', color: '#a855f7' }}>{categoryCounts['Differentiation']}</span>
           </div>
         </div>
       </div>

@@ -8,7 +8,8 @@ const STORAGE_KEY = 'pa_standards_user_notes_v1';
 export const NOTE_CATEGORIES = [
   { id: 'Lesson Plan', label: 'Lesson Plan', color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.12)' },
   { id: 'Walkthrough', label: 'Walkthrough Observation', color: '#38bdf8', bgColor: 'rgba(56, 189, 248, 0.12)' },
-  { id: 'Scaffold', label: 'Scaffold / Remediation', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.12)' },
+  { id: 'Small Group', label: 'Small Group', color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.12)' },
+  { id: 'Differentiation', label: 'Differentiation', color: '#a855f7', bgColor: 'rgba(168, 85, 247, 0.12)' },
   { id: 'General', label: 'General Note', color: '#94a3b8', bgColor: 'rgba(148, 163, 184, 0.12)' }
 ];
 

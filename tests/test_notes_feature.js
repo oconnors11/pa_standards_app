@@ -55,10 +55,33 @@ const note2 = addNote({
 
 assert.strictEqual(getAllNotes().length, 2);
 
+// Add Note - Small Group & Differentiation Examples
+const note3 = addNote({
+  standardId: 'std_ri_1_1',
+  standardCode: 'CCSS.ELA-LITERACY.RI.1.1',
+  standardSubject: 'English Language Arts',
+  standardGrade: '1',
+  content: 'Tier 2 guided reading intervention group focusing on textual evidence.',
+  category: 'Small Group'
+});
+
+const note4 = addNote({
+  standardId: 'std_4_nbt_4',
+  standardCode: 'CCSS.MATH.CONTENT.4.NBT.B.4',
+  standardSubject: 'Mathematics',
+  standardGrade: '4',
+  content: 'Differentiated graphic organizers for ELL students.',
+  category: 'Differentiation'
+});
+
+assert.strictEqual(note3.category, 'Small Group');
+assert.strictEqual(note4.category, 'Differentiation');
+assert.strictEqual(getAllNotes().length, 4);
+
 // 4. Get Notes for Standard
 const riNotes = getNotesForStandard('CCSS.ELA-LITERACY.RI.1.1');
-assert.strictEqual(riNotes.length, 1);
-assert.strictEqual(riNotes[0].id, note2.id);
+assert.strictEqual(riNotes.length, 2);
+assert.strictEqual(riNotes.some(n => n.id === note2.id), true);
 
 // 5. Update Note
 const updated = updateNote(note2.id, {
@@ -81,6 +104,6 @@ assert.strictEqual(formatted.includes('CCSS.ELA-LITERACY.RI.1.1'), true);
 // 8. Delete Note
 const deleted = deleteNote(note1.id);
 assert.strictEqual(deleted, true);
-assert.strictEqual(getAllNotes().length, 1);
+assert.strictEqual(getAllNotes().length, 3);
 
 console.log('✅ ALL NOTES FEATURE UNIT TESTS PASSED SUCCESSFULLY!');
