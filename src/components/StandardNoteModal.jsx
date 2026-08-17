@@ -1,28 +1,32 @@
-import React, { useState, useEffect } from 'react';
-import { X, Plus, Edit2, Trash2, Check, Tag, Calendar, Sparkles } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { X, Plus, Check } from 'lucide-react';
 import { NOTE_CATEGORIES, getNotesForStandard } from '../utils/notesStorage';
 
-export function StandardNoteModal({ standard, isOpen, onClose, onAddNote, onUpdateNote, onDeleteNote }) {
-  const [existingNotes, setExistingNotes] = useState([]);
+export function StandardNoteModal({ standard, isOpen, onClose, onAddNote }) {
   const [content, setContent] = useState('');
   const [category, setCategory] = useState('Lesson Plan');
-  const [editingNoteId, setEditingNoteId] = useState(null);
-  const [editContent, setEditContent] = useState('');
-  const [editCategory, setEditCategory] = useState('');
+  const [existingCount, setExistingCount] = useState(0);
+  const textareaRef = useRef(null);
 
   useEffect(() => {
     if (standard && isOpen) {
       const currentNotes = getNotesForStandard(standard.code || standard.id);
-      setExistingNotes(currentNotes);
+      setExistingCount(currentNotes.length);
       setContent('');
       setCategory('Lesson Plan');
-      setEditingNoteId(null);
+
+      // Auto-focus textarea when modal opens
+      setTimeout(() => {
+        if (textareaRef.current) {
+          textareaRef.current.focus();
+        }
+      }, 100);
     }
   }, [standard, isOpen]);
 
   if (!isOpen || !standard) return null;
 
-  const handleSaveNew = (e) => {
+  const handleSave = (e) => {
     e.preventDefault();
     if (!content.trim()) return;
 
@@ -36,32 +40,8 @@ export function StandardNoteModal({ standard, isOpen, onClose, onAddNote, onUpda
       category
     });
 
-    // Refresh existing list
-    setExistingNotes(getNotesForStandard(standard.code || standard.id));
     setContent('');
-  };
-
-  const handleStartEdit = (note) => {
-    setEditingNoteId(note.id);
-    setEditContent(note.content);
-    setEditCategory(note.category || 'General');
-  };
-
-  const handleSaveEdit = (noteId) => {
-    if (!editContent.trim()) return;
-    onUpdateNote(noteId, {
-      content: editContent.trim(),
-      category: editCategory
-    });
-    setEditingNoteId(null);
-    setExistingNotes(getNotesForStandard(standard.code || standard.id));
-  };
-
-  const handleDelete = (noteId) => {
-    if (window.confirm('Are you sure you want to delete this note?')) {
-      onDeleteNote(noteId);
-      setExistingNotes(getNotesForStandard(standard.code || standard.id));
-    }
+    onClose();
   };
 
   return (
@@ -70,39 +50,48 @@ export function StandardNoteModal({ standard, isOpen, onClose, onAddNote, onUpda
         className="modal-container"
         onClick={(e) => e.stopPropagation()}
         style={{
-          maxWidth: '650px',
+          maxWidth: '560px',
           width: '90%',
-          maxHeight: '85vh',
-          display: 'flex',
-          flexDirection: 'column',
           borderRadius: 'var(--radius-lg)',
           background: 'var(--bg-card)',
           border: '1px solid var(--border-medium)',
-          boxShadow: 'var(--shadow-lg)'
+          boxShadow: 'var(--shadow-lg)',
+          overflow: 'hidden',
+          animation: 'fadeInScale 0.2s cubic-bezier(0.16, 1, 0.3, 1)'
         }}
       >
         {/* Header */}
         <div style={{
-          padding: '20px 24px',
+          padding: '18px 24px',
           borderBottom: '1px solid var(--border-subtle)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          background: 'var(--bg-tertiary)',
-          borderTopLeftRadius: 'var(--radius-lg)',
-          borderTopRightRadius: 'var(--radius-lg)'
+          background: 'var(--bg-tertiary)'
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <span className="badge badge-navy" style={{ fontSize: '0.85rem' }}>
+              <span className="badge badge-navy" style={{ fontSize: '0.85rem', fontWeight: '800' }}>
                 {standard.code}
               </span>
               <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)', fontWeight: '600' }}>
                 {standard.subject} • Grade {standard.grade}
               </span>
+              {existingCount > 0 && (
+                <span style={{
+                  fontSize: '0.75rem',
+                  padding: '2px 8px',
+                  borderRadius: '10px',
+                  background: 'rgba(56, 189, 248, 0.12)',
+                  color: 'var(--accent-blue)',
+                  fontWeight: '700'
+                }}>
+                  {existingCount} saved note{existingCount === 1 ? '' : 's'}
+                </span>
+              )}
             </div>
-            <h3 style={{ fontSize: '1.1rem', fontWeight: '700', marginTop: '6px', color: 'var(--text-main)' }}>
-              Standard Notes & Observations
+            <h3 style={{ fontSize: '1.05rem', fontWeight: '700', marginTop: '6px', color: 'var(--text-main)', margin: '6px 0 0 0' }}>
+              Quick Add Note / Walkthrough Entry
             </h3>
           </div>
           <button 
@@ -115,26 +104,14 @@ export function StandardNoteModal({ standard, isOpen, onClose, onAddNote, onUpda
           </button>
         </div>
 
-        {/* Content Body */}
-        <div style={{ padding: '24px', overflowY: 'auto', flex: 1, display: 'flex', flexDirection: 'column', gap: '20px' }}>
+        {/* Form Body */}
+        <form onSubmit={handleSave} style={{ padding: '24px', display: 'flex', flexDirection: 'column', gap: '18px' }}>
           
-          {/* Add New Note Form */}
-          <form onSubmit={handleSaveNew} style={{
-            background: 'var(--bg-secondary)',
-            padding: '16px',
-            borderRadius: 'var(--radius-md)',
-            border: '1px solid var(--border-medium)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '12px'
-          }}>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <label style={{ fontSize: '0.85rem', fontWeight: '700', color: 'var(--text-main)', display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <Plus size={16} color="var(--accent-blue)" /> Add New Note / Walkthrough Entry
-              </label>
-            </div>
-
-            {/* Category Selectors */}
+          {/* Category Selector Pills */}
+          <div>
+            <label style={{ fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '8px', display: 'block' }}>
+              Select Tag / Category
+            </label>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '8px' }}>
               {NOTE_CATEGORIES.map(cat => {
                 const isSelected = category === cat.id;
@@ -144,12 +121,12 @@ export function StandardNoteModal({ standard, isOpen, onClose, onAddNote, onUpda
                     type="button"
                     onClick={() => setCategory(cat.id)}
                     style={{
-                      padding: '5px 12px',
+                      padding: '6px 14px',
                       borderRadius: '16px',
-                      fontSize: '0.78rem',
-                      fontWeight: '600',
+                      fontSize: '0.8rem',
+                      fontWeight: '700',
                       border: isSelected ? `2px solid ${cat.color}` : '1px solid var(--border-medium)',
-                      background: isSelected ? cat.bgColor : 'var(--bg-card)',
+                      background: isSelected ? cat.bgColor : 'var(--bg-secondary)',
                       color: isSelected ? cat.color : 'var(--text-secondary)',
                       cursor: 'pointer',
                       transition: 'all 0.15s ease'
@@ -160,180 +137,74 @@ export function StandardNoteModal({ standard, isOpen, onClose, onAddNote, onUpda
                 );
               })}
             </div>
+          </div>
 
-            {/* Textarea */}
+          {/* Text Area */}
+          <div>
+            <label style={{ fontSize: '0.8rem', fontWeight: '700', textTransform: 'uppercase', color: 'var(--text-muted)', marginBottom: '6px', display: 'block' }}>
+              Note Content
+            </label>
             <textarea
+              ref={textareaRef}
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              placeholder="e.g. Eureka Math2 Unit 4 Lesson 2 connection, or Principal walkthrough observation in Room 102..."
-              rows={3}
+              placeholder="Type your lesson plan note, walkthrough observation, or instructional strategy here..."
+              rows={4}
               style={{
                 width: '100%',
-                padding: '10px 12px',
-                borderRadius: 'var(--radius-sm)',
+                padding: '12px',
+                borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--border-medium)',
-                background: 'var(--bg-card)',
+                background: 'var(--bg-secondary)',
                 color: 'var(--text-main)',
-                fontSize: '0.88rem',
-                lineHeight: '1.4',
+                fontSize: '0.9rem',
+                lineHeight: '1.5',
                 resize: 'vertical',
                 fontFamily: 'inherit'
               }}
             />
-
-            <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-              <button
-                type="submit"
-                disabled={!content.trim()}
-                style={{
-                  padding: '8px 16px',
-                  borderRadius: 'var(--radius-sm)',
-                  background: content.trim() ? 'var(--accent-blue)' : 'var(--border-medium)',
-                  color: '#FFFFFF',
-                  fontWeight: '700',
-                  fontSize: '0.82rem',
-                  cursor: content.trim() ? 'pointer' : 'not-allowed',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '6px',
-                  border: 'none'
-                }}
-              >
-                <Plus size={14} /> Save Note
-              </button>
-            </div>
-          </form>
-
-          {/* Existing Notes List */}
-          <div>
-            <h4 style={{ fontSize: '0.9rem', fontWeight: '700', color: 'var(--text-secondary)', marginBottom: '12px' }}>
-              Saved Notes for {standard.code} ({existingNotes.length})
-            </h4>
-
-            {existingNotes.length === 0 ? (
-              <p style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontStyle: 'italic' }}>
-                No notes logged for this standard yet. Use the form above to add a lesson plan note or walkthrough observation.
-              </p>
-            ) : (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                {existingNotes.map(n => {
-                  const catConfig = NOTE_CATEGORIES.find(c => c.id === n.category) || NOTE_CATEGORIES[3];
-                  const isEditing = editingNoteId === n.id;
-
-                  return (
-                    <div 
-                      key={n.id}
-                      style={{
-                        background: 'var(--bg-card)',
-                        border: '1px solid var(--border-subtle)',
-                        borderRadius: 'var(--radius-md)',
-                        padding: '14px',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: '8px'
-                      }}
-                    >
-                      {isEditing ? (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                            {NOTE_CATEGORIES.map(cat => (
-                              <button
-                                key={cat.id}
-                                type="button"
-                                onClick={() => setEditCategory(cat.id)}
-                                style={{
-                                  padding: '4px 10px',
-                                  borderRadius: '12px',
-                                  fontSize: '0.75rem',
-                                  fontWeight: '600',
-                                  border: editCategory === cat.id ? `2px solid ${cat.color}` : '1px solid var(--border-medium)',
-                                  background: editCategory === cat.id ? cat.bgColor : 'transparent',
-                                  color: editCategory === cat.id ? cat.color : 'var(--text-muted)'
-                                }}
-                              >
-                                {cat.label}
-                              </button>
-                            ))}
-                          </div>
-                          <textarea
-                            value={editContent}
-                            onChange={(e) => setEditContent(e.target.value)}
-                            rows={3}
-                            style={{
-                              width: '100%',
-                              padding: '8px',
-                              borderRadius: 'var(--radius-sm)',
-                              border: '1px solid var(--border-medium)',
-                              background: 'var(--bg-secondary)',
-                              color: 'var(--text-main)',
-                              fontSize: '0.85rem'
-                            }}
-                          />
-                          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '8px' }}>
-                            <button
-                              type="button"
-                              onClick={() => setEditingNoteId(null)}
-                              style={{ padding: '4px 10px', fontSize: '0.78rem', background: 'transparent', color: 'var(--text-muted)', border: 'none', cursor: 'pointer' }}
-                            >
-                              Cancel
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => handleSaveEdit(n.id)}
-                              style={{ padding: '5px 12px', fontSize: '0.78rem', background: 'var(--accent-emerald)', color: '#FFF', borderRadius: '4px', border: 'none', fontWeight: '700', cursor: 'pointer' }}
-                            >
-                              Save Changes
-                            </button>
-                          </div>
-                        </div>
-                      ) : (
-                        <>
-                          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <span 
-                              style={{
-                                padding: '3px 10px',
-                                borderRadius: '12px',
-                                fontSize: '0.75rem',
-                                fontWeight: '700',
-                                color: catConfig.color,
-                                background: catConfig.bgColor
-                              }}
-                            >
-                              {catConfig.label}
-                            </span>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                              <span style={{ fontSize: '0.75rem', color: 'var(--text-muted)', display: 'flex', alignItems: 'center', gap: '4px' }}>
-                                <Calendar size={12} /> {new Date(n.createdAt).toLocaleDateString()}
-                              </span>
-                              <button
-                                onClick={() => handleStartEdit(n)}
-                                style={{ background: 'none', border: 'none', padding: '2px', color: 'var(--text-muted)', cursor: 'pointer' }}
-                                title="Edit note"
-                              >
-                                <Edit2 size={14} />
-                              </button>
-                              <button
-                                onClick={() => handleDelete(n.id)}
-                                style={{ background: 'none', border: 'none', padding: '2px', color: 'var(--accent-crimson)', cursor: 'pointer' }}
-                                title="Delete note"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            </div>
-                          </div>
-                          <p style={{ fontSize: '0.88rem', color: 'var(--text-main)', whiteSpace: 'pre-wrap', lineHeight: '1.45', margin: 0 }}>
-                            {n.content}
-                          </p>
-                        </>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
           </div>
 
-        </div>
+          {/* Footer Buttons */}
+          <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px', marginTop: '4px' }}>
+            <button
+              type="button"
+              onClick={onClose}
+              style={{
+                padding: '8px 16px',
+                borderRadius: 'var(--radius-md)',
+                background: 'transparent',
+                border: '1px solid var(--border-medium)',
+                color: 'var(--text-muted)',
+                fontWeight: '600',
+                fontSize: '0.85rem',
+                cursor: 'pointer'
+              }}
+            >
+              Cancel
+            </button>
+
+            <button
+              type="submit"
+              disabled={!content.trim()}
+              style={{
+                padding: '8px 20px',
+                borderRadius: 'var(--radius-md)',
+                background: content.trim() ? 'var(--accent-blue)' : 'var(--border-medium)',
+                color: '#FFFFFF',
+                fontWeight: '700',
+                fontSize: '0.85rem',
+                cursor: content.trim() ? 'pointer' : 'not-allowed',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                border: 'none'
+              }}
+            >
+              <Check size={16} /> Save Note
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   );
