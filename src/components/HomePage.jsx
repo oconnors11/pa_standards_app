@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { 
-  BookOpen, GitFork, Network, Layers, Search, 
-  ArrowRight, Sparkles, Compass, GraduationCap, 
+import {
+  BookOpen, GitFork, Network, Layers, Search,
+  ArrowRight, Sparkles, Compass, GraduationCap,
   Calculator, BookText, Microscope, Landmark, ChevronRight, NotebookPen
 } from 'lucide-react';
 
-export function HomePage({ 
-  onNavigate, 
-  onSearchTopic, 
+export function HomePage({
+  onNavigate,
+  onSearchTopic,
   onSelectGradeBand,
   totalCount
 }) {
@@ -162,19 +162,19 @@ export function HomePage({
 
   return (
     <div className="home-dashboard-container animate-fade-in">
-      
+
       {/* SECTION 1: Top Hero & Mode Launchpad (2-Column Tiled Grid on Desktop) */}
       <div className="hero-grid-row">
-        
+
         {/* Left Hero Card */}
         <div className="tile-card hero-tile">
           <div className="hero-badge">
             <Compass size={15} />
-            <span>K–8 & Secondary Curriculum Hub</span>
+            <span>K–12 Standards Hub</span>
           </div>
 
           <h1 className="hero-heading">
-            RBCS Standards Browser
+            RBCS Standards Hub
           </h1>
 
           <p className="hero-subtext">
