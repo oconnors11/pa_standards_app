@@ -91,6 +91,15 @@ export function StandardDetailModal({
               <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-silver)' }}>
                 Grade {standard.grade}
               </span>
+              {standard.authority === 'CCSS' ? (
+                <span className="badge badge-ccss">
+                  National CCSS
+                </span>
+              ) : (
+                <span className="badge badge-pa">
+                  PA State Standard
+                </span>
+              )}
               {standard.is_keystone && (
                 <span className="badge badge-keystone">Keystone</span>
               )}
@@ -126,9 +135,9 @@ export function StandardDetailModal({
             style={{
               padding: '12px 0',
               borderBottom: `2px solid ${activeTab === 'overview' ? 'var(--accent-crimson)' : 'transparent'}`,
-              color: activeTab === 'overview' ? '#FFFFFF' : 'var(--text-silver)',
+              color: activeTab === 'overview' ? 'var(--accent-crimson-text)' : 'var(--text-silver)',
               fontSize: '0.85rem',
-              fontWeight: '600'
+              fontWeight: activeTab === 'overview' ? '700' : '600'
             }}
           >
             Standard Overview
@@ -138,15 +147,15 @@ export function StandardDetailModal({
             style={{
               padding: '12px 0',
               borderBottom: `2px solid ${activeTab === 'ai_objectives' ? 'var(--accent-crimson)' : 'transparent'}`,
-              color: activeTab === 'ai_objectives' ? '#FFFFFF' : 'var(--text-silver)',
+              color: activeTab === 'ai_objectives' ? 'var(--accent-crimson-text)' : 'var(--text-silver)',
               fontSize: '0.85rem',
-              fontWeight: '600',
+              fontWeight: activeTab === 'ai_objectives' ? '700' : '600',
               display: 'flex',
               alignItems: 'center',
               gap: '6px'
             }}
           >
-            <Sparkles size={14} color="#ff85a1" />
+            <Sparkles size={14} color="var(--accent-crimson-text)" />
             <span>Lesson Objectives</span>
           </button>
         </div>
@@ -251,7 +260,7 @@ export function StandardDetailModal({
                   border: '1px solid var(--border-subtle)'
                 }}>
                   <div style={{ fontSize: '0.75rem', color: 'var(--text-dim)', fontWeight: '600' }}>Rigor Level</div>
-                  <div style={{ fontSize: '0.95rem', fontWeight: '700', color: '#ff85a1', marginTop: '2px' }}>
+                  <div style={{ fontSize: '0.95rem', fontWeight: '700', color: 'var(--accent-crimson-text)', marginTop: '2px' }}>
                     {standard.dok}
                   </div>
                 </div>
@@ -362,7 +371,7 @@ export function StandardDetailModal({
                 background: 'var(--accent-crimson-bg)',
                 borderRadius: 'var(--radius-md)',
                 border: '1px solid var(--accent-crimson-border)',
-                color: '#ff85a1',
+                color: 'var(--accent-crimson-text)',
                 fontSize: '0.85rem'
               }}>
                 <strong>Curriculum Alignment Assistant:</strong> These customizable "Students Will Be Able To" (SWBAT) objective stems are grounded in the standard's cognitive rigor level.
@@ -381,7 +390,7 @@ export function StandardDetailModal({
                     gap: '8px'
                   }}
                 >
-                  <div style={{ fontSize: '0.75rem', fontWeight: '700', color: '#ff85a1' }}>
+                  <div style={{ fontSize: '0.75rem', fontWeight: '700', color: 'var(--accent-crimson-text)' }}>
                     {obj.level}
                   </div>
                   <p style={{ fontSize: '0.9rem', color: 'var(--text-main)', lineHeight: '1.5' }}>

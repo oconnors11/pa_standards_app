@@ -1,11 +1,18 @@
 import React from 'react';
-import { Home, BookOpen, GitFork, Network, Layers, SlidersHorizontal, Compass } from 'lucide-react';
+import { Home, BookOpen, GitFork, Network, Layers, SlidersHorizontal, Compass, Sun, Moon } from 'lucide-react';
+import { useTheme } from '../hooks/useTheme';
 
 export function Header({ 
   currentView, 
   setCurrentView, 
-  onToggleMobileFilters 
+  onToggleMobileFilters,
+  theme: controlledTheme,
+  onToggleTheme: controlledToggleTheme
 }) {
+  const themeHook = useTheme();
+  const theme = controlledTheme !== undefined ? controlledTheme : themeHook.theme;
+  const toggleTheme = controlledToggleTheme || themeHook.toggleTheme;
+
   const navItems = [
     { id: 'home', label: 'Home', icon: <Home size={15} /> },
     { id: 'feed', label: 'Standards Feed', icon: <BookOpen size={15} /> },
@@ -115,9 +122,36 @@ export function Header({
           })}
         </nav>
 
-        {/* Action Controls (Mobile Filter Toggle) */}
-        {currentView === 'feed' && (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+        {/* Action Controls (Theme Toggle & Mobile Filter Toggle) */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          {/* Theme Toggle Button */}
+          <button
+            onClick={toggleTheme}
+            className="theme-toggle-btn"
+            data-testid="theme-toggle"
+            aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+            title={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}
+            style={{
+              padding: '8px',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--bg-primary)',
+              border: '1px solid var(--border-subtle)',
+              color: 'var(--text-main)',
+              cursor: 'pointer',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              transition: 'all var(--transition-fast)'
+            }}
+          >
+            {theme === 'dark' ? (
+              <Sun size={17} color="var(--accent-gold)" />
+            ) : (
+              <Moon size={17} color="var(--accent-crimson)" />
+            )}
+          </button>
+
+          {currentView === 'feed' && (
             <button
               onClick={onToggleMobileFilters}
               className="mobile-filter-btn"
@@ -135,8 +169,8 @@ export function Header({
               <SlidersHorizontal size={16} />
               <span>Filters</span>
             </button>
-          </div>
-        )}
+          )}
+        </div>
 
       </div>
 

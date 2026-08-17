@@ -5,9 +5,9 @@ export function Toast({ toast, onClose }) {
   if (!toast) return null;
 
   const icons = {
-    success: <CheckCircle2 size={18} color="#10B981" />,
-    error: <AlertCircle size={18} color="#EF4444" />,
-    info: <Info size={18} color="#3B82F6" />
+    success: <CheckCircle2 size={18} color="var(--accent-emerald)" />,
+    error: <AlertCircle size={18} color="#ef4444" />,
+    info: <Info size={18} color="var(--accent-blue)" />
   };
 
   return (
@@ -20,11 +20,11 @@ export function Toast({ toast, onClose }) {
       alignItems: 'center',
       gap: '10px',
       padding: '12px 18px',
-      background: '#0F2744',
+      background: 'var(--bg-elevated)',
       border: '1px solid var(--border-medium)',
       boxShadow: 'var(--shadow-lg)',
       borderRadius: 'var(--radius-md)',
-      color: '#F8FAFC',
+      color: 'var(--text-main)',
       fontSize: '0.9rem',
       fontWeight: '500',
       animation: 'fadeIn 0.2s ease-out'

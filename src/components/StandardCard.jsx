@@ -94,6 +94,15 @@ export function StandardCard({
           <span className={`badge ${subjectBadgeClass}`}>
             {standard.subject}
           </span>
+          {standard.authority === 'CCSS' ? (
+            <span className="badge badge-ccss">
+              National CCSS
+            </span>
+          ) : (
+            <span className="badge badge-pa">
+              PA State Standard
+            </span>
+          )}
           <span className="badge badge-code">
             <HighlightedText text={standard.code} query={query} />
           </span>
@@ -179,11 +188,11 @@ export function StandardCard({
           borderRadius: 'var(--radius-sm)',
           borderLeft: '3px solid var(--accent-gold)',
           fontSize: '0.8rem',
-          color: 'var(--accent-gold)'
+          color: 'var(--text-main)'
         }}>
-          <AlertTriangle size={14} style={{ flexShrink: 0, marginTop: '2px' }} />
+          <AlertTriangle size={14} color="var(--accent-gold)" style={{ flexShrink: 0, marginTop: '2px' }} />
           <span>
-            <strong>Assessment Limit:</strong> {standard.assessment_limits}
+            <strong style={{ color: 'var(--accent-gold)' }}>Assessment Limit:</strong> {standard.assessment_limits}
           </span>
         </div>
       )}

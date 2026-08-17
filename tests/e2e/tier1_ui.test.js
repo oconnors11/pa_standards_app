@@ -27,7 +27,7 @@ const PROJECT_ROOT = path.resolve(__dirname, '../../');
 describe('Tier 1: Desktop 2D Interactive Node-and-Link Canvas (Feature 7)', () => {
   test('TC-UI-CANV-01: 3-Column Node Placement Layout — Calculates standard column coordinates', async () => {
     const engine = await getEngine();
-    const graph = engine.getCoherenceGraph('M03.A-N.1.1.1');
+    const graph = engine.getCoherenceGraph('CCSS.MATH.CONTENT.3.NF.A.1');
     const layout = calculateNodePositions(graph.focalNode, graph.upstream, graph.downstream, graph.horizontal);
 
     assert.strictEqual(layout.col1X, 80, 'Column 1 (Upstream) starts at X=80');
@@ -173,29 +173,29 @@ describe('Tier 1: Dynamic SVG Curved Connectors & Directional Arrows (Feature 8)
 describe('Tier 1: Re-Centering Transitions & State Management (Feature 9)', () => {
   test('TC-UI-REC-01: Upstream Node Re-Center Trigger — Shifts focal node to upstream standard', async () => {
     const engine = await getEngine();
-    let focalStandard = engine.getStandardByCode('M03.A-N.1.1.1');
-    let breadcrumbs = ['M03.A-N.1.1.1'];
+    let focalStandard = engine.getStandardByCode('CCSS.MATH.CONTENT.3.NF.A.1');
+    let breadcrumbs = ['CCSS.MATH.CONTENT.3.NF.A.1'];
 
-    // User clicks upstream standard CC.2.3.2.A.2
-    const targetCode = 'CC.2.3.2.A.2';
+    // User clicks upstream standard CCSS.MATH.CONTENT.2.G.A.3
+    const targetCode = 'CCSS.MATH.CONTENT.2.G.A.3';
     focalStandard = engine.getStandardByCode(targetCode);
     breadcrumbs = engine.addBreadcrumb(breadcrumbs, targetCode);
 
-    assert.strictEqual(focalStandard.code, 'CC.2.3.2.A.2');
-    assert.deepStrictEqual(breadcrumbs, ['M03.A-N.1.1.1', 'CC.2.3.2.A.2']);
+    assert.strictEqual(focalStandard.code, 'CCSS.MATH.CONTENT.2.G.A.3');
+    assert.deepStrictEqual(breadcrumbs, ['CCSS.MATH.CONTENT.3.NF.A.1', 'CCSS.MATH.CONTENT.2.G.A.3']);
   }, { tier: 1 });
 
   test('TC-UI-REC-02: Downstream Node Re-Center Trigger — Shifts focal node to downstream standard', async () => {
     const engine = await getEngine();
-    let focalStandard = engine.getStandardByCode('M03.A-N.1.1.1');
-    let breadcrumbs = ['M03.A-N.1.1.1'];
+    let focalStandard = engine.getStandardByCode('CCSS.MATH.CONTENT.3.NF.A.1');
+    let breadcrumbs = ['CCSS.MATH.CONTENT.3.NF.A.1'];
 
     const nextCode = 'M04.A-F.1.1.1';
     focalStandard = engine.getStandardByCode(nextCode);
     breadcrumbs = engine.addBreadcrumb(breadcrumbs, nextCode);
 
     assert.strictEqual(focalStandard.code, 'M04.A-F.1.1.1');
-    assert.deepStrictEqual(breadcrumbs, ['M03.A-N.1.1.1', 'M04.A-F.1.1.1']);
+    assert.deepStrictEqual(breadcrumbs, ['CCSS.MATH.CONTENT.3.NF.A.1', 'M04.A-F.1.1.1']);
   }, { tier: 1 });
 
   test('TC-UI-REC-03: Breadcrumb Trail Navigation — Jumps backward to earlier breadcrumb', async () => {
@@ -288,7 +288,7 @@ describe('Tier 1: Mobile Vertical Progression Stream (Feature 10)', () => {
 
   test('TC-UI-MOB-05: Mobile Card 1-Tap Re-Centering — Updates focal state on tap', async () => {
     const engine = await getEngine();
-    let currentFocal = 'M03.A-N.1.1.1';
+    let currentFocal = 'CCSS.MATH.CONTENT.3.NF.A.1';
     const handleTapFocus = (code) => { currentFocal = code; };
 
     handleTapFocus('CC.2.1.2.B.2');
@@ -307,18 +307,18 @@ describe('Tier 1: Mobile Vertical Progression Stream (Feature 10)', () => {
 describe('Tier 1: Integrated Standard Inspection Drawer / Modal (Feature 11)', () => {
   test('TC-UI-DRW-01: Drawer Invocation from Coherence Card — Mounts inspector drawer', async () => {
     const engine = await getEngine();
-    const std = engine.getStandardByCode('M03.A-N.1.1.1');
+    const std = engine.getStandardByCode('CCSS.MATH.CONTENT.3.NF.A.1');
     let inspectedStandard = null;
     const handleInspect = (s) => { inspectedStandard = s; };
 
     handleInspect(std);
     assert.ok(inspectedStandard);
-    assert.strictEqual(inspectedStandard.code, 'M03.A-N.1.1.1');
+    assert.strictEqual(inspectedStandard.code, 'CCSS.MATH.CONTENT.3.NF.A.1');
   }, { tier: 1 });
 
   test('TC-UI-DRW-02: Webb DOK Badge & Level Display — Displays DOK badge and class', async () => {
     const engine = await getEngine();
-    const std = engine.getStandardByCode('M03.A-N.1.1.1');
+    const std = engine.getStandardByCode('CCSS.MATH.CONTENT.3.NF.A.1');
     assert.strictEqual(std.dok, 'DOK 1-2');
     const badgeClass = 'badge-dok';
     assert.strictEqual(badgeClass, 'badge-dok');
@@ -347,13 +347,13 @@ describe('Tier 1: Integrated Standard Inspection Drawer / Modal (Feature 11)', (
 
   test('TC-UI-DRW-05: Dynamic SWBAT Lesson Objectives — Generates objective stems', async () => {
     const engine = await getEngine();
-    const swbat = engine.generateSWBAT('M03.A-N.1.1.1');
+    const swbat = engine.generateSWBAT('CCSS.MATH.CONTENT.3.NF.A.1');
     assert.match(swbat, /Students will be able to/i);
   }, { tier: 1 });
 
   test('TC-UI-DRW-06: Copy Citation Action in Drawer Footer — Writes formatted citation', async () => {
     const mockWin = createMockWindow();
-    const citation = 'PA Core Standard M03.A-N.1.1.1 (Grade 3 Mathematics)';
+    const citation = 'PA Core Standard CCSS.MATH.CONTENT.3.NF.A.1 (Grade 3 Mathematics)';
     await mockWin.navigator.clipboard.writeText(citation);
     assert.strictEqual(mockWin.navigator.clipboard.lastCopiedText, citation);
   }, { tier: 1 });
@@ -404,18 +404,18 @@ describe('Tier 1: Route Management & URL Query Deep-Linking (Feature 13)', () =>
   }, { tier: 1 });
 
   test('TC-UI-RTE-02: URL Query Parameter Mount Deep-Link — Parses initial search query', () => {
-    const mockWin = createMockWindow('http://localhost:5173/?view=coherence&code=CC.2.1.3.B.1');
+    const mockWin = createMockWindow('http://localhost:5173/?view=coherence&code=CCSS.MATH.CONTENT.3.NBT.A.1');
     const params = mockWin.location.searchParams;
     assert.strictEqual(params.get('view'), 'coherence');
-    assert.strictEqual(params.get('code'), 'CC.2.1.3.B.1');
+    assert.strictEqual(params.get('code'), 'CCSS.MATH.CONTENT.3.NBT.A.1');
   }, { tier: 1 });
 
   test('TC-UI-RTE-03: URL History Serialization on Focal Change — Pushes URL query params', () => {
     const mockWin = createMockWindow('http://localhost:5173/');
-    mockWin.history.pushState({ view: 'coherence', code: 'M03.A-N.1.1.1' }, '', '/?view=coherence&code=M03.A-N.1.1.1');
+    mockWin.history.pushState({ view: 'coherence', code: 'CCSS.MATH.CONTENT.3.NF.A.1' }, '', '/?view=coherence&code=CCSS.MATH.CONTENT.3.NF.A.1');
 
     assert.strictEqual(mockWin.location.searchParams.get('view'), 'coherence');
-    assert.strictEqual(mockWin.location.searchParams.get('code'), 'M03.A-N.1.1.1');
+    assert.strictEqual(mockWin.location.searchParams.get('code'), 'CCSS.MATH.CONTENT.3.NF.A.1');
   }, { tier: 1 });
 
   test('TC-UI-RTE-04: Browser Back/Forward popstate Listener — Restores previous view state', () => {
@@ -498,14 +498,14 @@ describe('Tier 1: Universal "View in Coherence Map" Launch Buttons (Feature 14)'
       isModalOpen = false;
     };
 
-    handleCtaClick({ code: 'CC.1.2.3.A' });
-    assert.strictEqual(launchedStandard.code, 'CC.1.2.3.A');
+    handleCtaClick({ code: 'CCSS.ELA-LITERACY.RI.3.1' });
+    assert.strictEqual(launchedStandard.code, 'CCSS.ELA-LITERACY.RI.3.1');
     assert.strictEqual(isModalOpen, false);
   }, { tier: 1 });
 
   test('TC-UI-LNC-05: Multi-Subject Universal Launching — Launches across all 5 subjects', async () => {
     const engine = await getEngine();
-    const testCodes = ['M03.A-N.1.1.1', 'CC.1.2.8.B', 'BIO.B.4.1.1', '5.1.8.C', '10.1.PK.B1'];
+    const testCodes = ['CCSS.MATH.CONTENT.3.NF.A.1', 'CCSS.ELA-LITERACY.RI.8.1', 'BIO.B.4.1.1', '5.1.8.C', '10.1.PK.B1'];
     for (const code of testCodes) {
       const std = engine.getStandardByCode(code);
       assert.ok(std, `Resolves standard ${code}`);

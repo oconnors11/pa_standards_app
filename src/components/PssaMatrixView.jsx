@@ -10,8 +10,8 @@ export function PssaMatrixView({ standards, onSelectCategory, onInspect }) {
       grades: 'Grades 3–8',
       emphasis: 'Approx. 20–25% of PSSA Exam',
       description: 'Focuses on place value, fraction models & operations, decimal concepts, division of fractions, rational signed numbers, and distinguishing rational vs. irrational numbers.',
-      color: '#38BDF8',
-      bg: 'rgba(56, 189, 248, 0.12)'
+      color: 'var(--color-math)',
+      bg: 'var(--color-math-bg)'
     },
     {
       id: 'Reporting Category B',
@@ -20,8 +20,8 @@ export function PssaMatrixView({ standards, onSelectCategory, onInspect }) {
       grades: 'Grades 3–8 & Keystone Alg 1',
       emphasis: 'Approx. 25–30% of PSSA Exam',
       description: 'Focuses on arithmetic operations, two-step equations, algebraic expressions, linear equations (one/none/infinite solutions), rate of change/slope (y = mx + b), and functions.',
-      color: '#818CF8',
-      bg: 'rgba(129, 140, 248, 0.12)'
+      color: 'var(--color-steels)',
+      bg: 'var(--color-steels-bg)'
     },
     {
       id: 'Reporting Category C',
@@ -30,8 +30,8 @@ export function PssaMatrixView({ standards, onSelectCategory, onInspect }) {
       grades: 'Grades 3–8',
       emphasis: 'Approx. 15–20% of PSSA Exam',
       description: 'Focuses on polygon classification, line/angle properties, coordinate plane graphing, transformations (rotations/reflections/translations/dilations), and the Pythagorean Theorem.',
-      color: '#34D399',
-      bg: 'rgba(52, 211, 153, 0.12)'
+      color: 'var(--color-ela)',
+      bg: 'var(--color-ela-bg)'
     },
     {
       id: 'Reporting Category D',
@@ -40,8 +40,8 @@ export function PssaMatrixView({ standards, onSelectCategory, onInspect }) {
       grades: 'Grades 3–8',
       emphasis: 'Approx. 15–20% of PSSA Exam',
       description: 'Focuses on elapsed time, liquid volume, area & perimeter, box plots, histograms, measures of center/variability (IQR, MAD), and bivariate scatter plots.',
-      color: '#F59E0B',
-      bg: 'rgba(245, 158, 11, 0.12)'
+      color: 'var(--accent-gold)',
+      bg: 'var(--accent-gold-bg)'
     },
     {
       id: 'Reporting Category E',
@@ -50,8 +50,8 @@ export function PssaMatrixView({ standards, onSelectCategory, onInspect }) {
       grades: 'Grades 3–8',
       emphasis: 'High Weight Scoring Rubric (4-Point Holistic)',
       description: 'Requires students to synthesize evidence from literary and informational texts, analyze author craft, character arcs, and thematic development with integrated quotes.',
-      color: '#F43F5E',
-      bg: 'rgba(244, 63, 94, 0.12)'
+      color: 'var(--color-early)',
+      bg: 'var(--color-early-bg)'
     }
   ];
 

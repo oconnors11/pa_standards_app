@@ -22,11 +22,11 @@ export function FilterBar({
 }) {
   const subjects = [
     { id: 'All', label: 'All Subjects', icon: null },
-    { id: 'Early Learning', label: 'Early Learning (PreK-2)', icon: <Sparkles size={15} color="#F472B6" /> },
-    { id: 'Mathematics', label: 'Mathematics', icon: <Calculator size={15} color="#38BDF8" /> },
-    { id: 'English Language Arts', label: 'ELA / Reading', icon: <BookText size={15} color="#34D399" /> },
-    { id: 'STEELS Science', label: 'STEELS Science', icon: <Microscope size={15} color="#A78BFA" /> },
-    { id: 'Social Studies', label: 'Social Studies', icon: <Globe size={15} color="#FB923C" /> }
+    { id: 'Early Learning', label: 'Early Learning (PreK-2)', icon: <Sparkles size={15} color="var(--color-early)" /> },
+    { id: 'Mathematics', label: 'Mathematics', icon: <Calculator size={15} color="var(--color-math)" /> },
+    { id: 'English Language Arts', label: 'ELA / Reading', icon: <BookText size={15} color="var(--color-ela)" /> },
+    { id: 'STEELS Science', label: 'STEELS Science', icon: <Microscope size={15} color="var(--color-steels)" /> },
+    { id: 'Social Studies', label: 'Social Studies', icon: <Globe size={15} color="var(--color-social)" /> }
   ];
 
   const grades = ['All', 'Pre-K', 'K', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', 'HS'];
@@ -82,7 +82,7 @@ export function FilterBar({
         ) : hasActiveFilters ? (
           <button 
             onClick={clearAllFilters}
-            style={{ fontSize: '0.75rem', color: '#ff5c7a', fontWeight: '600' }}
+            style={{ fontSize: '0.75rem', color: 'var(--accent-crimson)', fontWeight: '600' }}
           >
             Clear All
           </button>
@@ -109,7 +109,7 @@ export function FilterBar({
                   borderRadius: 'var(--radius-md)',
                   background: active ? 'var(--accent-crimson-bg)' : 'transparent',
                   border: `1px solid ${active ? 'var(--accent-crimson)' : 'transparent'}`,
-                  color: active ? '#FFFFFF' : 'var(--text-muted)',
+                  color: active ? 'var(--accent-crimson-text)' : 'var(--text-muted)',
                   fontSize: '0.85rem',
                   fontWeight: active ? '700' : '400',
                   textAlign: 'left'
@@ -119,7 +119,7 @@ export function FilterBar({
                   {s.icon}
                   <span>{s.label}</span>
                 </div>
-                {active && <Check size={14} color="#ff5c7a" />}
+                {active && <Check size={14} color="var(--accent-crimson-text)" />}
               </button>
             );
           })}
@@ -185,13 +185,13 @@ export function FilterBar({
                   borderRadius: 'var(--radius-sm)',
                   background: active ? 'var(--accent-crimson-bg)' : 'transparent',
                   border: `1px solid ${active ? 'var(--accent-crimson)' : 'var(--border-subtle)'}`,
-                  color: active ? '#FFFFFF' : 'var(--text-muted)',
+                  color: active ? 'var(--accent-crimson-text)' : 'var(--text-muted)',
                   fontSize: '0.8rem',
                   fontWeight: active ? '700' : '400'
                 }}
               >
                 <span>{opt.label}</span>
-                {active && <Check size={14} color="#ff5c7a" />}
+                {active && <Check size={14} color="var(--accent-crimson-text)" />}
               </button>
             );
           })}
@@ -214,7 +214,7 @@ export function FilterBar({
                   padding: '4px 10px',
                   borderRadius: 'var(--radius-full)',
                   background: active ? 'var(--accent-crimson)' : 'var(--bg-primary)',
-                  color: active ? '#FFFFFF' : 'var(--text-muted)',
+                  color: active ? '#FFFFFF' : 'var(--text-silver)',
                   border: `1px solid ${active ? 'var(--accent-crimson)' : 'var(--border-subtle)'}`,
                   fontSize: '0.75rem',
                   fontWeight: active ? '700' : '400'

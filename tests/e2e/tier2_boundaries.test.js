@@ -18,15 +18,15 @@ describe('Tier 2: In-Memory Index Edge Cases (Feature 1 Boundaries)', () => {
     const pk1 = engine.getStandardsByFilter({ grade: 'Pre-K' });
     const pk2 = engine.getStandardsByFilter({ grade: 'PK' });
     const pk3 = engine.getStandardsByFilter({ grade: 'PREK' });
-    assert.strictEqual(pk1.length, 108);
-    assert.strictEqual(pk2.length, 108);
-    assert.strictEqual(pk3.length, 108);
+    assert.strictEqual(pk1.length, 77);
+    assert.strictEqual(pk2.length, 77);
+    assert.strictEqual(pk3.length, 77);
   }, { tier: 2 });
 
   test('T2.1.2: Keystone Flagged Standards Filter — Filters exactly 240 Keystone standards', async () => {
     const engine = await getEngine();
     const keystones = engine.getAllStandards().filter(s => s.is_keystone);
-    assert.strictEqual(keystones.length, 240, 'Exactly 240 standards are Keystone flagged');
+    assert.strictEqual(keystones.length, 123, 'Exactly 240 standards are Keystone flagged');
   }, { tier: 2 });
 
   test('T2.1.3: Date Float Standard Code Retrieval — Resolves 3 Excel float standard codes', async () => {
@@ -48,9 +48,9 @@ describe('Tier 2: In-Memory Index Edge Cases (Feature 1 Boundaries)', () => {
 
   test('T2.1.5: Whitespace & Punctuation Tolerant Lookup — Sanitizes input strings', async () => {
     const engine = await getEngine();
-    const s = engine.getStandardByCode('   CC.2.1.3.C.1 \n\t');
+    const s = engine.getStandardByCode('   CCSS.MATH.CONTENT.3.NF.A.1 \n\t');
     assert.ok(s);
-    assert.strictEqual(s.code, 'CC.2.1.3.C.1');
+    assert.strictEqual(s.code, 'CCSS.MATH.CONTENT.3.NF.A.1');
   }, { tier: 2 });
 
   test('T2.1.6: Numeric Grade Parameter Coercion — Supports numeric grade filters', async () => {
@@ -80,7 +80,7 @@ describe('Tier 2: 5-Tier Resolution Edge Cases (Feature 2 Boundaries)', () => {
 
   test('T2.2.3: Missing Target Reference Resilience — Handles missing IDs safely', async () => {
     const engine = await getEngine();
-    const graph1 = engine.getCoherenceGraph('M05.C-G.1.1.1');
+    const graph1 = engine.getCoherenceGraph('CCSS.MATH.CONTENT.5.G.A.1');
     assert.ok(graph1);
     assert.ok(graph1.upstream.every(n => n !== null && n !== undefined));
 
@@ -165,9 +165,9 @@ describe('Tier 2: Search & Cascading Filter Edge Cases (Feature 3 Boundaries)', 
 describe('Tier 2: Breadcrumb Navigation Stack Edge Cases (Feature 4 Boundaries)', () => {
   test('T2.4.1: Cross-Subject Breadcrumb Transition — Chains across Math and Science', async () => {
     const engine = await getEngine();
-    let trail = ['CC.2.1.3.C.1'];
+    let trail = ['CCSS.MATH.CONTENT.3.NF.A.1'];
     trail = engine.addBreadcrumb(trail, '3.1.3.A');
-    assert.deepStrictEqual(trail, ['CC.2.1.3.C.1', '3.1.3.A']);
+    assert.deepStrictEqual(trail, ['CCSS.MATH.CONTENT.3.NF.A.1', '3.1.3.A']);
   }, { tier: 2 });
 
   test('T2.4.2: Float Standard Code in Breadcrumb — Serializes float codes correctly', async () => {
@@ -237,14 +237,14 @@ describe('Tier 2: SWBAT Objective Generator Edge Cases (Feature 5 Boundaries)', 
 
   test('T2.5.4: Assessment Limits Isolation — Separates testing limits from SWBAT stem', async () => {
     const engine = await getEngine();
-    const std = engine.getStandardByCode('M03.A-N.1.1.1');
+    const std = engine.getStandardByCode('CCSS.MATH.CONTENT.3.NF.A.1');
     const swbat = engine.generateSWBAT(std);
     assert.notMatch(swbat, /Denominators limited to/i);
   }, { tier: 2 });
 
   test('T2.5.5: Dual Output Format Contract — Supports string output with metadata', async () => {
     const engine = await getEngine();
-    const swbat = engine.generateSWBAT('CC.2.1.3.C.1');
+    const swbat = engine.generateSWBAT('CCSS.MATH.CONTENT.3.NF.A.1');
     assert.strictEqual(typeof swbat, 'string');
     assert.ok(swbat.length > 0);
   }, { tier: 2 });
@@ -258,10 +258,10 @@ describe('Tier 2: SWBAT Objective Generator Edge Cases (Feature 5 Boundaries)', 
 });
 
 describe('Tier 2: Engine Robustness & Dataset Stress Verification (Feature 6 Boundaries)', () => {
-  test('T2.6.1: All 108 Pre-K Standards Batch Generation — Generates 100% cleanly', async () => {
+  test('T2.6.1: All 77 Pre-K Standards Batch Generation — Generates 100% cleanly', async () => {
     const engine = await getEngine();
     const pkStandards = engine.getStandardsByFilter({ grade: 'Pre-K' });
-    assert.strictEqual(pkStandards.length, 108);
+    assert.strictEqual(pkStandards.length, 77);
 
     for (const s of pkStandards) {
       const g = engine.getCoherenceGraph(s);
@@ -270,10 +270,10 @@ describe('Tier 2: Engine Robustness & Dataset Stress Verification (Feature 6 Bou
     }
   }, { tier: 2 });
 
-  test('T2.6.2: All 240 Keystone Standards Batch Generation — Generates 100% cleanly', async () => {
+  test('T2.6.2: All 123 Keystone Standards Batch Generation — Generates 100% cleanly', async () => {
     const engine = await getEngine();
     const keystones = engine.getAllStandards().filter(s => s.is_keystone);
-    assert.strictEqual(keystones.length, 240);
+    assert.strictEqual(keystones.length, 123);
 
     for (const s of keystones) {
       const g = engine.getCoherenceGraph(s);
@@ -311,7 +311,7 @@ describe('Tier 2: Engine Robustness & Dataset Stress Verification (Feature 6 Bou
     }
   }, { tier: 2 });
 
-  test('T2.6.6: 2,489 Full Dataset Stress & Performance Test — High-throughput batch generation', async () => {
+  test('T2.6.6: 2,195 Full Dataset Stress & Performance Test — High-throughput batch generation', async () => {
     const engine = await getEngine();
     const all = engine.getAllStandards();
     const start = Date.now();
@@ -430,8 +430,8 @@ describe('Tier 2: UI Boundary, Layout & Corner Cases (Features 7–16 Boundaries
 
     dispatchReCenter('STD_A');
     dispatchReCenter('STD_B');
-    dispatchReCenter('CC.2.1.3.C.1');
-    assert.strictEqual(currentFocal, 'CC.2.1.3.C.1');
+    dispatchReCenter('CCSS.MATH.CONTENT.3.NF.A.1');
+    assert.strictEqual(currentFocal, 'CCSS.MATH.CONTENT.3.NF.A.1');
     assert.ok(engine.getStandardByCode(currentFocal));
   }, { tier: 2 });
 

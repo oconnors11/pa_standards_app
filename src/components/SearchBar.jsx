@@ -54,7 +54,7 @@ export function SearchBar({
       }}>
         <div style={{
           padding: '0 16px',
-          color: query ? '#ff5c7a' : 'var(--text-silver)',
+          color: query ? 'var(--accent-crimson)' : 'var(--text-silver)',
           display: 'flex',
           alignItems: 'center'
         }}>
@@ -151,7 +151,7 @@ export function SearchBar({
               onMouseEnter={(e) => {
                 e.currentTarget.style.borderColor = 'var(--accent-crimson)';
                 e.currentTarget.style.background = 'var(--accent-crimson-bg)';
-                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.color = 'var(--accent-crimson-text)';
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = 'var(--border-subtle)';
@@ -177,7 +177,7 @@ export function SearchBar({
             <button
               onClick={onClearFilters}
               style={{
-                color: '#ff5c7a',
+                color: 'var(--accent-crimson)',
                 fontWeight: '600',
                 textDecoration: 'underline',
                 fontSize: '0.8rem'

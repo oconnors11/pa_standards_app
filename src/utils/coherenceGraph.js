@@ -20,7 +20,8 @@ export const GRADE_ORDER = {
   '1': 2, '2': 3, '3': 4, '4': 5, '5': 6, '6': 7, '7': 8, '8': 9,
   '9': 10, '10': 11, '11': 12, '12': 13,
   'HS': 14, 'HIGH SCHOOL': 14, 'hs': 14, 'high school': 14,
-  '9-12': 14, '11-12': 13, '9-10': 11, '3-5': 5, '6-8': 8, 'K-2': 1, 'k-2': 1
+  '9-12': 14, '11-12': 13, '9-10': 11, '3-5': 5, '6-8': 8, 'K-2': 1, 'k-2': 1,
+  'HSA': 10, 'HSF': 11, 'HSG': 12, 'HSN': 10, 'HSS': 13, 'K-12': 7
 };
 
 export const GRADE_RANKS = [
@@ -232,6 +233,23 @@ export function parseStandardCode(code) {
 
   const normalized = normalizeCode(trimmed);
   const existing = getStandardByCode(trimmed) || getStandardByCode(normalized);
+
+  // 0. CCSS regex: CCSS.MATH.CONTENT.K.CC.A.1, CCSS.ELA-LITERACY.RL.K.1, CCSS.MATH.PRACTICE.MP1
+  const ccssMatch = normalized.match(/^CCSS\.(MATH\.CONTENT|ELA-LITERACY|MATH\.PRACTICE)\.([A-Z0-9.-]+)/i);
+  if (ccssMatch) {
+    const isMath = ccssMatch[1].startsWith('MATH');
+    return {
+      rawCode: trimmed,
+      normalizedCode: normalized,
+      type: 'CCSS',
+      subject: existing ? existing.subject : (isMath ? 'Mathematics' : 'English Language Arts'),
+      grade: existing ? existing.grade : 'K-12',
+      anchor: ccssMatch[2],
+      domain: existing ? existing.domain : (isMath ? 'Mathematics' : 'English Language Arts'),
+      standardNumber: ccssMatch[2],
+      isValid: true
+    };
+  }
 
   // 1. PSSA regex: M04.A-T.1.1.1, E08.E.1.1.1
   const pssaMatch = normalized.match(/^([ME])(\d{2})\.([A-Z0-9-]+)(?:\.([A-Z0-9.-]+))?$/i);

@@ -219,7 +219,7 @@ export function VerticalCrosswalkView({ standards, onInspect, onCopyShort }) {
                 fontSize: '0.72rem',
                 padding: '2px 6px',
                 borderRadius: '4px',
-                background: active ? 'rgba(56, 189, 248, 0.15)' : 'var(--bg-primary)',
+                background: active ? 'var(--accent-blue-bg)' : 'var(--bg-primary)',
                 color: active ? 'var(--accent-blue)' : 'var(--text-dim)',
                 fontWeight: '600'
               }}>

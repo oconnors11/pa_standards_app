@@ -27,7 +27,7 @@ export function HomePage({
       id: 'feed',
       title: 'Standards Feed',
       subtitle: 'Multi-filter & keyword search',
-      icon: <BookOpen size={20} color="#38BDF8" />,
+      icon: <BookOpen size={20} color="var(--color-math)" />,
       tag: 'Filter Engine',
       bg: 'var(--bg-card)',
       border: 'var(--border-subtle)'
@@ -36,7 +36,7 @@ export function HomePage({
       id: 'map',
       title: 'Coherence Map',
       subtitle: 'Visual prerequisite network',
-      icon: <Compass size={20} color="#F59E0B" />,
+      icon: <Compass size={20} color="var(--accent-gold)" />,
       tag: 'Visual Graph',
       bg: 'var(--bg-card)',
       border: 'var(--border-subtle)'
@@ -45,7 +45,7 @@ export function HomePage({
       id: 'crosswalk',
       title: 'Vertical Progression',
       subtitle: 'Cross-grade skill trajectories',
-      icon: <GitFork size={20} color="#818CF8" />,
+      icon: <GitFork size={20} color="var(--color-steels)" />,
       tag: 'Skill Ladders',
       bg: 'var(--bg-card)',
       border: 'var(--border-subtle)'
@@ -54,7 +54,7 @@ export function HomePage({
       id: 'tree',
       title: 'Hierarchy Tree',
       subtitle: 'Nested PDE SAS taxonomy',
-      icon: <Network size={20} color="#34D399" />,
+      icon: <Network size={20} color="var(--color-ela)" />,
       tag: 'Domain Tree',
       bg: 'var(--bg-card)',
       border: 'var(--border-subtle)'
@@ -63,7 +63,7 @@ export function HomePage({
       id: 'pssa',
       title: 'PSSA Blueprint',
       subtitle: 'Categories A–E & test limits',
-      icon: <Layers size={20} color="#F59E0B" />,
+      icon: <Layers size={20} color="var(--accent-gold)" />,
       tag: 'Assessment Specs',
       bg: 'var(--bg-card)',
       border: 'var(--border-subtle)'
@@ -76,7 +76,7 @@ export function HomePage({
       grades: 'Pre-K – Grade 2',
       query: 'PreK-2',
       bandKey: 'PreK-2',
-      icon: <Calculator size={18} color="#38BDF8" />,
+      icon: <Calculator size={18} color="var(--color-early)" />,
       topics: 'Early Literacy, Counting, Place Value, Basic Shapes'
     },
     {
@@ -84,7 +84,7 @@ export function HomePage({
       grades: 'Grades 3–5',
       query: '3-5',
       bandKey: '3-5',
-      icon: <BookText size={18} color="#34D399" />,
+      icon: <BookText size={18} color="var(--color-ela)" />,
       topics: 'Multiplication, Fractions, Main Idea, Earth Systems'
     },
     {
@@ -92,7 +92,7 @@ export function HomePage({
       grades: 'Grades 6–8',
       query: '6-8',
       bandKey: '6-8',
-      icon: <GraduationCap size={18} color="#818CF8" />,
+      icon: <GraduationCap size={18} color="var(--color-steels)" />,
       topics: 'Ratios, Linear Slope, TDA Evidence, Cells & Genetics'
     },
     {
@@ -100,7 +100,7 @@ export function HomePage({
       grades: 'Grades 9–12 / Keystone',
       query: '9-12',
       bandKey: '9-12',
-      icon: <Microscope size={18} color="#F59E0B" />,
+      icon: <Microscope size={18} color="var(--accent-gold)" />,
       topics: 'Keystone Algebra 1, Literature, Biology'
     }
   ];
@@ -137,31 +137,31 @@ export function HomePage({
     {
       id: 'feed',
       title: 'Standards Feed & Multi-Filter Search',
-      icon: <BookOpen size={22} color="#38BDF8" />,
+      icon: <BookOpen size={22} color="var(--color-math)" />,
       description: 'Search instantly by exact short codes (e.g. M08.A-N.1, CC.2.1.8) or topic keywords. Narrow down by Grade K–8, Subject Area, Webb\'s DOK level (1–4), and PSSA Category with real-time term highlighting.'
     },
     {
       id: 'map',
       title: 'Visual Coherence Map (Achieve the Core Style)',
-      icon: <Compass size={22} color="#F59E0B" />,
+      icon: <Compass size={22} color="var(--accent-gold)" />,
       description: 'Explore how standards connect across grade levels in an interactive node-and-link network. Trace prerequisite learning gaps backward, plan scaffolded instruction forward, and generate DOK-aligned SWBAT lesson objectives.'
     },
     {
       id: 'crosswalk',
       title: 'Vertical Progression Crosswalks',
-      icon: <GitFork size={22} color="#818CF8" />,
+      icon: <GitFork size={22} color="var(--color-steels)" />,
       description: 'Trace how foundational skills build vertically across elementary and middle school. Compare how concepts progress (e.g., Partitioning Shapes in Grade 1 → Unit Fractions in 3 → Rational Numbers in 7 → Real Numbers in 8).'
     },
     {
       id: 'tree',
       title: 'Interactive Hierarchy Tree',
-      icon: <Network size={22} color="#34D399" />,
+      icon: <Network size={22} color="var(--color-ela)" />,
       description: 'Navigate the complete state curriculum taxonomy from high-level Subject Areas down to Grade Levels, Content Domains, Assessment Anchors, and Eligible Content statements with clean full-width descriptions.'
     },
     {
       id: 'pssa',
       title: 'PSSA & State Testing Blueprints',
-      icon: <Layers size={22} color="#F59E0B" />,
+      icon: <Layers size={22} color="var(--accent-gold)" />,
       description: 'Analyze official Pennsylvania state assessment frameworks broken down by Reporting Category (Categories A–E), testing weights, eligible content boundaries, and assessment limits.'
     }
   ];
@@ -184,7 +184,7 @@ export function HomePage({
           </h1>
 
           <p className="hero-subtext">
-            A fast, accessible browser for Pennsylvania Core Standards, PSSA Assessment Anchors, and Keystone Frameworks with focused support for <strong>Kindergarten through Grade 8</strong>.
+            A fast, accessible browser for <strong>National Common Core State Standards (CCSS)</strong> in Mathematics and ELA, alongside <strong>PA State Standards</strong> for STEELS Science, Early Learning, and Social Studies.
           </p>
 
           {/* Embedded Quick Search Input */}
@@ -194,7 +194,7 @@ export function HomePage({
               type="text"
               value={localQuery}
               onChange={(e) => setLocalQuery(e.target.value)}
-              placeholder="Search standards by code (e.g. CC.2.1, M08) or topic (e.g. fractions, slope)..."
+              placeholder="Search standards by code (e.g. RL.K.1, K.CC.A.1) or topic (e.g. fractions, slope)..."
               className="hero-search-input"
             />
             <button type="submit" className="hero-search-btn">
@@ -324,7 +324,7 @@ export function HomePage({
           {/* Math K-8 */}
           <div className="topic-group-box">
             <div className="topic-group-header">
-              <Calculator size={16} color="#38BDF8" />
+              <Calculator size={16} color="var(--color-math)" />
               <span>Mathematics (Grades K–8)</span>
             </div>
             <div className="topic-chip-wrap">
@@ -343,7 +343,7 @@ export function HomePage({
           {/* ELA K-8 */}
           <div className="topic-group-box">
             <div className="topic-group-header">
-              <BookText size={16} color="#34D399" />
+              <BookText size={16} color="var(--color-ela)" />
               <span>English Language Arts (Grades K–8)</span>
             </div>
             <div className="topic-chip-wrap">
@@ -362,7 +362,7 @@ export function HomePage({
           {/* Science & Social Studies K-8 */}
           <div className="topic-group-box">
             <div className="topic-group-header">
-              <Landmark size={16} color="#F59E0B" />
+              <Landmark size={16} color="var(--color-social)" />
               <span>Science & Social Studies (Grades K–8)</span>
             </div>
             <div className="topic-chip-wrap">
@@ -471,7 +471,7 @@ export function HomePage({
           border-radius: var(--radius-full);
           background: var(--accent-crimson-bg);
           border: 1px solid var(--accent-crimson-border);
-          color: #ff5c7a;
+          color: var(--accent-crimson-text);
           font-size: 0.78rem;
           font-weight: 700;
           margin-bottom: 14px;
@@ -723,7 +723,7 @@ export function HomePage({
         }
 
         .topic-chip:hover {
-          color: #FFFFFF;
+          color: var(--accent-crimson-text);
           border-color: var(--accent-crimson);
           background: var(--accent-crimson-bg);
         }

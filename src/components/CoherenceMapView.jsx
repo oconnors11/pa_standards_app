@@ -18,33 +18,33 @@ import {
 // Standard subject color tokens
 const SUBJECT_COLORS = {
   'Mathematics': {
-    primary: '#38BDF8',
-    bg: 'rgba(56, 189, 248, 0.12)',
-    border: 'rgba(56, 189, 248, 0.35)',
+    primary: 'var(--color-math)',
+    bg: 'var(--color-math-bg)',
+    border: 'var(--border-medium)',
     badgeClass: 'badge-math'
   },
   'English Language Arts': {
-    primary: '#818CF8',
-    bg: 'rgba(129, 140, 248, 0.12)',
-    border: 'rgba(129, 140, 248, 0.35)',
+    primary: 'var(--color-ela)',
+    bg: 'var(--color-ela-bg)',
+    border: 'var(--border-medium)',
     badgeClass: 'badge-ela'
   },
   'STEELS Science': {
-    primary: '#34D399',
-    bg: 'rgba(52, 211, 153, 0.12)',
-    border: 'rgba(52, 211, 153, 0.35)',
+    primary: 'var(--color-steels)',
+    bg: 'var(--color-steels-bg)',
+    border: 'var(--border-medium)',
     badgeClass: 'badge-steels'
   },
   'Early Learning': {
-    primary: '#F472B6',
-    bg: 'rgba(244, 114, 182, 0.12)',
-    border: 'rgba(244, 114, 182, 0.35)',
+    primary: 'var(--color-early)',
+    bg: 'var(--color-early-bg)',
+    border: 'var(--border-medium)',
     badgeClass: 'badge-early'
   },
   'Social Studies': {
-    primary: '#F59E0B',
-    bg: 'rgba(245, 158, 11, 0.12)',
-    border: 'rgba(245, 158, 11, 0.35)',
+    primary: 'var(--color-social)',
+    bg: 'var(--color-social-bg)',
+    border: 'var(--border-medium)',
     badgeClass: 'badge-social'
   }
 };
@@ -523,9 +523,10 @@ export function CoherenceMapView({
           display: 'flex',
           alignItems: 'center',
           gap: '6px',
-          background: 'rgba(5, 15, 30, 0.85)',
+          background: 'var(--bg-card)',
           backdropFilter: 'blur(8px)',
           border: '1px solid var(--border-medium)',
+          boxShadow: 'var(--shadow-md)',
           borderRadius: 'var(--radius-lg)',
           padding: '4px'
         }} className="interactive-control">
@@ -733,13 +734,13 @@ export function CoherenceMapView({
                   {targetStandard.assessment_limits && (
                     <div style={{
                       fontSize: '0.78rem',
-                      color: 'var(--text-muted)',
+                      color: 'var(--text-main)',
                       background: 'rgba(245, 158, 11, 0.08)',
                       borderLeft: '3px solid var(--accent-gold)',
                       padding: '8px 12px',
                       borderRadius: '0 var(--radius-sm) var(--radius-sm) 0'
                     }}>
-                      <strong>Assessment Limit:</strong> {targetStandard.assessment_limits}
+                      <strong style={{ color: 'var(--accent-gold)' }}>Assessment Limit:</strong> {targetStandard.assessment_limits}
                     </div>
                   )}
 
@@ -1094,7 +1095,7 @@ export function CoherenceMapView({
                   <h4 style={{ fontSize: '0.82rem', fontWeight: '800', color: 'var(--accent-gold)', textTransform: 'uppercase', marginBottom: '8px' }}>
                     PSSA Assessment Boundary / Limit
                   </h4>
-                  <div style={{ fontSize: '0.85rem', color: 'var(--text-silver)', background: 'rgba(217, 119, 6, 0.08)', padding: '12px 16px', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--accent-gold)' }}>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--text-main)', background: 'rgba(217, 119, 6, 0.08)', padding: '12px 16px', borderRadius: 'var(--radius-md)', borderLeft: '3px solid var(--accent-gold)' }}>
                     {inspectedStandard.assessment_limits}
                   </div>
                 </div>

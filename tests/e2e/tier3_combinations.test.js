@@ -19,10 +19,10 @@ describe('Tier 3: Cross-Feature Combinations (TC-T3-COMB-01..08)', () => {
     const engine = await getEngine();
 
     // 1. Search for Grade 3 fraction standard
-    const searchResults = engine.searchStandards('CC.2.1.3.C.1');
+    const searchResults = engine.searchStandards('CCSS.MATH.CONTENT.3.NF.A.1');
     assert.ok(searchResults.length > 0);
     const selected = searchResults[0];
-    assert.strictEqual(selected.code, 'CC.2.1.3.C.1');
+    assert.strictEqual(selected.code, 'CCSS.MATH.CONTENT.3.NF.A.1');
 
     // 2. Load 2D canvas graph for selected standard
     let graph = engine.getCoherenceGraph(selected.code);
@@ -30,12 +30,12 @@ describe('Tier 3: Cross-Feature Combinations (TC-T3-COMB-01..08)', () => {
     let layout = calculateNodePositions(graph.focalNode, graph.upstream, graph.downstream, graph.horizontal);
     assert.strictEqual(layout.positions.get(selected.id).x, 500);
 
-    // 3. Click upstream foundational node CC.2.3.2.A.2 to re-center
-    const targetCode = 'CC.2.3.2.A.2';
+    // 3. Click upstream foundational node CCSS.MATH.CONTENT.2.G.A.3 to re-center
+    const targetCode = 'CCSS.MATH.CONTENT.2.G.A.3';
     graph = engine.getCoherenceGraph(targetCode);
     breadcrumbs = engine.addBreadcrumb(breadcrumbs, targetCode);
     assert.strictEqual(graph.focalNode.code, targetCode);
-    assert.deepStrictEqual(breadcrumbs, ['CC.2.1.3.C.1', 'CC.2.3.2.A.2']);
+    assert.deepStrictEqual(breadcrumbs, ['CCSS.MATH.CONTENT.3.NF.A.1', 'CCSS.MATH.CONTENT.2.G.A.3']);
 
     // 4. Open inspection drawer for new focal node
     const swbat = engine.generateSWBAT(graph.focalNode);
@@ -78,7 +78,7 @@ describe('Tier 3: Cross-Feature Combinations (TC-T3-COMB-01..08)', () => {
   test('TC-T3-COMB-03: Detail Modal CTA -> Coherence Map -> Breadcrumb Reset -> Drawer Re-Launch', async () => {
     const engine = await getEngine();
     let modalOpen = true;
-    let inspectedStandard = engine.getStandardByCode('CC.1.2.8.B');
+    let inspectedStandard = engine.getStandardByCode('CCSS.ELA-LITERACY.RI.8.1');
     let currentView = 'feed';
     let breadcrumbs = [];
 
@@ -88,14 +88,14 @@ describe('Tier 3: Cross-Feature Combinations (TC-T3-COMB-01..08)', () => {
     breadcrumbs = engine.addBreadcrumb([], inspectedStandard.code);
     assert.strictEqual(modalOpen, false);
     assert.strictEqual(currentView, 'coherence');
-    assert.deepStrictEqual(breadcrumbs, ['CC.1.2.8.B']);
+    assert.deepStrictEqual(breadcrumbs, ['CCSS.ELA-LITERACY.RI.8.1']);
 
     // 2. On canvas, navigate to downstream extension CC.1.2.9-10.B
     const nextCode = 'CC.1.2.9-10.B';
     const nextStd = engine.getStandardByCode(nextCode);
     if (nextStd) {
       breadcrumbs = engine.addBreadcrumb(breadcrumbs, nextCode);
-      assert.deepStrictEqual(breadcrumbs, ['CC.1.2.8.B', 'CC.1.2.9-10.B']);
+      assert.deepStrictEqual(breadcrumbs, ['CCSS.ELA-LITERACY.RI.8.1', 'CC.1.2.9-10.B']);
     }
   }, { tier: 3 });
 
@@ -133,7 +133,7 @@ describe('Tier 3: Cross-Feature Combinations (TC-T3-COMB-01..08)', () => {
     trail = engine.addBreadcrumb(trail, 'CC.2.1.K.A.1');
     trail = engine.addBreadcrumb(trail, 'CC.2.1.1.B.1');
     trail = engine.addBreadcrumb(trail, 'CC.2.1.2.B.2');
-    trail = engine.addBreadcrumb(trail, 'CC.2.1.3.C.1');
+    trail = engine.addBreadcrumb(trail, 'CCSS.MATH.CONTENT.3.NF.A.1');
     assert.strictEqual(trail.length, 4);
 
     // Jump backward to index 1 (Grade 1)
@@ -147,7 +147,7 @@ describe('Tier 3: Cross-Feature Combinations (TC-T3-COMB-01..08)', () => {
 
   test('TC-T3-COMB-06: Canvas Hardware Matrix -> SVG Anchor Sync -> Link Hover State', async () => {
     const engine = await getEngine();
-    const graph = engine.getCoherenceGraph('M03.A-N.1.1.1');
+    const graph = engine.getCoherenceGraph('CCSS.MATH.CONTENT.3.NF.A.1');
     const layout = calculateNodePositions(graph.focalNode, graph.upstream, graph.downstream, graph.horizontal);
 
     // 1. Pan and zoom canvas stage

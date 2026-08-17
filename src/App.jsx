@@ -13,9 +13,11 @@ import { Toast } from './components/Toast';
 
 import { useStandardsSearch } from './hooks/useStandardsSearch';
 import { useToast } from './hooks/useToast';
+import { useTheme } from './hooks/useTheme';
 import { AlertCircle } from 'lucide-react';
 
 export function App() {
+  const { theme, toggleTheme } = useTheme();
   const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'map', 'crosswalk', 'tree', 'pssa'
   const [inspectedStandard, setInspectedStandard] = useState(null);
   const [activeMapCode, setActiveMapCode] = useState('CC.2.1.4.B.2');
@@ -126,6 +128,8 @@ export function App() {
         setCurrentView={setCurrentView}
         totalCount={totalCount}
         onToggleMobileFilters={() => setIsMobileFiltersOpen(true)}
+        theme={theme}
+        onToggleTheme={toggleTheme}
       />
 
       {/* Main Content Area */}

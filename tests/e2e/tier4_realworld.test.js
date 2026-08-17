@@ -12,28 +12,28 @@ describe('Tier 4 Scenario 1: Grade 3 Math Fractions Scaffolding Progression (TC-
     const engine = await getEngine();
 
     // Step 1: Educator searches for Grade 3 fractions standard
-    const searchResults = engine.searchStandards('CC.2.1.3.C.1');
+    const searchResults = engine.searchStandards('CCSS.MATH.CONTENT.3.NF.A.1');
     assert.ok(searchResults.length > 0, 'Search returns matching fraction standards');
-    assert.strictEqual(searchResults[0].code, 'CC.2.1.3.C.1');
+    assert.strictEqual(searchResults[0].code, 'CCSS.MATH.CONTENT.3.NF.A.1');
 
     // Step 2: Load Coherence Graph for focal standard
-    const graph = engine.getCoherenceGraph('CC.2.1.3.C.1');
-    assert.strictEqual(graph.focalNode.code, 'CC.2.1.3.C.1');
+    const graph = engine.getCoherenceGraph('CCSS.MATH.CONTENT.3.NF.A.1');
+    assert.strictEqual(graph.focalNode.code, 'CCSS.MATH.CONTENT.3.NF.A.1');
     assert.strictEqual(graph.focalNode.grade, '3');
     assert.strictEqual(graph.focalNode.subject, 'Mathematics');
 
     // Step 3: Verify Upstream Prerequisite from Grade 2
     const upstreamCodes = graph.upstream.map(n => n.code);
-    assert.ok(upstreamCodes.includes('CC.2.3.2.A.2'), 'Identifies Grade 2 shape partitioning foundation CC.2.3.2.A.2');
+    assert.ok(upstreamCodes.includes('CCSS.MATH.CONTENT.2.G.A.3'), 'Identifies Grade 2 shape partitioning foundation CCSS.MATH.CONTENT.2.G.A.3');
 
     // Step 4: Focus on Grade 2 foundation to generate remediation objective
-    const g2Graph = engine.getCoherenceGraph('CC.2.3.2.A.2');
+    const g2Graph = engine.getCoherenceGraph('CCSS.MATH.CONTENT.2.G.A.3');
     const g2SWBAT = engine.generateSWBAT(g2Graph.focalNode);
     assert.match(g2SWBAT, /Students will be able to/i, 'Generates valid SWBAT objective');
     assert.match(g2SWBAT, /partition/i, 'SWBAT addresses shape partitioning');
 
-    // Step 5: Trace forward to Grade 3 Assessment Anchor M03.A-N.1.1.1
-    const pssaAnchorGraph = engine.getCoherenceGraph('M03.A-N.1.1.1');
+    // Step 5: Trace forward to Grade 3 Assessment Anchor CCSS.MATH.CONTENT.3.NF.A.1
+    const pssaAnchorGraph = engine.getCoherenceGraph('CCSS.MATH.CONTENT.3.NF.A.1');
     assert.strictEqual(pssaAnchorGraph.focalNode.is_pssa_assessed, true, 'Flags standard as PSSA assessed');
     assert.strictEqual(pssaAnchorGraph.focalNode.dok, 'DOK 1-2', 'Identifies DOK level');
 
@@ -43,11 +43,11 @@ describe('Tier 4 Scenario 1: Grade 3 Math Fractions Scaffolding Progression (TC-
 
     // Step 7: Verify Breadcrumb Trail History Progression
     let trail = [];
-    trail = engine.addBreadcrumb(trail, 'CC.2.3.2.A.2');
-    trail = engine.addBreadcrumb(trail, 'CC.2.1.3.C.1');
-    trail = engine.addBreadcrumb(trail, 'M03.A-N.1.1.1');
+    trail = engine.addBreadcrumb(trail, 'CCSS.MATH.CONTENT.2.G.A.3');
+    trail = engine.addBreadcrumb(trail, 'CCSS.MATH.CONTENT.3.NF.A.1');
+    trail = engine.addBreadcrumb(trail, 'CCSS.MATH.CONTENT.3.NF.A.1');
     trail = engine.addBreadcrumb(trail, 'M04.A-F.1.1.1');
-    assert.deepStrictEqual(trail, ['CC.2.3.2.A.2', 'CC.2.1.3.C.1', 'M03.A-N.1.1.1', 'M04.A-F.1.1.1']);
+    assert.deepStrictEqual(trail, ['CCSS.MATH.CONTENT.2.G.A.3', 'CCSS.MATH.CONTENT.3.NF.A.1', 'CCSS.MATH.CONTENT.3.NF.A.1', 'M04.A-F.1.1.1']);
   }, { tier: 4 });
 });
 
@@ -133,20 +133,20 @@ describe('Tier 4 Scenario 4: ELA Informational Text & Textual Evidence Progressi
   test('Traces 4-grade vertical articulation of textual evidence standards with DOK rigor verification', async () => {
     const engine = await getEngine();
 
-    // Step 1: Locate focal Grade 8 Textual Evidence standard CC.1.2.8.B
-    const focal = engine.getStandardByCode('CC.1.2.8.B');
-    assert.ok(focal, 'Finds CC.1.2.8.B');
-    assert.strictEqual(focal.domain, 'Reading Informational Text');
+    // Step 1: Locate focal Grade 8 Textual Evidence standard CCSS.ELA-LITERACY.RI.8.1
+    const focal = engine.getStandardByCode('CCSS.ELA-LITERACY.RI.8.1');
+    assert.ok(focal, 'Finds CCSS.ELA-LITERACY.RI.8.1');
+    assert.strictEqual(focal.domain, 'Reading: Informational Text');
     assert.strictEqual(focal.grade, '8');
 
-    // Step 2: Build Coherence Graph for CC.1.2.8.B
-    const graph = engine.getCoherenceGraph('CC.1.2.8.B');
-    assert.strictEqual(graph.focalNode.code, 'CC.1.2.8.B');
+    // Step 2: Build Coherence Graph for CCSS.ELA-LITERACY.RI.8.1
+    const graph = engine.getCoherenceGraph('CCSS.ELA-LITERACY.RI.8.1');
+    assert.strictEqual(graph.focalNode.code, 'CCSS.ELA-LITERACY.RI.8.1');
 
     // Step 3: Verify Upstream Prerequisite Standards (Grades 6 & 7)
     const upstreamCodes = graph.upstream.map(n => n.code);
-    assert.ok(upstreamCodes.includes('CC.1.2.7.B'), 'Upstream includes Grade 7 standard CC.1.2.7.B');
-    assert.ok(upstreamCodes.includes('CC.1.2.6.B'), 'Upstream includes Grade 6 standard CC.1.2.6.B');
+    assert.ok(upstreamCodes.includes('CCSS.ELA-LITERACY.RI.7.1'), 'Upstream includes Grade 7 standard CCSS.ELA-LITERACY.RI.7.1');
+    assert.ok(upstreamCodes.includes('CCSS.ELA-LITERACY.RI.6.1'), 'Upstream includes Grade 6 standard CCSS.ELA-LITERACY.RI.6.1');
 
     // Step 4: Verify Downstream High School Extension (Grade 9-10)
     const downCodes = graph.downstream.map(n => n.code);
@@ -162,8 +162,8 @@ describe('Tier 4 Scenario 4: ELA Informational Text & Textual Evidence Progressi
     assert.match(swbat, /textual evidence|cite|support|evidence/i);
 
     // Step 7: Step through full 4-Grade Vertical Chain
-    const g6Graph = engine.getCoherenceGraph('CC.1.2.6.B');
-    const g7Graph = engine.getCoherenceGraph('CC.1.2.7.B');
+    const g6Graph = engine.getCoherenceGraph('CCSS.ELA-LITERACY.RI.6.1');
+    const g7Graph = engine.getCoherenceGraph('CCSS.ELA-LITERACY.RI.7.1');
     const g10Graph = engine.getCoherenceGraph('CC.1.2.9-10.B');
     assert.strictEqual(g6Graph.focalNode.grade, '6');
     assert.strictEqual(g7Graph.focalNode.grade, '7');
