@@ -16,6 +16,7 @@
   --border-focus: #800022;
 
   --text-main: #FFFFFF;
+  --text-secondary: #9aa8b8;
   --text-silver: #d0d0d0;
   --text-muted: #d0d0d0;
   --text-dim: #9aa8b8;
@@ -82,6 +83,7 @@ body.light-theme {
 
   /* Typography / Text Tokens */
   --text-main: #00234b; /* Deep Oxford Navy */
+  --text-secondary: #475569;
   --text-silver: #475569;
   --text-muted: #64748b;
   --text-dim: #94a3b8;

@@ -453,7 +453,7 @@ export function MyNotesView({
                       style={{ padding: '6px' }}
                       title="Edit Note"
                     >
-                      <Edit2 size={15} color="var(--text-secondary)" />
+                      <Edit2 size={15} color="var(--accent-emerald)" />
                     </button>
 
                     <button
