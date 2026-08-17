@@ -9,6 +9,7 @@ import { VerticalCrosswalkView } from './components/VerticalCrosswalkView';
 import { HierarchyTreeView } from './components/HierarchyTreeView';
 import { PssaMatrixView } from './components/PssaMatrixView';
 import { CoherenceMapView } from './components/CoherenceMapView';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Toast } from './components/Toast';
 
 import { useStandardsSearch } from './hooks/useStandardsSearch';
@@ -20,7 +21,7 @@ export function App() {
   const { theme, toggleTheme } = useTheme();
   const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'map', 'crosswalk', 'tree', 'pssa'
   const [inspectedStandard, setInspectedStandard] = useState(null);
-  const [activeMapCode, setActiveMapCode] = useState('CC.2.1.4.B.2');
+  const [activeMapCode, setActiveMapCode] = useState('CCSS.MATH.CONTENT.4.NBT.B.4');
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
   const {
@@ -160,120 +161,120 @@ export function App() {
 
         {/* Center / Full-Width Feed & Tools */}
         <section style={{ display: 'flex', flexDirection: 'column', gap: '20px', width: '100%' }}>
-          
-          {/* Landing / Home Page */}
-          {currentView === 'home' && (
-            <HomePage
-              onNavigate={setCurrentView}
-              onSearchTopic={handleSearchTopic}
-              onSelectGradeBand={handleSelectGradeBand}
-              totalCount={totalCount}
-            />
-          )}
-
-          {/* Main Feed View */}
-          {currentView === 'feed' && (
-            <>
-              {/* Omnibar & Suggestions */}
-              <SearchBar
-                query={query}
-                setQuery={setQuery}
-                filteredCount={filteredCount}
+          <ErrorBoundary key={currentView} onReset={() => setCurrentView('home')}>
+            {/* Landing / Home Page */}
+            {currentView === 'home' && (
+              <HomePage
+                onNavigate={setCurrentView}
+                onSearchTopic={handleSearchTopic}
+                onSelectGradeBand={handleSelectGradeBand}
                 totalCount={totalCount}
-                onClearFilters={clearAllFilters}
-                hasActiveFilters={hasActiveFilters}
               />
+            )}
 
-              {/* Standard Cards Feed */}
-              {filteredStandards.length === 0 ? (
-                <div style={{
-                  background: 'var(--bg-secondary)',
-                  borderRadius: 'var(--radius-lg)',
-                  border: '1px dashed var(--border-medium)',
-                  padding: '48px 24px',
-                  textAlign: 'center',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '12px'
-                }}>
-                  <AlertCircle size={36} color="var(--accent-gold)" />
-                  <h2 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)' }}>
-                    No standards matched your filters
-                  </h2>
-                  <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', maxWidth: '400px' }}>
-                    Try searching for broader keywords (e.g. "fractions", "linear", "main idea"), or reset your filters.
-                  </p>
-                  <button
-                    onClick={clearAllFilters}
-                    style={{
-                      marginTop: '8px',
-                      padding: '8px 18px',
-                      borderRadius: 'var(--radius-md)',
-                      background: 'var(--accent-blue)',
-                      color: '#FFFFFF',
-                      fontSize: '0.85rem',
-                      fontWeight: '700'
-                    }}
-                  >
-                    Reset All Filters
-                  </button>
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  {filteredStandards.map(standard => (
-                    <StandardCard
-                      key={standard.id}
-                      standard={standard}
-                      query={query}
-                      onInspect={setInspectedStandard}
-                      onCopyShort={handleCopyShort}
-                      onCopyCitation={handleCopyCitation}
-                      onOpenMap={handleOpenMap}
-                    />
-                  ))}
-                </div>
-              )}
-            </>
-          )}
+            {/* Main Feed View */}
+            {currentView === 'feed' && (
+              <>
+                {/* Omnibar & Suggestions */}
+                <SearchBar
+                  query={query}
+                  setQuery={setQuery}
+                  filteredCount={filteredCount}
+                  totalCount={totalCount}
+                  onClearFilters={clearAllFilters}
+                  hasActiveFilters={hasActiveFilters}
+                />
 
-          {/* Visual Coherence Map View */}
-          {currentView === 'map' && (
-            <CoherenceMapView
-              initialStandardCode={activeMapCode}
-              onInspectStandard={setInspectedStandard}
-              onCopyCitation={handleCopyCitation}
-              onCopyShort={handleCopyShort}
-            />
-          )}
+                {/* Standard Cards Feed */}
+                {filteredStandards.length === 0 ? (
+                  <div style={{
+                    background: 'var(--bg-secondary)',
+                    borderRadius: 'var(--radius-lg)',
+                    border: '1px dashed var(--border-medium)',
+                    padding: '48px 24px',
+                    textAlign: 'center',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '12px'
+                  }}>
+                    <AlertCircle size={36} color="var(--accent-gold)" />
+                    <h2 style={{ fontSize: '1.15rem', fontWeight: '700', color: 'var(--text-main)' }}>
+                      No standards matched your filters
+                    </h2>
+                    <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', maxWidth: '400px' }}>
+                      Try searching for broader keywords (e.g. "fractions", "linear", "main idea"), or reset your filters.
+                    </p>
+                    <button
+                      onClick={clearAllFilters}
+                      style={{
+                        marginTop: '8px',
+                        padding: '8px 18px',
+                        borderRadius: 'var(--radius-md)',
+                        background: 'var(--accent-blue)',
+                        color: '#FFFFFF',
+                        fontSize: '0.85rem',
+                        fontWeight: '700'
+                      }}
+                    >
+                      Reset All Filters
+                    </button>
+                  </div>
+                ) : (
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                    {filteredStandards.map(standard => (
+                      <StandardCard
+                        key={standard.id}
+                        standard={standard}
+                        query={query}
+                        onInspect={setInspectedStandard}
+                        onCopyShort={handleCopyShort}
+                        onCopyCitation={handleCopyCitation}
+                        onOpenMap={handleOpenMap}
+                      />
+                    ))}
+                  </div>
+                )}
+              </>
+            )}
 
-          {/* Vertical Progression Matrix View */}
-          {currentView === 'crosswalk' && (
-            <VerticalCrosswalkView
-              standards={standards}
-              onInspect={setInspectedStandard}
-              onCopyShort={handleCopyShort}
-            />
-          )}
+            {/* Visual Coherence Map View */}
+            {currentView === 'map' && (
+              <CoherenceMapView
+                initialStandardCode={activeMapCode}
+                onInspectStandard={setInspectedStandard}
+                onCopyCitation={handleCopyCitation}
+                onCopyShort={handleCopyShort}
+              />
+            )}
 
-          {/* Hierarchy Tree View */}
-          {currentView === 'tree' && (
-            <HierarchyTreeView
-              standards={standards}
-              onInspect={setInspectedStandard}
-              onCopyShort={handleCopyShort}
-            />
-          )}
+            {/* Vertical Progression Matrix View */}
+            {currentView === 'crosswalk' && (
+              <VerticalCrosswalkView
+                standards={standards}
+                onInspect={setInspectedStandard}
+                onCopyShort={handleCopyShort}
+              />
+            )}
 
-          {/* PSSA & Keystone Blueprint View */}
-          {currentView === 'pssa' && (
-            <PssaMatrixView
-              standards={standards}
-              onSelectCategory={handleSelectPssaCategory}
-              onInspect={setInspectedStandard}
-            />
-          )}
+            {/* Hierarchy Tree View */}
+            {currentView === 'tree' && (
+              <HierarchyTreeView
+                standards={standards}
+                onInspect={setInspectedStandard}
+                onCopyShort={handleCopyShort}
+              />
+            )}
 
+            {/* PSSA & Keystone Blueprint View */}
+            {currentView === 'pssa' && (
+              <PssaMatrixView
+                standards={standards}
+                onSelectCategory={handleSelectPssaCategory}
+                onInspect={setInspectedStandard}
+              />
+            )}
+          </ErrorBoundary>
         </section>
 
       </main>

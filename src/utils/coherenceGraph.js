@@ -587,10 +587,15 @@ export function getStandardByCode(codeOrId) {
   const norm = normalizeCode(raw);
   if (byNormalizedCode.has(norm)) return byNormalizedCode.get(norm);
 
-  // 4. Alt code lookup
-  if (byAltCode.has(raw)) return byAltCode.get(raw);
-  if (byAltCode.has(norm)) return byAltCode.get(norm);
-  if (byAltCode.has(lower)) return byAltCode.get(lower);
+  // 5. Crosswalks & partial match fallback
+  const foundMatch = enrichedStandards.find(s => 
+    s.code === raw || 
+    s.alt_code === raw || 
+    (s.crosswalks && s.crosswalks.includes(raw)) ||
+    s.code.toLowerCase().includes(lower) ||
+    (s.alt_code && s.alt_code.toLowerCase().includes(lower))
+  );
+  if (foundMatch) return foundMatch;
 
   return null;
 }
@@ -612,12 +617,20 @@ export function getCoherenceGraph(standardOrCode) {
     focal = getStandardByCode(standardOrCode);
   }
 
+  // If focal not found directly, default to first available math standard as resilient fallback
+  if (!focal && enrichedStandards.length > 0) {
+    focal = enrichedStandards.find(s => s.subject === 'Mathematics') || enrichedStandards[0];
+  }
+
   if (!focal) {
     // Safe graceful return for invalid inputs
     return {
       focalNode: null,
+      target: null,
       upstream: [],
+      prerequisites: [],
       downstream: [],
+      nextSteps: [],
       horizontal: [],
       edges: [],
       stats: {
@@ -874,14 +887,19 @@ export function getCoherenceGraph(standardOrCode) {
     addNode(c, 'horizontal', 5, `Same-grade conceptual standard in ${c.domain}`);
   });
 
+  const focalNodeData = {
+    ...focal,
+    relationshipType: 'focal',
+    swbat: focal.swbat || generateSWBAT(focal).swbatText
+  };
+
   return {
-    focalNode: {
-      ...focal,
-      relationshipType: 'focal',
-      swbat: focal.swbat || generateSWBAT(focal).swbatText
-    },
+    focalNode: focalNodeData,
+    target: focalNodeData,
     upstream,
+    prerequisites: upstream,
     downstream,
+    nextSteps: downstream,
     horizontal,
     edges,
     stats: {

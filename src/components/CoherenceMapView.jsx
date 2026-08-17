@@ -12,7 +12,8 @@ import {
   getFilterOptions, 
   getStandardsByFilter, 
   addBreadcrumb, 
-  generateSWBAT 
+  generateSWBAT,
+  getAllStandards
 } from '../utils/coherenceGraph';
 
 // Standard subject color tokens
@@ -54,14 +55,23 @@ function getSubjectColor(subject) {
 }
 
 export function CoherenceMapView({ 
-  initialStandardCode = 'CC.2.1.4.B.2',
+  initialStandardCode = 'CCSS.MATH.CONTENT.4.NBT.B.4',
   onInspectStandard,
   onCopyCitation,
   onCopyShort
 }) {
+  // Resolve valid initial standard code
+  const resolvedInitialCode = useMemo(() => {
+    const found = getStandardByCode(initialStandardCode);
+    if (found) return found.code;
+    const all = getAllStandards();
+    const firstMath = all.find(s => s.subject === 'Mathematics') || all[0];
+    return firstMath ? firstMath.code : initialStandardCode;
+  }, [initialStandardCode]);
+
   // Current active standard code
-  const [activeCode, setActiveCode] = useState(initialStandardCode);
-  const [breadcrumbTrail, setBreadcrumbTrail] = useState([initialStandardCode]);
+  const [activeCode, setActiveCode] = useState(resolvedInitialCode);
+  const [breadcrumbTrail, setBreadcrumbTrail] = useState([resolvedInitialCode]);
   const [inspectedStandard, setInspectedStandard] = useState(null);
   
   // Search & Filter state
@@ -88,18 +98,31 @@ export function CoherenceMapView({
 
   // Update initial code if prop changes
   useEffect(() => {
-    if (initialStandardCode && initialStandardCode !== activeCode) {
-      setActiveCode(initialStandardCode);
-      setBreadcrumbTrail(prev => addBreadcrumb(prev, initialStandardCode));
+    if (initialStandardCode) {
+      const found = getStandardByCode(initialStandardCode);
+      const codeToSet = found ? found.code : initialStandardCode;
+      if (codeToSet !== activeCode) {
+        setActiveCode(codeToSet);
+        setBreadcrumbTrail(prev => addBreadcrumb(prev, codeToSet));
+      }
     }
   }, [initialStandardCode]);
 
-  // Compute graph data
+  // Compute graph data safely
   const graphData = useMemo(() => {
-    return getCoherenceGraph(activeCode);
+    return getCoherenceGraph(activeCode) || {};
   }, [activeCode]);
 
-  const targetStandard = graphData.target;
+  const targetStandard = graphData.target || graphData.focalNode || null;
+  const prerequisites = graphData.prerequisites || graphData.upstream || [];
+  const nextSteps = graphData.nextSteps || graphData.downstream || [];
+  const horizontal = graphData.horizontal || [];
+  const stats = graphData.stats || {
+    totalConnections: prerequisites.length + nextSteps.length + horizontal.length,
+    upstreamCount: prerequisites.length,
+    downstreamCount: nextSteps.length,
+    horizontalCount: horizontal.length
+  };
 
   // Sync cascading dropdowns when target changes
   useEffect(() => {
@@ -252,13 +275,13 @@ export function CoherenceMapView({
           {/* Quick Metrics Badge */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
             <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-silver)', padding: '6px 12px', fontSize: '0.78rem' }}>
-              <strong>{graphData.prerequisites.length}</strong> Prior Foundations
+              <strong>{prerequisites.length}</strong> Prior Foundations
             </span>
             <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-silver)', padding: '6px 12px', fontSize: '0.78rem' }}>
-              <strong>{graphData.nextSteps.length}</strong> Future Extensions
+              <strong>{nextSteps.length}</strong> Future Extensions
             </span>
             <span className="badge" style={{ background: 'var(--bg-primary)', color: 'var(--text-silver)', padding: '6px 12px', fontSize: '0.78rem' }}>
-              <strong>{graphData.horizontal.length}</strong> Same-Grade Links
+              <strong>{horizontal.length}</strong> Same-Grade Links
             </span>
           </div>
         </div>
@@ -624,8 +647,7 @@ export function CoherenceMapView({
                   Prior Grades
                 </span>
               </div>
-
-              {graphData.prerequisites.length === 0 ? (
+              {prerequisites.length === 0 ? (
                 <div style={{
                   background: 'var(--bg-card)',
                   border: '1px dashed var(--border-subtle)',
@@ -638,7 +660,7 @@ export function CoherenceMapView({
                   Foundational Entry Point (No prior grade prerequisites required)
                 </div>
               ) : (
-                graphData.prerequisites.map((node) => (
+                prerequisites.map((node) => (
                   <StandardNodeCard
                     key={node.code}
                     standard={node}
@@ -718,87 +740,90 @@ export function CoherenceMapView({
                   </div>
 
                   {/* Standard Main Statement */}
-                  <div style={{
-                    fontSize: '0.94rem',
-                    lineHeight: '1.55',
-                    color: 'var(--text-main)',
-                    background: 'var(--bg-primary)',
-                    padding: '14px 16px',
-                    borderRadius: 'var(--radius-md)',
-                    border: '1px solid var(--border-subtle)'
-                  }}>
+                  <div style={{ fontSize: '0.96rem', color: 'var(--text-main)', lineHeight: '1.6', fontWeight: '500' }}>
                     {targetStandard.description}
                   </div>
 
-                  {/* Clarifying limits if available */}
+                  {/* Assessment Limits Alert */}
                   {targetStandard.assessment_limits && (
                     <div style={{
-                      fontSize: '0.78rem',
-                      color: 'var(--text-main)',
+                      padding: '10px 14px',
+                      borderRadius: 'var(--radius-md)',
                       background: 'rgba(245, 158, 11, 0.08)',
-                      borderLeft: '3px solid var(--accent-gold)',
-                      padding: '8px 12px',
-                      borderRadius: '0 var(--radius-sm) var(--radius-sm) 0'
+                      borderLeft: '4px solid var(--accent-gold)',
+                      fontSize: '0.8rem',
+                      color: 'var(--accent-gold)',
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      gap: '8px'
                     }}>
-                      <strong style={{ color: 'var(--accent-gold)' }}>Assessment Limit:</strong> {targetStandard.assessment_limits}
+                      <Info size={16} style={{ flexShrink: 0, marginTop: '2px' }} />
+                      <span><strong>Testing Limits:</strong> {targetStandard.assessment_limits}</span>
                     </div>
                   )}
 
-                  {/* Action Buttons */}
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    gap: '8px',
-                    paddingTop: '8px',
-                    borderTop: '1px solid var(--border-subtle)'
-                  }}>
-                    <button
-                      onClick={(e) => handleCopyCode(e, targetStandard)}
-                      style={{
-                        padding: '6px 12px',
-                        borderRadius: 'var(--radius-sm)',
-                        background: 'var(--bg-primary)',
-                        border: '1px solid var(--border-subtle)',
-                        color: copiedCode === targetStandard.code ? 'var(--accent-emerald)' : 'var(--text-silver)',
-                        fontSize: '0.78rem',
-                        fontWeight: '600',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      {copiedCode === targetStandard.code ? <Check size={14} /> : <Copy size={14} />}
-                      <span>{copiedCode === targetStandard.code ? 'Copied' : 'Copy Code'}</span>
-                    </button>
-
-                    <button
-                      onClick={(e) => handleOpenInspect(e, targetStandard)}
-                      style={{
-                        padding: '8px 16px',
-                        borderRadius: 'var(--radius-md)',
-                        background: 'var(--accent-crimson)',
-                        border: 'none',
-                        color: '#FFFFFF',
-                        fontSize: '0.82rem',
-                        fontWeight: '700',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '6px',
-                        cursor: 'pointer'
-                      }}
-                    >
-                      <span>Teacher SWBAT & Details</span>
-                      <ArrowUpRight size={15} />
-                    </button>
+                  {/* Bottom Actions Row */}
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: '6px', paddingTop: '12px', borderTop: '1px solid var(--border-subtle)' }}>
+                    <span style={{ fontSize: '0.78rem', color: 'var(--text-dim)' }}>
+                      Reporting Category: {targetStandard.reporting_category || 'General Core'}
+                    </span>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <button
+                        onClick={(e) => handleCopyCode(e, targetStandard)}
+                        style={{
+                          padding: '6px 12px',
+                          borderRadius: 'var(--radius-sm)',
+                          background: 'var(--bg-primary)',
+                          border: '1px solid var(--border-subtle)',
+                          color: copiedCode === targetStandard.code ? 'var(--accent-emerald)' : 'var(--text-silver)',
+                          fontSize: '0.78rem',
+                          fontWeight: '600',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        {copiedCode === targetStandard.code ? <Check size={14} /> : <Copy size={14} />}
+                        <span>{copiedCode === targetStandard.code ? 'Copied' : 'Copy Code'}</span>
+                      </button>
+                      <button
+                        onClick={(e) => handleOpenInspect(e, targetStandard)}
+                        style={{
+                          padding: '6px 14px',
+                          borderRadius: 'var(--radius-sm)',
+                          background: 'var(--accent-crimson)',
+                          border: 'none',
+                          color: '#FFFFFF',
+                          fontSize: '0.78rem',
+                          fontWeight: '700',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '6px',
+                          cursor: 'pointer'
+                        }}
+                      >
+                        <BookOpen size={14} />
+                        <span>Teacher Objectives</span>
+                      </button>
+                    </div>
                   </div>
-
                 </div>
-              ) : null}
+              ) : (
+                <div style={{
+                  background: 'var(--bg-card)',
+                  border: '1px dashed var(--border-subtle)',
+                  borderRadius: 'var(--radius-xl)',
+                  padding: '32px 24px',
+                  textAlign: 'center',
+                  color: 'var(--text-muted)'
+                }}>
+                  Select a standard above or choose from the dropdown to explore its visual coherence graph.
+                </div>
+              )}
             </div>
 
-            {/* COLUMN 3: Downstream Extensions (Future Grades) */}
+            {/* COLUMN 3: Downstream Next Steps (Future Grades) */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
               <div style={{
                 display: 'flex',
@@ -818,7 +843,7 @@ export function CoherenceMapView({
                 </span>
               </div>
 
-              {graphData.nextSteps.length === 0 ? (
+              {nextSteps.length === 0 ? (
                 <div style={{
                   background: 'var(--bg-card)',
                   border: '1px dashed var(--border-subtle)',
@@ -831,7 +856,7 @@ export function CoherenceMapView({
                   Terminal Concept Level (Extends into Keystone / Advanced High School Courses)
                 </div>
               ) : (
-                graphData.nextSteps.map((node) => (
+                nextSteps.map((node) => (
                   <StandardNodeCard
                     key={node.code}
                     standard={node}
@@ -849,7 +874,7 @@ export function CoherenceMapView({
           </div>
 
           {/* Bottom Section: Same-Grade Horizontal Coherence */}
-          {graphData.horizontal.length > 0 && (
+          {horizontal.length > 0 && (
             <div style={{
               background: 'var(--bg-card)',
               border: '1px solid var(--border-subtle)',
@@ -876,7 +901,7 @@ export function CoherenceMapView({
                 gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
                 gap: '12px'
               }}>
-                {graphData.horizontal.map((node) => (
+                {horizontal.map((node) => (
                   <StandardNodeCard
                     key={node.code}
                     standard={node}
@@ -910,10 +935,10 @@ export function CoherenceMapView({
               </h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {graphData.prerequisites.length === 0 ? (
+              {prerequisites.length === 0 ? (
                 <div className="empty-box-mobile">No prior prerequisites required.</div>
               ) : (
-                graphData.prerequisites.map(node => (
+                prerequisites.map(node => (
                   <StandardNodeCard
                     key={node.code}
                     standard={node}
@@ -980,10 +1005,10 @@ export function CoherenceMapView({
               </h3>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-              {graphData.nextSteps.length === 0 ? (
+              {nextSteps.length === 0 ? (
                 <div className="empty-box-mobile">Extends into Keystone & High School courses.</div>
               ) : (
-                graphData.nextSteps.map(node => (
+                nextSteps.map(node => (
                   <StandardNodeCard
                     key={node.code}
                     standard={node}
