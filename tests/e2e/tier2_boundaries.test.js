@@ -364,18 +364,18 @@ describe('Tier 2: UI Boundary, Layout & Corner Cases (Features 7–16 Boundaries
 
   test('TC-BND-UI-06: Null / Empty Initial Standard Code — Defaults safely', async () => {
     const engine = await getEngine();
-    const resolveInitial = (code) => engine.getStandardByCode(code) || engine.getStandardByCode('CC.2.1.K.A.1');
+    const resolveInitial = (code) => engine.getStandardByCode(code) || engine.getStandardByCode('CCSS.MATH.CONTENT.K.CC.A.1');
     const fallback = resolveInitial(null);
     assert.ok(fallback);
-    assert.strictEqual(fallback.code, 'CC.2.1.K.A.1');
+    assert.strictEqual(fallback.code, 'CCSS.MATH.CONTENT.K.CC.A.1');
   }, { tier: 2 });
 
   test('TC-BND-UI-07: Nonexistent Deep-Link Standard Code — Handles bad URL parameters', async () => {
     const engine = await getEngine();
-    const resolveInitial = (code) => engine.getStandardByCode(code) || engine.getStandardByCode('CC.2.1.K.A.1');
+    const resolveInitial = (code) => engine.getStandardByCode(code) || engine.getStandardByCode('CCSS.MATH.CONTENT.K.CC.A.1');
     const fallback = resolveInitial('INVALID_CODE_999');
     assert.ok(fallback);
-    assert.strictEqual(fallback.code, 'CC.2.1.K.A.1');
+    assert.strictEqual(fallback.code, 'CCSS.MATH.CONTENT.K.CC.A.1');
   }, { tier: 2 });
 
   test('TC-BND-UI-08: Zero Upstream Prerequisites (Pre-K / K) — Renders clean placeholder', async () => {
