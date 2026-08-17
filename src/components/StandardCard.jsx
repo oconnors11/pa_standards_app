@@ -1,5 +1,5 @@
 import React from 'react';
-import { Copy, ArrowUpRight, AlertTriangle, Check, Compass } from 'lucide-react';
+import { Copy, ArrowUpRight, AlertTriangle, Check, Compass, NotebookPen } from 'lucide-react';
 
 // Helper to highlight search matches
 function HighlightedText({ text, query }) {
@@ -30,7 +30,9 @@ export function StandardCard({
   onInspect,
   onCopyShort,
   onCopyCitation,
-  onOpenMap
+  onOpenMap,
+  notesCount = 0,
+  onOpenNotes
 }) {
   const [copiedType, setCopiedType] = React.useState(null);
 
@@ -271,6 +273,42 @@ export function StandardCard({
             >
               <Compass size={13} />
               <span>Map</span>
+            </button>
+          )}
+
+          {/* Manage Notes / Walkthroughs */}
+          {onOpenNotes && (
+            <button
+              onClick={(e) => { e.stopPropagation(); onOpenNotes(standard); }}
+              title="Add or view standard notes & walkthroughs"
+              style={{
+                padding: '6px 10px',
+                borderRadius: 'var(--radius-sm)',
+                background: notesCount > 0 ? 'rgba(56, 189, 248, 0.15)' : 'var(--bg-primary)',
+                color: notesCount > 0 ? 'var(--accent-blue)' : 'var(--text-muted)',
+                border: notesCount > 0 ? '1px solid var(--accent-blue)' : '1px solid var(--border-subtle)',
+                fontSize: '0.75rem',
+                fontWeight: '600',
+                gap: '4px',
+                display: 'flex',
+                alignItems: 'center'
+              }}
+            >
+              <NotebookPen size={13} />
+              <span>Notes</span>
+              {notesCount > 0 && (
+                <span style={{
+                  padding: '1px 5px',
+                  borderRadius: '10px',
+                  fontSize: '0.68rem',
+                  fontWeight: '800',
+                  background: 'var(--accent-blue)',
+                  color: '#FFFFFF',
+                  marginLeft: '2px'
+                }}>
+                  {notesCount}
+                </span>
+              )}
             </button>
           )}
 

@@ -8,18 +8,22 @@ import { StandardDetailModal } from './components/StandardDetailModal';
 import { VerticalCrosswalkView } from './components/VerticalCrosswalkView';
 import { HierarchyTreeView } from './components/HierarchyTreeView';
 import { CoherenceMapView } from './components/CoherenceMapView';
+import { MyNotesView } from './components/MyNotesView';
+import { StandardNoteModal } from './components/StandardNoteModal';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Toast } from './components/Toast';
 
 import { useStandardsSearch } from './hooks/useStandardsSearch';
 import { useToast } from './hooks/useToast';
 import { useTheme } from './hooks/useTheme';
+import { useUserNotes } from './hooks/useUserNotes';
 import { AlertCircle } from 'lucide-react';
 
 export function App() {
   const { theme, toggleTheme } = useTheme();
-  const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'map', 'crosswalk', 'tree'
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'map', 'crosswalk', 'tree', 'notes'
   const [inspectedStandard, setInspectedStandard] = useState(null);
+  const [noteModalStandard, setNoteModalStandard] = useState(null);
   const [activeMapCode, setActiveMapCode] = useState('CCSS.MATH.CONTENT.4.NBT.B.4');
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
 
@@ -44,6 +48,7 @@ export function App() {
   } = useStandardsSearch();
 
   const { toast, showToast, hideToast } = useToast();
+  const userNotes = useUserNotes();
 
   // Copy Short Code
   const handleCopyShort = useCallback((standard) => {
@@ -100,8 +105,6 @@ export function App() {
     setCurrentView('feed');
   }, [clearAllFilters, setSelectedGrades]);
 
-
-
   // Handle open standard directly in Coherence Map
   const handleOpenMap = useCallback((standardOrCode) => {
     const code = typeof standardOrCode === 'string' ? standardOrCode : standardOrCode?.code;
@@ -111,6 +114,29 @@ export function App() {
     setCurrentView('map');
   }, []);
 
+  // Handle opening standard inspector by code or standard object
+  const handleInspectByCodeOrObject = useCallback((standardOrCode) => {
+    if (!standardOrCode) return;
+    if (typeof standardOrCode === 'object' && standardOrCode.description) {
+      setInspectedStandard(standardOrCode);
+      return;
+    }
+    const code = typeof standardOrCode === 'string' ? standardOrCode : standardOrCode.code || standardOrCode.id;
+    const cleanCode = String(code).trim();
+    const target = standards.find(s => 
+      s.code === cleanCode || 
+      s.alt_code === cleanCode || 
+      s.id === cleanCode
+    );
+    if (target) {
+      setInspectedStandard(target);
+    } else {
+      clearAllFilters();
+      setQuery(cleanCode);
+      setCurrentView('feed');
+    }
+  }, [standards, setQuery, clearAllFilters]);
+
   return (
     <div className="app-container">
       {/* Global Navigation Header */}
@@ -118,6 +144,7 @@ export function App() {
         currentView={currentView}
         setCurrentView={setCurrentView}
         totalCount={totalCount}
+        totalNotesCount={userNotes.totalNotesCount}
         onToggleMobileFilters={() => setIsMobileFiltersOpen(true)}
         theme={theme}
         onToggleTheme={toggleTheme}
@@ -216,6 +243,8 @@ export function App() {
                         onCopyShort={handleCopyShort}
                         onCopyCitation={handleCopyCitation}
                         onOpenMap={handleOpenMap}
+                        notesCount={userNotes.notesCountByStandard[standard.code] || userNotes.notesCountByStandard[standard.id] || 0}
+                        onOpenNotes={(std) => setNoteModalStandard(std)}
                       />
                     ))}
                   </div>
@@ -250,19 +279,55 @@ export function App() {
                 onCopyShort={handleCopyShort}
               />
             )}
+
+            {/* My Notes & Lessons Dashboard View */}
+            {currentView === 'notes' && (
+              <MyNotesView
+                userNotes={userNotes}
+                onInspectStandard={handleInspectByCodeOrObject}
+                onOpenMap={handleOpenMap}
+                onShowToast={showToast}
+                onAddNote={userNotes.addNote}
+                onUpdateNote={userNotes.updateNote}
+                onDeleteNote={userNotes.deleteNote}
+              />
+            )}
           </ErrorBoundary>
         </section>
 
       </main>
 
-      {/* Standard Detail Inspector (Bottom Sheet on Mobile / Slide-Over on Desktop) */}
+      {/* Standard Detail Inspector */}
       <StandardDetailModal
         standard={inspectedStandard}
         onClose={() => setInspectedStandard(null)}
         onCopyCitation={handleCopyCitation}
         onSelectPrerequisite={handleSelectPrerequisite}
         onOpenMap={handleOpenMap}
+        onOpenNotesModal={(std) => setNoteModalStandard(std)}
+        notesCount={inspectedStandard ? (userNotes.notesCountByStandard[inspectedStandard.code] || userNotes.notesCountByStandard[inspectedStandard.id] || 0) : 0}
       />
+
+      {/* Standard Note Editor Modal */}
+      {noteModalStandard && (
+        <StandardNoteModal
+          standard={noteModalStandard}
+          isOpen={Boolean(noteModalStandard)}
+          onClose={() => setNoteModalStandard(null)}
+          onAddNote={(params) => {
+            userNotes.addNote(params);
+            showToast('Note saved successfully!');
+          }}
+          onUpdateNote={(id, updates) => {
+            userNotes.updateNote(id, updates);
+            showToast('Note updated.');
+          }}
+          onDeleteNote={(id) => {
+            userNotes.deleteNote(id);
+            showToast('Note deleted.');
+          }}
+        />
+      )}
 
       {/* Mobile Filters Modal Drawer */}
       {isMobileFiltersOpen && (

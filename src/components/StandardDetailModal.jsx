@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { 
   X, Copy, ArrowRight, ArrowLeft, 
-  Sparkles, Check, Compass 
+  Sparkles, Check, Compass, NotebookPen 
 } from 'lucide-react';
 
 export function StandardDetailModal({
@@ -9,10 +9,12 @@ export function StandardDetailModal({
   onClose,
   onCopyCitation,
   onSelectPrerequisite,
-  onOpenMap
+  onOpenMap,
+  onOpenNotesModal,
+  notesCount = 0
 }) {
   const [copied, setCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'ai_objectives'
+  const [activeTab, setActiveTab] = useState('overview'); // 'overview', 'ai_objectives', 'user_notes'
 
   if (!standard) return null;
 
@@ -436,6 +438,32 @@ export function StandardDetailModal({
           display: 'flex',
           gap: '10px'
         }}>
+          {onOpenNotesModal && (
+            <button
+              onClick={() => {
+                onOpenNotesModal(standard);
+              }}
+              style={{
+                flex: 1,
+                padding: '12px',
+                borderRadius: 'var(--radius-md)',
+                background: notesCount > 0 ? 'rgba(56, 189, 248, 0.18)' : 'var(--bg-primary)',
+                color: notesCount > 0 ? 'var(--accent-blue)' : 'var(--text-main)',
+                border: notesCount > 0 ? '1px solid var(--accent-blue)' : '1px solid var(--border-medium)',
+                fontWeight: '700',
+                fontSize: '0.86rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '6px',
+                cursor: 'pointer'
+              }}
+            >
+              <NotebookPen size={16} />
+              <span>Notes {notesCount > 0 ? `(${notesCount})` : ''}</span>
+            </button>
+          )}
+
           {onOpenMap && (
             <button
               onClick={() => {
@@ -459,7 +487,7 @@ export function StandardDetailModal({
               }}
             >
               <Compass size={16} />
-              <span>Coherence Map</span>
+              <span>Map</span>
             </button>
           )}
 

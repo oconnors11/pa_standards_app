@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { 
   BookOpen, GitFork, Network, Layers, Search, 
   ArrowRight, Sparkles, Compass, GraduationCap, 
-  Calculator, BookText, Microscope, Landmark, ChevronRight
+  Calculator, BookText, Microscope, Landmark, ChevronRight, NotebookPen
 } from 'lucide-react';
 
 export function HomePage({ 
@@ -56,6 +56,15 @@ export function HomePage({
       subtitle: 'Nested PDE SAS taxonomy',
       icon: <Network size={20} color="var(--color-ela)" />,
       tag: 'Domain Tree',
+      bg: 'var(--bg-card)',
+      border: 'var(--border-subtle)'
+    },
+    {
+      id: 'notes',
+      title: 'My Notes & Lessons',
+      subtitle: 'Lesson plans & walkthrough logs',
+      icon: <NotebookPen size={20} color="var(--accent-blue)" />,
+      tag: 'Notes & Logs',
       bg: 'var(--bg-card)',
       border: 'var(--border-subtle)'
     }

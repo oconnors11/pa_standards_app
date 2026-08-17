@@ -1,10 +1,11 @@
 import React from 'react';
-import { Home, BookOpen, GitFork, Network, Layers, SlidersHorizontal, Compass, Sun, Moon } from 'lucide-react';
+import { Home, BookOpen, GitFork, Network, Layers, SlidersHorizontal, Compass, Sun, Moon, NotebookPen } from 'lucide-react';
 import { useTheme } from '../hooks/useTheme';
 
 export function Header({ 
   currentView, 
   setCurrentView, 
+  totalNotesCount = 0,
   onToggleMobileFilters,
   theme: controlledTheme,
   onToggleTheme: controlledToggleTheme
@@ -18,7 +19,8 @@ export function Header({
     { id: 'feed', label: 'Standards Feed', icon: <BookOpen size={15} /> },
     { id: 'map', label: 'Coherence Map', icon: <Compass size={15} /> },
     { id: 'crosswalk', label: 'Vertical Progression', icon: <GitFork size={15} /> },
-    { id: 'tree', label: 'Hierarchy Tree', icon: <Network size={15} /> }
+    { id: 'tree', label: 'Hierarchy Tree', icon: <Network size={15} /> },
+    { id: 'notes', label: 'My Notes', icon: <NotebookPen size={15} />, badge: totalNotesCount }
   ];
 
   return (
@@ -116,6 +118,19 @@ export function Header({
               >
                 {item.icon}
                 <span>{item.label}</span>
+                {Boolean(item.badge) && item.badge > 0 && (
+                  <span style={{
+                    padding: '1px 6px',
+                    borderRadius: '10px',
+                    fontSize: '0.7rem',
+                    fontWeight: '800',
+                    background: active ? '#FFFFFF' : 'var(--accent-crimson)',
+                    color: active ? 'var(--accent-crimson)' : '#FFFFFF',
+                    marginLeft: '2px'
+                  }}>
+                    {item.badge}
+                  </span>
+                )}
               </button>
             );
           })}
