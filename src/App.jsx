@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Header } from './components/Header';
 import { HomePage } from './components/HomePage';
 import { SearchBar } from './components/SearchBar';
@@ -330,16 +331,24 @@ export function App() {
       )}
 
       {/* Mobile Filters Modal Drawer */}
-      {isMobileFiltersOpen && (
+      {isMobileFiltersOpen && typeof document !== 'undefined' && createPortal(
         <div 
           style={{
             position: 'fixed',
             inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100dvh',
             backgroundColor: 'rgba(5, 15, 30, 0.75)',
             backdropFilter: 'blur(6px)',
-            zIndex: 920,
+            WebkitBackdropFilter: 'blur(6px)',
+            zIndex: 95000,
             display: 'flex',
-            alignItems: 'flex-end'
+            alignItems: 'flex-end',
+            pointerEvents: 'auto'
           }}
           onClick={() => setIsMobileFiltersOpen(false)}
         >
@@ -362,7 +371,8 @@ export function App() {
               onCloseMobileDrawer={() => setIsMobileFiltersOpen(false)}
             />
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* Toast Notification Alert */}

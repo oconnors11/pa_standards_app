@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   Home, BookOpen, GitFork, Network, Layers, 
   SlidersHorizontal, Compass, Sun, Moon, NotebookPen, 
@@ -238,20 +239,27 @@ export function Header({
 
       </div>
 
-      {/* Mobile Slide-Out Drawer Navigation */}
-      {isMobileDrawerOpen && (
+      {/* Mobile Slide-Out Drawer Navigation (Rendered via React Portal onto document.body to avoid stacking context traps) */}
+      {isMobileDrawerOpen && typeof document !== 'undefined' && createPortal(
         <div 
           className="mobile-drawer-overlay animate-fade-in"
           onClick={() => setIsMobileDrawerOpen(false)}
           style={{
             position: 'fixed',
             inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100dvh',
             backgroundColor: 'rgba(0, 15, 35, 0.78)',
             backdropFilter: 'blur(10px)',
             WebkitBackdropFilter: 'blur(10px)',
-            zIndex: 999,
+            zIndex: 99999,
             display: 'flex',
-            justifyContent: 'flex-end'
+            justifyContent: 'flex-end',
+            pointerEvents: 'auto'
           }}
         >
           <div 
@@ -266,7 +274,9 @@ export function Header({
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
-              overflowY: 'auto'
+              overflowY: 'auto',
+              position: 'relative',
+              zIndex: 100000
             }}
           >
             {/* Drawer Header */}
@@ -432,7 +442,8 @@ export function Header({
               </div>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       <style>{`

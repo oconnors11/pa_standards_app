@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X, Plus, Check } from 'lucide-react';
 import { NOTE_CATEGORIES, getNotesForStandard } from '../utils/notesStorage';
 
@@ -44,8 +45,8 @@ export function StandardNoteModal({ standard, isOpen, onClose, onAddNote }) {
     onClose();
   };
 
-  return (
-    <div className="modal-backdrop" onClick={onClose} style={{ zIndex: 1000 }}>
+  return typeof document !== 'undefined' ? createPortal(
+    <div className="modal-backdrop" onClick={onClose} style={{ zIndex: 10000 }}>
       <div 
         className="modal-container"
         onClick={(e) => e.stopPropagation()}
@@ -206,6 +207,7 @@ export function StandardNoteModal({ standard, isOpen, onClose, onAddNote }) {
           </div>
         </form>
       </div>
-    </div>
-  );
+    </div>,
+    document.body
+  ) : null;
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, Copy, ArrowRight, ArrowLeft, 
   Sparkles, Check, Compass, NotebookPen 
@@ -43,7 +44,7 @@ export function StandardDetailModal({
     ];
   };
 
-  return (
+  return typeof document !== 'undefined' ? createPortal(
     <div 
       style={{
         position: 'fixed',
@@ -51,7 +52,7 @@ export function StandardDetailModal({
         backgroundColor: 'rgba(0, 15, 35, 0.82)',
         backdropFilter: 'blur(8px)',
         WebkitBackdropFilter: 'blur(8px)',
-        zIndex: 900,
+        zIndex: 9000,
         display: 'flex',
         justifyContent: 'flex-end',
         alignItems: 'stretch'
@@ -518,6 +519,7 @@ export function StandardDetailModal({
         </div>
 
       </div>
-    </div>
-  );
+    </div>,
+    document.body
+  ) : null;
 }
