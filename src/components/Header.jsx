@@ -18,8 +18,7 @@ export function Header({
     { id: 'feed', label: 'Standards Feed', icon: <BookOpen size={15} /> },
     { id: 'map', label: 'Coherence Map', icon: <Compass size={15} /> },
     { id: 'crosswalk', label: 'Vertical Progression', icon: <GitFork size={15} /> },
-    { id: 'tree', label: 'Hierarchy Tree', icon: <Network size={15} /> },
-    { id: 'pssa', label: 'PSSA Blueprint', icon: <Layers size={15} /> }
+    { id: 'tree', label: 'Hierarchy Tree', icon: <Network size={15} /> }
   ];
 
   return (

@@ -15,22 +15,8 @@ export function useStandardsSearch() {
   const [query, setQuery] = useState('');
   const [selectedSubject, setSelectedSubject] = useState('All');
   const [selectedGrades, setSelectedGrades] = useState(['All']);
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [selectedDok, setSelectedDok] = useState('All');
   const [examFilter, setExamFilter] = useState('All'); // 'All', 'PSSA', 'Keystone'
-
-  // Extract unique reporting categories and domains
-  const availableCategories = useMemo(() => {
-    const cats = new Set();
-    rawStandards.forEach(s => {
-      if (s.reporting_category) {
-        // Extract shortened category name if present
-        const match = s.reporting_category.match(/Reporting Category [A-E]|Module [1-2]|Module [A-B]/i);
-        if (match) cats.add(match[0]);
-      }
-    });
-    return Array.from(cats).sort();
-  }, []);
 
   // Filtered & Ranked Standards
   const filteredStandards = useMemo(() => {
@@ -47,13 +33,6 @@ export function useStandardsSearch() {
       // Grade multi-select filter
       if (hasGradeFilter && !selectedGrades.includes(item.grade)) {
         return false;
-      }
-
-      // Reporting category filter
-      if (selectedCategory !== 'All') {
-        if (!item.reporting_category || !item.reporting_category.includes(selectedCategory)) {
-          return false;
-        }
       }
 
       // DOK filter
@@ -109,7 +88,7 @@ export function useStandardsSearch() {
 
       return a.code.localeCompare(b.code);
     });
-  }, [query, selectedSubject, selectedGrades, selectedCategory, selectedDok, examFilter]);
+  }, [query, selectedSubject, selectedGrades, selectedDok, examFilter]);
 
   // Toggle individual grade in multi-select mode
   const toggleGrade = useCallback((grade) => {
@@ -147,13 +126,12 @@ export function useStandardsSearch() {
     setQuery('');
     setSelectedSubject('All');
     setSelectedGrades(['All']);
-    setSelectedCategory('All');
     setSelectedDok('All');
     setExamFilter('All');
   }, []);
 
   const isGradeFiltered = !selectedGrades.includes('All') && selectedGrades.length > 0;
-  const hasActiveFilters = query.length > 0 || selectedSubject !== 'All' || isGradeFiltered || selectedCategory !== 'All' || selectedDok !== 'All' || examFilter !== 'All';
+  const hasActiveFilters = query.length > 0 || selectedSubject !== 'All' || isGradeFiltered || selectedDok !== 'All' || examFilter !== 'All';
 
   return {
     standards: rawStandards,
@@ -170,13 +148,10 @@ export function useStandardsSearch() {
     setSelectedGrade,
     setSelectedGrades,
     toggleGrade,
-    selectedCategory,
-    setSelectedCategory,
     selectedDok,
     setSelectedDok,
     examFilter,
     setExamFilter,
-    availableCategories,
     clearAllFilters,
     hasActiveFilters
   };

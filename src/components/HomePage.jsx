@@ -58,15 +58,6 @@ export function HomePage({
       tag: 'Domain Tree',
       bg: 'var(--bg-card)',
       border: 'var(--border-subtle)'
-    },
-    {
-      id: 'pssa',
-      title: 'PSSA Blueprint',
-      subtitle: 'Categories A–E & test limits',
-      icon: <Layers size={20} color="var(--accent-gold)" />,
-      tag: 'Assessment Specs',
-      bg: 'var(--bg-card)',
-      border: 'var(--border-subtle)'
     }
   ];
 
@@ -138,7 +129,7 @@ export function HomePage({
       id: 'feed',
       title: 'Standards Feed & Multi-Filter Search',
       icon: <BookOpen size={22} color="var(--color-math)" />,
-      description: 'Search instantly by exact short codes (e.g. M08.A-N.1, CC.2.1.8) or topic keywords. Narrow down by Grade K–8, Subject Area, Webb\'s DOK level (1–4), and PSSA Category with real-time term highlighting.'
+      description: 'Search instantly by exact short codes (e.g. M08.A-N.1, CC.2.1.8) or topic keywords. Narrow down by Grade K–8, Subject Area, and Webb\'s DOK level (1–4) with real-time term highlighting.'
     },
     {
       id: 'map',
@@ -157,12 +148,6 @@ export function HomePage({
       title: 'Interactive Hierarchy Tree',
       icon: <Network size={22} color="var(--color-ela)" />,
       description: 'Navigate the complete state curriculum taxonomy from high-level Subject Areas down to Grade Levels, Content Domains, Assessment Anchors, and Eligible Content statements with clean full-width descriptions.'
-    },
-    {
-      id: 'pssa',
-      title: 'PSSA & State Testing Blueprints',
-      icon: <Layers size={22} color="var(--accent-gold)" />,
-      description: 'Analyze official Pennsylvania state assessment frameworks broken down by Reporting Category (Categories A–E), testing weights, eligible content boundaries, and assessment limits.'
     }
   ];
 
@@ -387,7 +372,7 @@ export function HomePage({
             How to Use the RBCS Standards Browser
           </h2>
           <p style={{ fontSize: '0.88rem', color: 'var(--text-muted)', marginTop: '4px' }}>
-            Five purpose-built lenses for classroom instruction, curriculum alignment, and state assessment preparation
+            Four purpose-built lenses for classroom instruction, curriculum alignment, and state assessment preparation
           </p>
         </div>
 

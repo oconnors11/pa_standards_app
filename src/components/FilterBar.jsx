@@ -8,13 +8,10 @@ export function FilterBar({
   selectedGrade = 'All',
   toggleGrade,
   setSelectedGrade,
-  selectedCategory,
-  setSelectedCategory,
   selectedDok,
   setSelectedDok,
   examFilter,
   setExamFilter,
-  availableCategories,
   clearAllFilters,
   hasActiveFilters,
   isMobileDrawer = false,
@@ -227,32 +224,7 @@ export function FilterBar({
         </div>
       </div>
 
-      {/* 5. Reporting Category Selector (if Math/ELA chosen) */}
-      {availableCategories.length > 0 && (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-          <label style={{ fontSize: '0.78rem', fontWeight: '700', textTransform: 'uppercase', letterSpacing: '0.05em', color: 'var(--text-muted)' }}>
-            PSSA Reporting Category
-          </label>
-          <select
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-            style={{
-              padding: '8px 10px',
-              borderRadius: 'var(--radius-sm)',
-              background: 'var(--bg-primary)',
-              color: 'var(--text-main)',
-              border: '1px solid var(--border-medium)',
-              fontSize: '0.82rem',
-              outline: 'none'
-            }}
-          >
-            <option value="All">All Reporting Categories</option>
-            {availableCategories.map(cat => (
-              <option key={cat} value={cat}>{cat}</option>
-            ))}
-          </select>
-        </div>
-      )}
+
 
       {isMobileDrawer && (
         <button

@@ -268,11 +268,7 @@ runTest('R4.5: CoherenceMapView floating toolbar and assessment limits use theme
   assert.ok(coherenceCode.includes("background: 'var(--bg-card)'"), 'Toolbar uses var(--bg-card)');
 });
 
-const pssaCode = fs.readFileSync(path.join(PROJECT_ROOT, 'src/components/PssaMatrixView.jsx'), 'utf8');
-runTest('R4.6: PssaMatrixView category cards use CSS variables instead of hardcoded hex', () => {
-  assert.ok(pssaCode.includes("color: 'var(--color-math)'"), 'Uses var(--color-math)');
-  assert.ok(pssaCode.includes("color: 'var(--color-ela)'"), 'Uses var(--color-ela)');
-});
+
 
 const treeCode = fs.readFileSync(path.join(PROJECT_ROOT, 'src/components/HierarchyTreeView.jsx'), 'utf8');
 const crosswalkCode = fs.readFileSync(path.join(PROJECT_ROOT, 'src/components/VerticalCrosswalkView.jsx'), 'utf8');

@@ -7,7 +7,6 @@ import { StandardCard } from './components/StandardCard';
 import { StandardDetailModal } from './components/StandardDetailModal';
 import { VerticalCrosswalkView } from './components/VerticalCrosswalkView';
 import { HierarchyTreeView } from './components/HierarchyTreeView';
-import { PssaMatrixView } from './components/PssaMatrixView';
 import { CoherenceMapView } from './components/CoherenceMapView';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Toast } from './components/Toast';
@@ -19,7 +18,7 @@ import { AlertCircle } from 'lucide-react';
 
 export function App() {
   const { theme, toggleTheme } = useTheme();
-  const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'map', 'crosswalk', 'tree', 'pssa'
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'feed', 'map', 'crosswalk', 'tree'
   const [inspectedStandard, setInspectedStandard] = useState(null);
   const [activeMapCode, setActiveMapCode] = useState('CCSS.MATH.CONTENT.4.NBT.B.4');
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false);
@@ -38,13 +37,10 @@ export function App() {
     setSelectedGrade,
     setSelectedGrades,
     toggleGrade,
-    selectedCategory,
-    setSelectedCategory,
     selectedDok,
     setSelectedDok,
     examFilter,
     setExamFilter,
-    availableCategories,
     clearAllFilters,
     hasActiveFilters
   } = useStandardsSearch();
@@ -106,11 +102,7 @@ export function App() {
     setCurrentView('feed');
   }, [clearAllFilters, setSelectedGrades]);
 
-  // Handle category selection from PSSA matrix view
-  const handleSelectPssaCategory = useCallback((categoryId) => {
-    setSelectedCategory(categoryId);
-    setCurrentView('feed');
-  }, [setSelectedCategory]);
+
 
   // Handle open standard directly in Coherence Map
   const handleOpenMap = useCallback((standardOrCode) => {
@@ -146,13 +138,10 @@ export function App() {
               selectedGrade={selectedGrade}
               toggleGrade={toggleGrade}
               setSelectedGrade={setSelectedGrade}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
               selectedDok={selectedDok}
               setSelectedDok={setSelectedDok}
               examFilter={examFilter}
               setExamFilter={setExamFilter}
-              availableCategories={availableCategories}
               clearAllFilters={clearAllFilters}
               hasActiveFilters={hasActiveFilters}
             />
@@ -265,15 +254,6 @@ export function App() {
                 onCopyShort={handleCopyShort}
               />
             )}
-
-            {/* PSSA & Keystone Blueprint View */}
-            {currentView === 'pssa' && (
-              <PssaMatrixView
-                standards={standards}
-                onSelectCategory={handleSelectPssaCategory}
-                onInspect={setInspectedStandard}
-              />
-            )}
           </ErrorBoundary>
         </section>
 
@@ -313,13 +293,10 @@ export function App() {
               selectedGrade={selectedGrade}
               toggleGrade={toggleGrade}
               setSelectedGrade={setSelectedGrade}
-              selectedCategory={selectedCategory}
-              setSelectedCategory={setSelectedCategory}
               selectedDok={selectedDok}
               setSelectedDok={setSelectedDok}
               examFilter={examFilter}
               setExamFilter={setExamFilter}
-              availableCategories={availableCategories}
               clearAllFilters={clearAllFilters}
               hasActiveFilters={hasActiveFilters}
               isMobileDrawer={true}
