@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="keystoneNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002b5c" />
+      <stop offset="100%" stop-color="#00142b" />
+    </linearGradient>
+    <linearGradient id="crimsonBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9c052d" />
+      <stop offset="100%" stop-color="#66001b" />
+    </linearGradient>
+    <filter id="subtleDropShadow" x="-10%" y="-10%" width="120%" height="125%">
+      <feDropShadow dx="0" dy="4" stdDeviation="5" flood-color="#000000" flood-opacity="0.35" />
+    </filter>
+  </defs>
+
+  <!-- Group with subtle drop shadow on transparent canvas -->
+  <g filter="url(#subtleDropShadow)">
+    <!-- Outer Crimson Keystone Border -->
+    <polygon points="24,34 176,34 154,170 100,190 46,170" fill="url(#crimsonBorder)" />
+
+    <!-- Inner Oxford Navy Keystone Body -->
+    <polygon points="29,39 171,39 150,165 100,183 50,165" fill="url(#keystoneNavy)" />
+
+    <!-- Silver Accent Inset Line -->
+    <polygon points="34,44 166,44 146,160 100,177 54,160" fill="none" stroke="#d0d0d0" stroke-width="1.5" stroke-opacity="0.75" />
+
+    <!-- Tree of Learning / Standards Progression Network -->
+    <!-- Network Connector Branches -->
+    <g stroke="#d0d0d0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+      <line x1="100" y1="52" x2="100" y2="82" />
+      <polyline points="100,68 76,60" />
+      <polyline points="100,68 124,60" />
+      <polyline points="76,60 58,74" />
+      <polyline points="124,60 142,74" />
+      <polyline points="76,60 76,82" />
+      <polyline points="124,60 124,82" />
+    </g>
+
+    <!-- Network Standard Nodes -->
+    <circle cx="100" cy="50" r="5.5" fill="#800022" stroke="#ffffff" stroke-width="2" />
+    <circle cx="76" cy="60" r="4.5" fill="#800022" stroke="#ffffff" stroke-width="1.8" />
+    <circle cx="124" cy="60" r="4.5" fill="#800022" stroke="#ffffff" stroke-width="1.8" />
+    <circle cx="58" cy="74" r="4" fill="#00234b" stroke="#ffffff" stroke-width="1.8" />
+    <circle cx="142" cy="74" r="4" fill="#00234b" stroke="#ffffff" stroke-width="1.8" />
+    <circle cx="76" cy="82" r="3.5" fill="#d0d0d0" stroke="#00234b" stroke-width="1.5" />
+    <circle cx="124" cy="82" r="3.5" fill="#d0d0d0" stroke="#00234b" stroke-width="1.5" />
+
+    <!-- Open Curriculum Book -->
+    <!-- Backing / Shadow Page -->
+    <path d="M 60 92 Q 100 82 100 122 Q 100 82 140 92 L 140 134 Q 100 124 100 152 Q 100 124 60 134 Z" fill="#800022" opacity="0.6" />
+    <!-- White Open Pages -->
+    <path d="M 62 88 Q 100 78 100 118 Q 100 78 138 88 L 138 130 Q 100 120 100 148 Q 100 120 62 130 Z" fill="#ffffff" />
+    <!-- Center Spine & Page Details -->
+    <line x1="100" y1="80" x2="100" y2="148" stroke="#800022" stroke-width="2.5" stroke-linecap="round" />
+    <path d="M 68 100 Q 84 94 94 98" fill="none" stroke="#00234b" stroke-width="1.2" stroke-linecap="round" opacity="0.3" />
+    <path d="M 68 108 Q 84 102 94 106" fill="none" stroke="#00234b" stroke-width="1.2" stroke-linecap="round" opacity="0.3" />
+    <path d="M 132 100 Q 116 94 106 98" fill="none" stroke="#00234b" stroke-width="1.2" stroke-linecap="round" opacity="0.3" />
+    <path d="M 132 108 Q 116 102 106 106" fill="none" stroke="#00234b" stroke-width="1.2" stroke-linecap="round" opacity="0.3" />
+
+    <!-- RBCS Title Text -->
+    <text x="100" y="166" font-family="'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">RBCS</text>
+  </g>
+</svg>

@@ -1,25 +1,32 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
   <defs>
-    <linearGradient id="keystoneGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#1E3A8A" />
-      <stop offset="100%" stop-color="#0F172A" />
+    <linearGradient id="favNavy" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#002b5c" />
+      <stop offset="100%" stop-color="#00142b" />
     </linearGradient>
-    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" stop-color="#FBBF24" />
-      <stop offset="100%" stop-color="#D97706" />
+    <linearGradient id="favCrimson" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#9c052d" />
+      <stop offset="100%" stop-color="#66001b" />
     </linearGradient>
   </defs>
-  
-  <!-- Keystone Shape -->
-  <polygon points="12,18 88,18 78,86 50,96 22,86" fill="url(#keystoneGrad)" stroke="#3B82F6" stroke-width="3" stroke-linejoin="round" />
-  
-  <!-- Inner Keystone Accent Line -->
-  <polygon points="18,24 82,24 73,81 50,89 27,81" fill="none" stroke="#60A5FA" stroke-width="1.5" stroke-opacity="0.4" />
-  
-  <!-- Open Book / Standards Emblem -->
-  <path d="M 32 45 Q 50 40 50 62 Q 50 40 68 45 L 68 68 Q 50 63 50 78 Q 50 63 32 68 Z" fill="#F8FAFC" />
-  <path d="M 50 42 L 50 78" stroke="#1E3A8A" stroke-width="2" stroke-linecap="round" />
-  
-  <!-- Golden Keystone Star -->
-  <path d="M 50 26 L 52.5 32 L 59 32.5 L 54 36.5 L 56 42.5 L 50 38.5 L 44 42.5 L 46 36.5 L 41 32.5 L 47.5 32 Z" fill="url(#goldGrad)" />
+
+  <polygon points="24,34 176,34 154,170 100,190 46,170" fill="url(#favCrimson)" />
+  <polygon points="29,39 171,39 150,165 100,183 50,165" fill="url(#favNavy)" />
+  <polygon points="34,44 166,44 146,160 100,177 54,160" fill="none" stroke="#d0d0d0" stroke-width="1.5" stroke-opacity="0.75" />
+
+  <g stroke="#d0d0d0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.95">
+    <line x1="100" y1="52" x2="100" y2="82" />
+    <polyline points="100,68 76,60" />
+    <polyline points="100,68 124,60" />
+    <polyline points="76,60 58,74" />
+    <polyline points="124,60 142,74" />
+  </g>
+
+  <circle cx="100" cy="50" r="5.5" fill="#800022" stroke="#ffffff" stroke-width="2" />
+  <circle cx="76" cy="60" r="4.5" fill="#800022" stroke="#ffffff" stroke-width="1.8" />
+  <circle cx="124" cy="60" r="4.5" fill="#800022" stroke="#ffffff" stroke-width="1.8" />
+
+  <path d="M 62 88 Q 100 78 100 118 Q 100 78 138 88 L 138 130 Q 100 120 100 148 Q 100 120 62 130 Z" fill="#ffffff" />
+  <line x1="100" y1="80" x2="100" y2="148" stroke="#800022" stroke-width="2.5" stroke-linecap="round" />
+  <text x="100" y="166" font-family="'Open Sans', -apple-system, BlinkMacSystemFont, sans-serif" font-size="14" font-weight="900" fill="#ffffff" text-anchor="middle" letter-spacing="2">RBCS</text>
 </svg>
